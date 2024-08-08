@@ -1,0 +1,44 @@
+/* 全局样式 */
+
+.my-button {
+  width: 90px;
+  height: 32px;
+  background-color: #444444 !important;
+  border-color: #1DA57A !important;
+  color: white;
+}
+
+.tools-button {
+  width: 90px;
+  height: 35px;
+  background-color: #616060;
+  border-color: #fafcfb !important;
+  color: white;
+}
+
+.ant-collapse-header{
+  border-color: #555555 !important;
+}
+
+.ant-collapse-header-text {
+  color: white;
+}
+
+.ant-collapse-content-box {
+  padding: 0 !important;
+  border-color: #555555 !important;
+}
+
+:where(.css-dev-only-do-not-override-19iuou).ant-collapse{
+  border-color: #999999 !important;
+}
+
+:where(.css-dev-only-do-not-override-19iuou).ant-collapse .ant-collapse-content{
+  border-color: #999999 !important;
+}
+
+:where(.css-dev-only-do-not-override-19iuou).ant-collapse>.ant-collapse-item{
+  border-color: #999999 !important;
+}
+
+
