@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
-import GraphicDraw from "@mars/pages/demo/module/GraphicDrawStore"
+import cameraDrawStore from "@mars/pages/demo/module/CameraStore"
 
 const checked = ref(false)
 const selectedState = ref("1")
 
 const handleDraw = () => {
-  GraphicDraw.commit("toggleCameraDraw")
+  console.log("handleDraw")
+  cameraDrawStore.commit("toggleCameraDraw")
+  console.log("", cameraDrawStore.state)
 }
 
 </script>
