@@ -142,14 +142,10 @@ const marsOnload = (map: any) => {
 
 
   map.addLayer(tiles3dLayer)
-// const threeLayer = new ThreeLayer()
   // 设置编辑功能，先注释掉不用
-  // graphicLayer.hasEdit = true
-  // map.onlyPickTerrainPosition = true
   map.addLayer(graphicLayer)
   map.addLayer(graphicLayer2d)
 
-  // map.addLayer(threeLayer);
   // 2.在layer上绑定监听事件
   graphicLayer.on(mars3d.EventType.click, function(event: any) {
     console.log("监听layer，单击了矢量对象", event)
@@ -159,74 +155,6 @@ const marsOnload = (map: any) => {
     selectedGraphicId.value = event.graphic.id
     console.log("selectedGraphicId", selectedGraphicId.value)
   })
-  // graphicLayer.on(mars3d.EventType.mouseOver, function(event: any) {
-  //   console.log("监听layer，鼠标移入了矢量对象", event)
-  // })
-  // graphicLayer.on(mars3d.EventType.mouseOut, function(event: any) {
-  //   console.log("监听layer，鼠标移出了矢量对象", event)
-  // })
-
-  // 绘制楼层空间
-  // document.addEventListener("mousemove", event => {
-  //   console.log("鼠标移动", event)
-  // })
-  document.addEventListener("keypress", event => {
-    // 按下空格
-    console.log("event", event, startDraw.value)
-    if (event.code === "Space") {
-      if (startDraw.value) {
-        startDraw.value = false
-        graphicLayer.stopDraw()
-        graphicLayer2d.stopDraw()
-      } else {
-        startDraw.value = true
-        // 开始绘制多边形
-        graphicLayer.startDraw({
-            type: "polygon",
-            style: {
-              color: "#106eac",
-              opacity: 0.8,
-              diffHeight: 5,
-              outline: true
-              // outlineWidth: 10000,
-              // outlineColor: "#ffffff",
-            }
-          }
-        ).then((e: any) => {
-          const oldPositions = e.positionsShow
-          e.destroy()
-          const building = createBuilding(graphicLayer, oldPositions)
-        })
-        graphicLayer2d.startDraw({
-            type: "polygon",
-            style: {
-              color: "#57cec0",
-              opacity: 0.5
-              // diffHeight: 1000,
-              // outline: true,
-              // outlineWidth: 10000,
-              // outlineColor: "#ffffff",
-            }
-          }
-        ).then((e: any) => {
-          console.log("绘制完成", e)
-          e.destroy()
-          // console.log("绘制完成", e)
-          // const positions = e.positions
-          // const volumn = new Cesium.PolylineVolumeGraphics
-          // e.destroy()
-        })
-      }
-
-    }
-
-  })
-  // 可以绑定Popup弹窗，回调方法中任意处理
-  // tiles3dLayer.bindPopup(function(event) {
-  //   const attr = event.graphic.attr
-  //   // attr["视频"] = `<video src='http://data.mars3d.cn/file/video/lukou.mp4' controls autoplay style="width: 300px;" ></video>`
-  //   return mars3d.Util.getTemplateHtml({ title: "石化工厂", template: "all", attr })
-  // })
 
 }
 
@@ -241,6 +169,7 @@ watchEffect(() => {
   }
 })
 
+// 添加图上标绘
 const GraphicDraw = () => {
   graphicLayer.startDraw({
     type: "divBillboard",
@@ -378,4 +307,3 @@ const getFloorByFloorIdAndBuildingId = (floorId: string, buildingId: string) => 
   overflow: hidden;
 }
 </style>
-
