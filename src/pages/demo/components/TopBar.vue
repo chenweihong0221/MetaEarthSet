@@ -119,11 +119,11 @@ const handleClick = () => {
     <a-space style="position: absolute; top: 10px; left: 150px">
       <a-select v-model:value="selectedValue" style="width: 130px; " class="c_mars-select"
                 popupClassName="mars-select-dropdown" @change="handleChange">
-        <a-select-option key="1">
+        <a-select-option key="2">
           <SelectOutlined />
           选项模式
         </a-select-option>
-        <a-select-option key="2">
+        <a-select-option key="1">
           <EditOutlined />
           绘制模式
         </a-select-option>
@@ -169,7 +169,10 @@ const handleClick = () => {
 .c_mars-select {
   width: 100%;
   height: 32px;
-  background-color: var(--mars-control-bg);
+
+  //modify by cwh 20240809
+  // background-color: var(--mars-control-bg);
+  background-color: #444444 !important;
   border-radius: 2px;
   box-shadow: none;
 

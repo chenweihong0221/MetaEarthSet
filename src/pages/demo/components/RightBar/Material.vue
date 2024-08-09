@@ -32,26 +32,26 @@
         </div>
       </div>
 
-      <div class="wrapper3">
-        <h1>颜色: </h1>
-        <a-space direction="vertical" style="margin-left: 9px">
-          <a-input v-model:value="value" placeholder="Basic usage" size="small" style="width: 140px;margin-left: 20px"/>
-        </a-space>
-      </div>
+<!--      <div class="wrapper3">-->
+<!--        <h1>颜色: </h1>-->
+<!--        <a-space direction="vertical" style="margin-left: 9px">-->
+<!--          <a-input v-model:value="value" placeholder="Basic usage" size="small" style="width: 140px;margin-left: 20px"/>-->
+<!--        </a-space>-->
+<!--      </div>-->
 
-      <div class="wrapper4">
-        <h1>颜色: </h1>
-        <a-space direction="vertical" style="margin-left: 9px">
-          <a-input v-model:value="value" placeholder="Basic usage" size="small" style="width: 140px;margin-left: 20px"/>
-        </a-space>
-      </div>
+<!--      <div class="wrapper4">-->
+<!--        <h1>颜色: </h1>-->
+<!--        <a-space direction="vertical" style="margin-left: 9px">-->
+<!--          <a-input v-model:value="value" placeholder="Basic usage" size="small" style="width: 140px;margin-left: 20px"/>-->
+<!--        </a-space>-->
+<!--      </div>-->
 
-      <div class="wrapper5">
-        <h1>透明度: </h1>
-        <a-space direction="vertical" style="margin-left: 9px">
-          <a-input v-model:value="value" placeholder="Basic usage" size="small" style="width: 140px;margin-left: 20px"/>
-        </a-space>
-      </div>
+<!--      <div class="wrapper5">-->
+<!--        <h1>透明度: </h1>-->
+<!--        <a-space direction="vertical" style="margin-left: 9px">-->
+<!--          <a-input v-model:value="value" placeholder="Basic usage" size="small" style="width: 140px;margin-left: 20px"/>-->
+<!--        </a-space>-->
+<!--      </div>-->
     </div>
 
   </div>

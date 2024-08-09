@@ -14,7 +14,9 @@
           <a-input v-model:value="value" placeholder="Basic usage" size="small" style="width: 140px;margin-left: 20px"/>
         </a-space>
       </div>
-      <a-button size="small" style="width: 140px;margin-top: 20px;margin-left: 27.5%">监控设备</a-button>
+      <a-button size="small" style="width: 140px;margin-top: 20px;margin-left: 27.5%"
+                @click="handleAddCamera"
+      >监控设备</a-button>
 
 
       <div class="wrapper2">
@@ -31,8 +33,13 @@
 
 <script lang="ts" setup>
 import { ref } from "vue"
+import cameraDrawStore from "@mars/pages/demo/module/CameraStore"
 
-const value = ref("OtherComponent")
+const value = ref("其他")
+const handleAddCamera = () => {
+  console.log(value.value)
+  cameraDrawStore.commit("toggleCameraDraw")
+}
 </script>
 
 <style scoped lang="less">

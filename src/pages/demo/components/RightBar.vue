@@ -218,18 +218,18 @@ const drawFence = () => {
     </div>
 
     <div class="wrapper" v-show="stateStore.state.topBarState === '2'">
-      <select-mode-box/>
-<!--      <transform />-->
-<!--      <div style="margin-top: 30px"/>-->
-<!--      <info-display />-->
-<!--      <div style="margin-top: 30px"/>-->
-<!--      <material />-->
-<!--      <div style="margin-top: 30px"/>-->
-<!--      <graphic-draw />-->
-<!--      <div style="margin-top: 30px"/>-->
-<!--      <other />-->
-<!--      <div style="margin-top: 30px"/>-->
-<!--      <div style="margin-bottom: 15vh"/>-->
+<!--      <select-mode-box/>-->
+      <transform />
+      <div style="margin-top: 30px"/>
+      <info-display />
+      <div style="margin-top: 30px"/>
+      <material />
+      <div style="margin-top: 30px"/>
+      <graphic-draw />
+      <div style="margin-top: 30px"/>
+      <other />
+      <div style="margin-top: 30px"/>
+      <div style="margin-bottom: 15vh"/>
     </div>
   </div>
 </template>

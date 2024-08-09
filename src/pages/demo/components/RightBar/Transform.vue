@@ -1,5 +1,5 @@
 <template>
-  <div class="info-wrapper">
+  <div class="transform-wrapper">
     <div class="header-wrapper">
       <div style="display: flex;align-items: center">
         <div style="font-size: 30px;"> ></div>
@@ -55,9 +55,9 @@ const value = ref()
 
 
 <style scoped lang="less">
-.info-wrapper {
+.transform-wrapper {
   width: 100%;
-  height: 25vh;
+  height: 30vh;
   background-color: #888888;
   display: flex;
   flex-direction: column;

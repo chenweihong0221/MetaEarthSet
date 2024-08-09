@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import MarsMap from "@mars/components/mars-work/mars-map.vue"
 import { useRouter } from "vue-router"
-import { provide, ref } from "vue"
+import { provide, ref, watchEffect } from "vue"
 import * as mars3d from "mars3d"
 import { Building } from "@mars/pages/demo/module/Building"
 import RightBar from "@mars/pages/demo/components/RightBar.vue"
@@ -19,6 +19,8 @@ import TopBar from "@mars/pages/demo/components/TopBar.vue"
 import message from "ant-design-vue/es/message"
 import { useStore } from "vuex"
 import { mapKey } from "@mars/pages/demo/module/store"
+import cameraDrawStore from "@mars/pages/demo/module/CameraStore"
+import temperatureDrawStore from "@mars/pages/demo/module/GraphicDrawStore"
 
 const Cesium = mars3d.Cesium
 
@@ -107,8 +109,7 @@ const marsOnload = (map: any) => {
     center: { lat: 34.813178, lng: 113.529168, alt: 354, heading: 319, pitch: -23 },
     flyTo: false
   })
-
-    // 加载油田联合站模型
+  // 加载油田联合站模型
   const tiles3dLayer2 = new mars3d.layer.TilesetLayer({
     pid: 2020,
     type: "3dtiles",
@@ -122,21 +123,24 @@ const marsOnload = (map: any) => {
   })
   map.addLayer(tiles3dLayer2)
 
-  const label = new mars3d.graphic.LabelEntity({
-    position: { lng: 113.526183, lat: 34.816372, alt: 26.8 },
-    rotation: { z: 43, y: 0, x: 0 },
-    style: {
-      text: "安全工厂",
-      fontSize: 24,
-      color: "#FFFFFF",
-      outline: true,
-      outlineColor: "#000000",
-      horizontalOrigin: mars3d.Cesium.HorizontalOrigin.CENTER,
-      verticalOrigin: mars3d.Cesium.VerticalOrigin.BOTTOM,
-      pixelOffsetY: 0
-    }
-  })
-  map.graphicLayer.addGraphic(label)
+  // del by cwh 20240809
+  // const label = new mars3d.graphic.LabelEntity({
+  //   position: { lng: 113.526183, lat: 34.816372, alt: 26.8 },
+  //   rotation: { z: 43, y: 0, x: 0 },
+  //   style: {
+  //     text: "安全工厂",
+  //     fontSize: 24,
+  //     color: "#FFFFFF",
+  //     outline: true,
+  //     outlineColor: "#000000",
+  //     horizontalOrigin: mars3d.Cesium.HorizontalOrigin.CENTER,
+  //     verticalOrigin: mars3d.Cesium.VerticalOrigin.BOTTOM,
+  //     pixelOffsetY: 0
+  //   }
+  // })
+  // map.graphicLayer.addGraphic(label)
+
+
   map.addLayer(tiles3dLayer)
 // const threeLayer = new ThreeLayer()
   // 设置编辑功能，先注释掉不用
@@ -161,11 +165,6 @@ const marsOnload = (map: any) => {
   // graphicLayer.on(mars3d.EventType.mouseOut, function(event: any) {
   //   console.log("监听layer，鼠标移出了矢量对象", event)
   // })
-
-  // 添加监控数据
-  addRandomGraphicByCount(graphicLayer, [113.524436, 34.814353, -20])
-  addRandomGraphicByCount(graphicLayer, [113.529316, 34.815322, -20])
-  addRandomGraphicByCount(graphicLayer, [113.525142, 34.816809, -20])
 
   // 绘制楼层空间
   // document.addEventListener("mousemove", event => {
@@ -229,7 +228,69 @@ const marsOnload = (map: any) => {
   //   return mars3d.Util.getTemplateHtml({ title: "石化工厂", template: "all", attr })
   // })
 
-  addCamera()
+}
+
+watchEffect(() => {
+  if (temperatureDrawStore.state.temperatureDraw) {
+    GraphicDraw()
+    temperatureDrawStore.commit("toggleTemperatureDraw")
+  }
+  if (cameraDrawStore.state.cameraDraw) {
+    addCamera()
+    cameraDrawStore.commit("toggleCameraDraw")
+  }
+})
+
+const GraphicDraw = () => {
+  graphicLayer.startDraw({
+    type: "divBillboard",
+    style: {
+      text: 18,
+      scale: 0.4,
+      horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+      verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+      distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 900000)
+    }
+  })
+
+  function handleClick(event) {
+    const cartesian = new Cesium.Cartesian3(event.cartesian.x, event.cartesian.y, event.cartesian.z)
+
+    // 将笛卡尔坐标转换为 Cartographic 坐标
+    const cartographic = Cesium.Cartographic.fromCartesian(cartesian)
+
+    // 提取经纬度和高度
+    const longitude = Cesium.Math.toDegrees(cartographic.longitude)
+    const latitude = Cesium.Math.toDegrees(cartographic.latitude)
+    const height = cartographic.height
+
+    addTemperatureDraw(graphicLayer, [longitude, latitude, height])
+
+    // 移除事件监听器，确保只执行一次
+    store.state.map.off(mars3d.EventType.click, handleClick)
+  }
+
+  // 监听绘制完成
+  store.state.map.on(mars3d.EventType.click, handleClick)
+}
+const addTemperatureDraw = (graphicLayer, position) => {
+  const graphicImg = new mars3d.graphic.DivGraphic({
+    position,
+    style: {
+      html: `     <div class="mars3d-temperature-content">
+                      <img class="mars3d-temperature-img" src="/public/img/icon/textPnl.png" alt=""
+                    </div>
+                    <div class="mars3d-draw-content-wrapper">
+<!--                      <div class="draw-style-title">${temperatureDrawStore.state.value}</div>-->
+                      <div class="draw-style-content" style="font-size: 23px">${temperatureDrawStore.state.contentValue}</div>
+                    <div></div>
+                    </div>
+                  `,
+      offsetX: -16,
+      distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
+    }
+  })
+  graphicLayer.addGraphic(graphicImg)
 }
 
 const addCamera = () => {
@@ -244,8 +305,7 @@ const addCamera = () => {
     }
   })
 
-  // 监听绘制完成
-  tiles3dLayer.on(mars3d.EventType.click, function(event) {
+  function handleClick(event) {
     const cartesian = new Cesium.Cartesian3(event.cartesian.x, event.cartesian.y, event.cartesian.z)
 
     // 将笛卡尔坐标转换为 Cartographic 坐标
@@ -257,10 +317,14 @@ const addCamera = () => {
     const height = cartographic.height
 
     addRandomGraphicByCount(graphicLayer, [longitude, latitude, height])
-  })
+
+    // 移除事件监听器，确保只执行一次
+    store.state.map.off(mars3d.EventType.click, handleClick)
+  }
+
+  // 监听绘制完成
+  store.state.map.on(mars3d.EventType.click, handleClick)
 }
-
-
 // 增加摄像头，并控制视频流的导入
 const addRandomGraphicByCount = (graphicLayer, position) => {
   const graphicImg = new mars3d.graphic.DivGraphic({
@@ -298,14 +362,15 @@ const createBuilding = (layer: mars3d.layer.GraphicLayer, positions: Cesium.Cart
   return building
 }
 const getFloorByFloorIdAndBuildingId = (floorId: string, buildingId: string) => {
-    const building = store.getters.getBuildingById(buildingId)
-    return building.floors.get(floorId)
+  const building = store.getters.getBuildingById(buildingId)
+  return building.floors.get(floorId)
 }
 
 </script>
 
 <style>
 @import "../style/camera.css";
+@import "../style/mapdraw.css";
 
 .centerDiv-container {
   height: 100%;

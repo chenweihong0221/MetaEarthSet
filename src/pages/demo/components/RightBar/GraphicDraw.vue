@@ -14,7 +14,7 @@
           <a-space>
             <a-select
               ref="select"
-              v-model:value="value"
+              v-model:value="styleValue"
               style="width: 140px"
               :options="options"
               @focus="focus"
@@ -28,53 +28,62 @@
       <div class="wrapper2">
         <h1>内容: </h1>
         <div style="margin-left: 20px; font-size: 14px">
-          <a-space>
-            <a-select
-              ref="select"
-              v-model:value="value"
-              style="width: 140px"
-              :options="options"
-              @focus="focus"
-              @change="handleChange"
-              size="small"
-            ></a-select>
+          <a-space direction="vertical">
+            <a-input v-model:value="contentValue"
+                     placeholder="内容标注"
+                     size="small"
+                     style="width: 140px;"
+                     maxlength="4"
+            />
           </a-space>
         </div>
       </div>
     </div>
 
     <div class="footer-wrapper">
-      <a-button size="small" style="width: 140px">图上标绘</a-button>
+      <a-button style="width: 140px"
+                size="small"
+                @click="handleDraw"
+      >
+        图上标绘
+      </a-button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue"
+import GraphicDraw from "@mars/pages/demo/module/GraphicDrawStore"
 
-const value = ref("lucy")
+const styleValue = ref("传统样式")
+const contentValue = ref("1号楼")
 const options = ref([
   {
-    value: "jack",
-    label: "jack"
+    id: 1,
+    value: "传统样式",
+    label: "传统样式"
   },
   {
-    value: "lucy",
-    label: "lucy"
+    id: 2,
+    value: "美式样式",
+    label: "美式样式"
   },
   {
-    value: "disabled",
-    label: "Disabled",
-    disabled: true
-  },
-  {
-    value: "yiminghe",
-    label: "Yiminghe"
+    id: 3,
+    value: "欧式样式",
+    label: "欧式样式"
   }
 ])
+
 const handleChange = (value: string) => {
-  console.log(`selected ${value}`)
+  styleValue.value = value
 }
+const handleDraw = () => {
+  GraphicDraw.commit("toggleTemperatureDraw")
+  GraphicDraw.commit("setValue", styleValue.value)
+  GraphicDraw.commit("setcontentValue", contentValue.value)
+}
+
 </script>
 
 <style scoped lang="less">
@@ -111,7 +120,7 @@ const handleChange = (value: string) => {
 
   .footer-wrapper {
     flex: 1;
-    margin-left: 21%;
+    margin-left: 52px;
   }
 }
 

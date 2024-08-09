@@ -44,15 +44,21 @@
     </div>
 
     <div class="footer-wrapper">
-      <a-button size="small" style="width: 140px">图上标绘</a-button>
+      <a-button style="width: 140px"
+                size="small"
+                @click="handleDraw"
+      >
+        图上标绘
+      </a-button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue"
+import GraphicDraw from "@mars/pages/demo/module/GraphicDrawStore"
 
-const value = ref("lucy")
+const value = ref("传统绘制")
 const options = ref([
   {
     value: "jack",
@@ -72,9 +78,15 @@ const options = ref([
     label: "Yiminghe"
   }
 ])
+
 const handleChange = (value: string) => {
   console.log(`selected ${value}`)
 }
+const handleDraw = () => {
+
+  GraphicDraw.commit("toggleCameraDraw")
+}
+
 </script>
 
 <style scoped lang="less">
@@ -111,7 +123,7 @@ const handleChange = (value: string) => {
 
   .footer-wrapper {
     flex: 1;
-    margin-left: 21%;
+    margin-left: 15%;
   }
 }
 

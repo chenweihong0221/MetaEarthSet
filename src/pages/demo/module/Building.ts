@@ -251,7 +251,7 @@ export class Space {
   constructor(positions: Cesium.Cartesian3[], parent: Floor, name?: string, height?: number) {
     this.id = uuid.v4()
     this.name = name || "空间"
-    this.height = height || 3
+    this.height = height || 1.5
     this.parent = parent
     this.polygon = new mars3d.graphic.PolygonEntity({
       positions,
