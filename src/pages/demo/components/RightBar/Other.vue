@@ -14,7 +14,7 @@
           <a-input v-model:value="value" placeholder="Basic usage" size="small" style="width: 140px;margin-left: 20px"/>
         </a-space>
       </div>
-      <a-button size="small" style="width: 140px;margin-top: 20px;margin-left: 68px"
+      <a-button size="small" style="width: 140px;margin-top: 20px;margin-left: 27.5%"
                 @click="handleAddCamera"
       >监控设备</a-button>
 
@@ -25,7 +25,7 @@
           <a-input v-model:value="value" placeholder="Basic usage" size="small" style="width: 140px;margin-left: 20px"/>
         </a-space>
       </div>
-      <a-button size="small" style="width: 140px;margin-top: 20px;margin-left: 68px">3D人员</a-button>
+      <a-button size="small" style="width: 140px;margin-top: 20px;margin-left: 27.5%">3D人员</a-button>
     </div>
 
   </div>

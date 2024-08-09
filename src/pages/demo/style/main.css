@@ -41,4 +41,33 @@
   border-color: #999999 !important;
 }
 
+:where(.css-dev-only-do-not-override-19iuou)  .ant-select-dropdown-empty .ant-select-dropdown-placement-bottomLeft {
+  background-color: rgba(35, 39, 47, 0.7) !important;
+}
+
+.ant-empty-description {
+  color: white !important;
+}
+
+:where(.css-dev-only-do-not-override-19iuou).ant-slider .ant-slider-track {
+  background-color: rgba(35, 39, 47, 0.7) !important;
+}
+
+:where(.css-dev-only-do-not-override-19iuou).ant-slider .ant-slider-handle::after {
+  border-color: rgba(35, 39, 47, 0.7) !important;
+}
+
+:where(.css-dev-only-do-not-override-19iuou).ant-slider .ant-slider-handle:hover::after,
+:where(.css-dev-only-do-not-override-19iuou).ant-slider:hover .ant-slider-handle::after,
+:where(.css-dev-only-do-not-override-19iuou).ant-slider .ant-slider-handle:focus::after,
+:where(.css-dev-only-do-not-override-19iuou).ant-slider .ant-slider-handle::after{
+  box-shadow:0 0 0 4px rgba(35, 39, 47, 0.7) !important;
+}
+
+
+.ant-select-dropdown.css-dev-only-do-not-override-19iuou.ant-select-dropdown-empty.ant-select-dropdown-placement-bottomLeft {
+  /* 在这里添加你想要的样式 */
+  background-color: rgba(35, 39, 47, 0.7) !important;/* 例如，修改背景颜色为黑色 */
+}
+
 

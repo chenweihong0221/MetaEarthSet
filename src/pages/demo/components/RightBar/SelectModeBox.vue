@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
+import GraphicDraw from "@mars/pages/demo/module/GraphicDrawStore"
+
 const checked = ref(false)
 const selectedState = ref("1")
+
+const handleDraw = () => {
+  GraphicDraw.commit("toggleCameraDraw")
+}
+
 </script>
 
 <template>
@@ -87,16 +94,17 @@ const selectedState = ref("1")
             </div>
             <div class="material-row">
               <div>颜色：&nbsp;&nbsp;</div>
-              <input class="material-input">
+              <input type="color" class="material-input-color" style="width: 2em; border: none; padding: 0" >
             </div>
             <div class="material-row">
               <div>贴图：&nbsp;&nbsp;</div>
-              <input class="material-input">
+              <input type="color" class="material-input-color" style="width: 2em; border: none; padding: 0">
             </div>
             <div class="material-row">
               <div>透明度：</div>
-              <input class="material-input">
+              <a-slider class="material-slider" :min="0" :max="1"  step="0.01" />
             </div>
+            <div style="height: 2px"></div>
           </div>
 
         </a-collapse-panel>
@@ -132,7 +140,7 @@ const selectedState = ref("1")
               <input class="draw-input">
             </div>
             <div class="draw-row">
-              <div><mars-button class="my-button">图上标绘</mars-button></div>
+              <div><mars-button class="my-button" @click="handleDraw">图上标绘</mars-button></div>
             </div>
           </div>
         </a-collapse-panel>
@@ -162,7 +170,7 @@ const selectedState = ref("1")
         </a-collapse-panel>
       </a-collapse>
     </div>
-
+    <div style="height: 5em"/>
   </div>
 
 </template>
@@ -198,6 +206,11 @@ const selectedState = ref("1")
 
 .msg-name-input {
   width: 10em
+}
+
+.material-slider {
+  width: 15em;
+  color: rgba(35, 39, 47, 0.7);
 }
 
 input {
@@ -296,6 +309,10 @@ input {
 .my-custom-select::v-deep .ant-select-dropdown-menu-item-selected {
   background-color: #060606; /* 示例：修改背景颜色 */
   color: #fff; /* 示例：修改文字颜色 */
+}
+
+.ant-slider-track {
+  background-color: rgb(255, 255, 255);
 }
 
 
