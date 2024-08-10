@@ -140,7 +140,6 @@ const marsOnload = (map: any) => {
   // })
   // map.graphicLayer.addGraphic(label)
 
-
   map.addLayer(tiles3dLayer)
   // 设置编辑功能，先注释掉不用
   map.addLayer(graphicLayer)
@@ -155,7 +154,6 @@ const marsOnload = (map: any) => {
     selectedGraphicId.value = event.graphic.id
     console.log("selectedGraphicId", selectedGraphicId.value)
   })
-
 }
 
 watchEffect(() => {
