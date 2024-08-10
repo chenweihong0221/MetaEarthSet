@@ -2,6 +2,7 @@
 import { ref } from "vue"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import graphicDrawStore from "@mars/pages/demo/module/GraphicDrawStore"
+import cameraStore from "@mars/pages/demo/module/CameraStore"
 
 const checked = ref(false)
 const selectedGraphicDrawStyle = ref(1)
@@ -34,6 +35,11 @@ const handleGraphicDraw = () => {
   graphicDrawStore.commit("toggleGraphicDraw")
   graphicDrawStore.commit("setSelectedGraphicDrawStyle", selectedGraphicDrawStyle.value)
   graphicDrawStore.commit("setSelectedGraphicDrawContent", selectedGraphicDrawContent.value)
+}
+
+// 添加监控设备功能
+const handleAddCamera = () => {
+  cameraStore.commit("toggleCameraDraw")
 }
 
 </script>
@@ -177,7 +183,7 @@ const handleGraphicDraw = () => {
               <input class="other-input">
             </div>
             <div class="other-row">
-              <mars-button class="my-button">监控设备</mars-button>
+              <mars-button class="my-button" @click="handleAddCamera">监控设备</mars-button>
             </div>
             <div class="other-row">
               <div>人员ID： </div>
