@@ -170,14 +170,7 @@ watchEffect(() => {
 // 添加图上标绘
 const GraphicDraw = () => {
   graphicLayer.startDraw({
-    type: "divBillboard",
-    style: {
-      text: 18,
-      scale: 0.4,
-      horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
-      verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-      distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 900000)
-    }
+    type: "divBillboard"
   })
 
   function handleClick(event) {
@@ -221,14 +214,7 @@ const addGraphicDraw = (graphicLayer, position) => {
 
 const addCamera = () => {
   graphicLayer.startDraw({
-    type: "divBillboard",
-    style: {
-      text: 18,
-      scale: 0.4,
-      horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
-      verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-      distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 900000)
-    }
+    type: "divBillboard"
   })
 
   function handleClick(event) {
@@ -242,7 +228,7 @@ const addCamera = () => {
     const latitude = Cesium.Math.toDegrees(cartographic.latitude)
     const height = cartographic.height
 
-    addRandomGraphicByCount(graphicLayer, [longitude, latitude, height])
+    addCameraGraphicDraw(graphicLayer, [longitude, latitude, height])
 
     // 移除事件监听器，确保只执行一次
     store.state.map.off(mars3d.EventType.click, handleClick)
@@ -252,7 +238,7 @@ const addCamera = () => {
   store.state.map.on(mars3d.EventType.click, handleClick)
 }
 // 增加摄像头，并控制视频流的导入
-const addRandomGraphicByCount = (graphicLayer, position) => {
+const addCameraGraphicDraw = (graphicLayer, position) => {
   const graphicImg = new mars3d.graphic.DivGraphic({
     position,
     style: {
