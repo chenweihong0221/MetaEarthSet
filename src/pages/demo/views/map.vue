@@ -20,7 +20,7 @@ import message from "ant-design-vue/es/message"
 import { useStore } from "vuex"
 import { mapKey } from "@mars/pages/demo/module/store"
 import cameraDrawStore from "@mars/pages/demo/module/CameraStore"
-import temperatureDrawStore from "@mars/pages/demo/module/GraphicDrawStore"
+import graphicDrawStore from "@mars/pages/demo/module/GraphicDrawStore"
 
 const Cesium = mars3d.Cesium
 
@@ -157,9 +157,9 @@ const marsOnload = (map: any) => {
 }
 
 watchEffect(() => {
-  if (temperatureDrawStore.state.temperatureDraw) {
+  if (graphicDrawStore.state.graphicDraw) {
     GraphicDraw()
-    temperatureDrawStore.commit("toggleTemperatureDraw")
+    graphicDrawStore.commit("toggleGraphicDraw")
   }
   if (cameraDrawStore.state.cameraDraw) {
     addCamera()
@@ -191,7 +191,7 @@ const GraphicDraw = () => {
     const latitude = Cesium.Math.toDegrees(cartographic.latitude)
     const height = cartographic.height
 
-    addTemperatureDraw(graphicLayer, [longitude, latitude, height])
+    addGraphicDraw(graphicLayer, [longitude, latitude, height])
 
     // 移除事件监听器，确保只执行一次
     store.state.map.off(mars3d.EventType.click, handleClick)
@@ -200,7 +200,7 @@ const GraphicDraw = () => {
   // 监听绘制完成
   store.state.map.on(mars3d.EventType.click, handleClick)
 }
-const addTemperatureDraw = (graphicLayer, position) => {
+const addGraphicDraw = (graphicLayer, position) => {
   const graphicImg = new mars3d.graphic.DivGraphic({
     position,
     style: {
@@ -208,8 +208,7 @@ const addTemperatureDraw = (graphicLayer, position) => {
                       <img class="mars3d-temperature-img" src="/public/img/icon/textPnl.png" alt=""
                     </div>
                     <div class="mars3d-draw-content-wrapper">
-<!--                      <div class="draw-style-title">${temperatureDrawStore.state.value}</div>-->
-                      <div class="draw-style-content" style="font-size: 23px">${temperatureDrawStore.state.contentValue}</div>
+                      <div class="draw-style-content" style="font-size: 23px">${graphicDrawStore.state.selectedGraphicDrawContent}</div>
                     <div></div>
                     </div>
                   `,

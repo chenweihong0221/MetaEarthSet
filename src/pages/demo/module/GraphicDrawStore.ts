@@ -2,19 +2,19 @@ import { createStore } from "vuex"
 
 const graphicDrawStore = createStore({
   state: {
-    temperatureDraw: false,
-    value: "",
-    contentValue: ""
+    graphicDraw: false,
+    selectedGraphicDrawStyle: 1,
+    selectedGraphicDrawContent: ""
   },
   mutations: {
-    toggleTemperatureDraw (state) {
-      state.temperatureDraw = !state.temperatureDraw
+    toggleGraphicDraw (state) {
+      state.graphicDraw = !state.graphicDraw
     },
-    setValue (state, value) {
-      state.value = value
+    setSelectedGraphicDrawStyle (state, value) {
+      state.selectedGraphicDrawStyle = value
     },
-    setcontentValue (state, value) {
-      state.contentValue = value
+    setSelectedGraphicDrawContent (state, value) {
+      state.selectedGraphicDrawContent = value
     }
   },
   actions: {}

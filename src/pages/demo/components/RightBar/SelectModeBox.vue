@@ -1,15 +1,39 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
-import cameraDrawStore from "@mars/pages/demo/module/CameraStore"
+import graphicDrawStore from "@mars/pages/demo/module/GraphicDrawStore"
 
 const checked = ref(false)
-const selectedState = ref("1")
+const selectedGraphicDrawStyle = ref(1)
+const selectedGraphicDrawContent = ref("1号楼")
+const graphicDrawOptions = ref([
+  {
+    value: 1,
+    label: "传统样式"
+  },
+  {
+    value: 2,
+    label: "样式2"
+  },
+  {
+    value: 3,
+    label: "样式3"
+  },
+  {
+    value: 4,
+    label: "样式4"
+  },
+  {
+    value: 5,
+    label: "样式5"
+  }
+])
 
-const handleDraw = () => {
-  console.log("handleDraw")
-  cameraDrawStore.commit("toggleCameraDraw")
-  console.log("", cameraDrawStore.state)
+// 添加图上绘制功能
+const handleGraphicDraw = () => {
+  graphicDrawStore.commit("toggleGraphicDraw")
+  graphicDrawStore.commit("setSelectedGraphicDrawStyle", selectedGraphicDrawStyle.value)
+  graphicDrawStore.commit("setSelectedGraphicDrawContent", selectedGraphicDrawContent.value)
 }
 
 </script>
@@ -77,7 +101,7 @@ const handleDraw = () => {
             </div>
             <div class="material-row">
               <div>材质流：</div>
-              <a-select v-model:value="selectedState" style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;"
+              <a-select v-model:value="graphicDrawOptions" style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;"
                         class="c_mars-select" popupClassName="mars-select-dropdown" >
                 <a-select-option key="1">
                   材质1
@@ -120,29 +144,23 @@ const handleDraw = () => {
           <div class="draw-box">
             <div class="draw-row">
               <div>样式：</div>
-              <a-select v-model:value="selectedState" style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;"
-                        class="c_mars-select" popupClassName="mars-select-dropdown" >
-                <a-select-option key="1">
-                  样式1
-                </a-select-option>
-                <a-select-option key="2">
-                  样式2
-                </a-select-option>
-                <a-select-option key="3">
-                  样式3
-                </a-select-option>
-                <a-select-option key="4">
-                  样式4
-                </a-select-option>
-
-              </a-select>
+              <a-select v-model:value="selectedGraphicDrawStyle"
+                        style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;"
+                        class="c_mars-select"
+                        popupClassName="mars-select-dropdown"
+                        :options="graphicDrawOptions"
+              />
             </div>
             <div class="draw-row">
               <div>内容：</div>
-              <input class="draw-input">
+              <a-input class="draw-input"
+                       placeholder="1号楼"
+                       style="margin-left: 11px; width: 14.9vw;"
+                       v-model:value="selectedGraphicDrawContent"
+              />
             </div>
             <div class="draw-row">
-              <div><mars-button class="my-button" @click="handleDraw">图上标绘</mars-button></div>
+              <div><mars-button class="my-button" @click="handleGraphicDraw">图上标绘</mars-button></div>
             </div>
           </div>
         </a-collapse-panel>
@@ -172,7 +190,7 @@ const handleDraw = () => {
         </a-collapse-panel>
       </a-collapse>
     </div>
-    <div style="height: 5em"/>
+    <div style="height: 8rem"/>
   </div>
 
 </template>
@@ -316,7 +334,5 @@ input {
 .ant-slider-track {
   background-color: rgb(255, 255, 255);
 }
-
-
 
 </style>

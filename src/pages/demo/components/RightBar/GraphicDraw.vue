@@ -28,16 +28,13 @@
       <div class="wrapper2">
         <h1>内容: </h1>
         <div style="margin-left: 20px; font-size: 14px">
-          <a-space>
-            <a-select
-              ref="select"
-              v-model:value="value"
-              style="width: 140px"
-              :options="options"
-              @focus="focus"
-              @change="handleChange"
-              size="small"
-            ></a-select>
+          <a-space direction="vertical">
+            <a-input v-model:value="value"
+                     placeholder="传统样式"
+                     size="small"
+                     style="width: 140px;
+                     margin-left: 20px"
+            />
           </a-space>
         </div>
       </div>
@@ -58,24 +55,19 @@
 import { ref } from "vue"
 import GraphicDraw from "@mars/pages/demo/module/GraphicDrawStore"
 
-const value = ref("传统绘制")
+const value = ref("传统样式")
 const options = ref([
   {
-    value: "jack",
-    label: "jack"
+    value: "传统样式",
+    label: "传统样式"
   },
   {
-    value: "lucy",
-    label: "lucy"
+    value: "美式样式",
+    label: "美式样式"
   },
   {
-    value: "disabled",
-    label: "Disabled",
-    disabled: true
-  },
-  {
-    value: "yiminghe",
-    label: "Yiminghe"
+    value: "欧式样式",
+    label: "欧式样式",
   }
 ])
 
@@ -83,8 +75,7 @@ const handleChange = (value: string) => {
   console.log(`selected ${value}`)
 }
 const handleDraw = () => {
-
-  GraphicDraw.commit("toggleCameraDraw")
+  GraphicDraw.commit("toggleTemperatureDraw")
 }
 
 </script>
