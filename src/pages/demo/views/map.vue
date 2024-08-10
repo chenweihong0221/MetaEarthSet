@@ -205,10 +205,10 @@ const addGraphicDraw = (graphicLayer, position) => {
     position,
     style: {
       html: `     <div class="mars3d-temperature-content">
-                      <img class="mars3d-temperature-img" src="/public/img/icon/textPnl.png" alt=""
+                      <img class="mars3d-temperature-img" src="/public/img/icon/textPnl.png" alt="样式一"
                     </div>
                     <div class="mars3d-draw-content-wrapper">
-                      <div class="draw-style-content" style="font-size: 23px">${graphicDrawStore.state.selectedGraphicDrawContent}</div>
+                      <div class="draw-style-content" style="font-size: 23px;display: flex;align-items: center;justify-content: center;">${graphicDrawStore.state.selectedGraphicDrawContent}</div>
                     <div></div>
                     </div>
                   `,
