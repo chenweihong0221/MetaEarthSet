@@ -197,12 +197,23 @@ const addGraphicDraw = (graphicLayer, position) => {
   const graphicImg = new mars3d.graphic.DivGraphic({
     position,
     style: {
-      html: `     <div class="mars3d-temperature-content">
-                      <img class="mars3d-temperature-img" src="/public/img/icon/textPnl.png" alt="样式一"
+      html: `     <div class="mars3d-graphicDraw-content">
+                      <img class="mars3d-graphicDraw-img"
+                        src="/public/img/icon/textPnl.png"
+                        alt="样式一"
+                      >
+<!--                      <img class="mars3d-graphicDraw-img" -->
+<!--                            src="/public/img/icon/div1.png" -->
+<!--                            alt="样式二"-->
+<!--                      >-->
                     </div>
+
                     <div class="mars3d-draw-content-wrapper">
-                      <div class="draw-style-content" style="font-size: 23px;display: flex;align-items: center;justify-content: center;">${graphicDrawStore.state.selectedGraphicDrawContent}</div>
-                    <div></div>
+                      <div class="draw-style-content"
+                            style="font-size: 23px;display: flex;align-items: center;justify-content: center;"
+                            >
+                        ${graphicDrawStore.state.selectedGraphicDrawContent}
+                      </div>
                     </div>
                   `,
       offsetX: -16,
