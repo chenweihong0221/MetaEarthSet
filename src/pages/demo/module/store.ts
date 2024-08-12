@@ -1,4 +1,5 @@
 import { createStore } from "vuex"
+import { Building, Fence, Floor, OpenAir } from "@mars/pages/demo/module/Building"
 import { Building, Fence, Floor, Space } from "@mars/pages/demo/module/Building"
 import * as mars3d from "mars3d"
 
@@ -12,6 +13,7 @@ export const mapStore = createStore({
       fenceMap: new Map<string, Fence>(),
       graphicDrawMap: new Map<string, mars3d.graphic.DivGraphic>(),
       cameraMap: new Map<string, mars3d.graphic.DivGraphic>(),
+      openAirMap: new Map<string, OpenAir>(), // openAirId => OpenAir
       graphicLayer: null, // graphicLayer
       graphicLayer2d: null // graphicLayer2d
     }
@@ -27,8 +29,15 @@ export const mapStore = createStore({
       state.fenceMap.set(fence.id.toString(), fence)
       state.graphicLayer.addGraphic(fence.polygon)
     },
+    addOpenAir(state, openAir: OpenAir) {
+      state.openAirMap.set(openAir.id.toString(), openAir)
+      state.graphicLayer.addGraphic(openAir.polygon)
+    },
     setMap(state, map) {
       state.map = map
+    },
+    setOnlyPickText(state, text) {
+      state.graphicLayer.setOnlyPickText(text)
     },
     setGraphicLayer(state, layer) {
       state.graphicLayer = layer

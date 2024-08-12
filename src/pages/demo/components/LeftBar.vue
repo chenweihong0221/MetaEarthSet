@@ -33,6 +33,13 @@ const handleSelected = (key: string, type:number, event: Event) => {
       </a-collapse>
       <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id" @click="handleSelected(fence.id, 3, $event)">
         {{fence.name}}
+      <div class="openAir-box" v-for="openAir in store.state.openAirMap.values()" :key="openAir.id"
+        @click="handleSelected(openAir.id)">
+        {{ openAir.name }}
+      </div>
+      <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id"
+        @click="handleSelected(fence.id)">
+        {{ fence.name }}
       </div>
     </div>
     <div>
@@ -47,17 +54,25 @@ const handleSelected = (key: string, type:number, event: Event) => {
   display: flex;
   justify-content: center;
 }
-.items-container{
+
+.items-container {
   width: 90%;
 
 }
-.space-box , .fence-box{
-  padding:  1em 3em;
+
+.space-box,
+.fence-box,
+.openAir-box {
+  padding: 1em 3em;
   color: #ffffff;
   background: #4d4d4d;
   border-radius: 2px;
 }
-.space-box:hover, .fence-box:hover, .ant-collapse-header:hover{
+
+.space-box:hover,
+.fence-box:hover,
+.ant-collapse-header:hover,
+.openAir-box:hover {
   background: #666666;
   cursor: pointer;
 }
