@@ -19,6 +19,7 @@ const buildingName = ref<string>("1号楼") // 绘制建筑时输入的建筑物
 const floorNum = ref<number>(3) // 绘制建筑时输入的楼层数量
 const spaceName = ref<string>("办公室1") // 绘制空间时输入的空间名称
 const fenceName = ref<string>("围栏") // 绘制围栏时输入的围栏名称
+const openAirName = ref<string>("露天场所") // 绘制露天场所时输入的露天场所名称
 const selectedBuildingId = ref<string>("") // 绘制空间时选择的建筑物id
 const selectedFloorId = ref<string>("") // 绘制空间时选择的楼层id
 const selectableFloor = ref<Floor[]>([]) // 绘制空间时可选择的楼层
@@ -114,9 +115,9 @@ const drawSpace = () => {
 }
 
 const createBuilding = (layer: mars3d.layer.GraphicLayer,
-                        positions: Cesium.Cartesian3[],
-                        name: string,
-                        floorNumber: number): Building => {
+  positions: Cesium.Cartesian3[],
+  name: string,
+  floorNumber: number): Building => {
   const building = new Building(layer, positions, name, floorNumber)
   store.commit("addBuilding", building)
   return building
@@ -139,6 +140,33 @@ const drawFence = () => {
   })
 }
 
+const drawOpenAir = () => {
+  startDraw.value = true
+  store.state.map.onlyPickTerrainPosition = true
+  store.state.graphicLayer.startDraw({
+    type: "polygon",
+    style: {
+      color: "#ffffff",
+      opacity: 0.8
+    }
+  }).then(e => {
+    startDraw.value = false
+    store.state.map.onlyPickTerrainPosition = false
+    const building = createBuilding(store.state.graphicLayer, e.positionsShow, buildingName.value, 1)
+    if (buildingName.value) {
+      building.name = buildingName.value
+    }
+  })
+  store.state.graphicLayer2d.startDraw({
+    type: "polygon",
+    style: {
+      color: "#57cec0",
+      opacity: 0.5
+    }
+  }).then((e: any) => {
+    e.destroy()
+  })
+}
 
 </script>
 
@@ -152,8 +180,8 @@ const drawFence = () => {
               <div class="message" style="margin-left: 10px">
                 选择绘制类型
               </div>
-              <a-select v-model:value="selectedState" style="left: 10px"
-                        class="c_mars-select" popupClassName="mars-select-dropdown">
+              <a-select v-model:value="selectedState" style="left: 10px" class="c_mars-select"
+                popupClassName="mars-select-dropdown">
                 <a-select-option key="1">
                   绘制建筑
                 </a-select-option>
@@ -162,6 +190,9 @@ const drawFence = () => {
                 </a-select-option>
                 <a-select-option key="3">
                   绘制围栏
+                </a-select-option>
+                <a-select-option key="4">
+                  绘制露天场所
                 </a-select-option>
               </a-select>
             </div>
@@ -194,10 +225,21 @@ const drawFence = () => {
                 <input v-model="fenceName" />
               </div>
 
-              <mars-button class="my-button" @click="stopDraw" v-show="selectedState > '0' && startDraw">停止绘制</mars-button>
-              <mars-button class="my-button" @click="drawBuilding" v-show="selectedState == '1' && !startDraw">开始绘制</mars-button>
-              <mars-button class="my-button" @click="drawSpace" v-show="selectedState == '2' && !startDraw">开始绘制</mars-button>
-              <mars-button class="my-button" @click="drawFence" v-show="selectedState == '3' && !startDraw">开始绘制</mars-button>
+              <div v-show="selectedState == '4'">
+                <div class="message">露天场所名称</div>
+                <input v-model="openAirName" />
+              </div>
+
+              <mars-button class="my-button" @click="stopDraw"
+                v-show="selectedState > '0' && startDraw">停止绘制</mars-button>
+              <mars-button class="my-button" @click="drawBuilding"
+                v-show="selectedState == '1' && !startDraw">开始绘制</mars-button>
+              <mars-button class="my-button" @click="drawSpace"
+                v-show="selectedState == '2' && !startDraw">开始绘制</mars-button>
+              <mars-button class="my-button" @click="drawFence"
+                v-show="selectedState == '3' && !startDraw">开始绘制</mars-button>
+              <mars-button class="my-button" @click="drawOpenAir"
+                v-show="selectedState == '4' && !startDraw">开始绘制</mars-button>
             </div>
           </div>
         </a-collapse-panel>
@@ -346,19 +388,23 @@ const drawFence = () => {
 /* 自定义下拉框项样式 */
 .my-custom-select::v-deep .ant-select-dropdown {
   background-color: #0a0606;
-  color: #333; /* 示例：修改文字颜色 */
+  color: #333;
+  /* 示例：修改文字颜色 */
 }
 
 /* 自定义下拉框项样式 */
 .my-custom-select::v-deep .ant-select-dropdown-menu-item {
   background-color: #2a2a2a;
-  color: #333; /* 示例：修改文字颜色 */
+  color: #333;
+  /* 示例：修改文字颜色 */
 }
 
 /* 自定义选中项的样式 */
 .my-custom-select::v-deep .ant-select-dropdown-menu-item-selected {
-  background-color: #060606; /* 示例：修改背景颜色 */
-  color: #fff; /* 示例：修改文字颜色 */
+  background-color: #060606;
+  /* 示例：修改背景颜色 */
+  color: #fff;
+  /* 示例：修改文字颜色 */
 }
 
 .mars-button {
