@@ -299,6 +299,7 @@ const addCameraGraphicDraw = (graphicLayer, position) => {
       flvPlayer.play()
     } else {
       console.log("camera error: 无法解析视频流格式")
+      console.log("url:" + flvUrl)
     }
   })
 }
