@@ -105,6 +105,18 @@ const onMessageNameChange = () => {
   }
 }
 
+const deleteStore = () => {
+  const id = stateStore.state.selectedGraphicId
+  const selectedType = stateStore.state.selectedGraphicType
+  console.log("selectedType", stateStore.state.selectedGraphicType)
+  if (selectedType === 1) { // type为1， 选中的图形为楼层
+
+  } else if (selectedType === 2) { // type为2， 选中的图形为空间
+  } else if (selectedType === 3) { // type为3， 选中的图形为围栏
+    mapStore.commit("removeFence", id)
+  }
+}
+
 </script>
 
 <template>
@@ -136,17 +148,17 @@ const onMessageNameChange = () => {
       </a-collapse>
     </div>
 
-    <div style="height: 3em"/>
+    <div style="height: 3em" />
     <div class="msg-panel">
       <a-collapse>
         <a-collapse-panel header="信息" key="2">
           <div class="msg-box">
             <div class="msg-row">
-              <div class="msg-name" >名称：</div>
+              <div class="msg-name">名称：</div>
               <input class="msg-name-input" v-model="name" @change="onMessageNameChange">
             </div>
             <div class="msg-row">
-              <div class="msg-name" >id：&nbsp;&nbsp;&nbsp;&nbsp;</div>
+              <div class="msg-name">id：&nbsp;&nbsp;&nbsp;&nbsp;</div>
               <input class="msg-name-input" v-model="selectedGraphicId" disabled @change="onMessageNameChange">
             </div>
             <div class="msg-row">
@@ -155,10 +167,10 @@ const onMessageNameChange = () => {
             </div>
             <div class="msg-row">
               <div class="msg-name">显示：</div>
-              <div><a-checkbox v-model:checked="show"/></div>
+              <div><a-checkbox v-model:checked="show" /></div>
             </div>
             <div class="msg-row">
-              <mars-button class="my-button">删除</mars-button>
+              <mars-button class="my-button" @click="deleteStore">删除</mars-button>
             </div>
           </div>
 
@@ -166,7 +178,7 @@ const onMessageNameChange = () => {
       </a-collapse>
     </div>
 
-    <div style="height: 3em"/>
+    <div style="height: 3em" />
     <div class="material-panel">
       <a-collapse>
         <a-collapse-panel header="材质" key="3">
@@ -177,8 +189,9 @@ const onMessageNameChange = () => {
             </div>
             <div class="material-row">
               <div>材质流：</div>
-              <a-select v-model:value="graphicDrawOptions" style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;"
-                        class="c_mars-select" popupClassName="mars-select-dropdown" >
+              <a-select v-model:value="graphicDrawOptions"
+                style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;" class="c_mars-select"
+                popupClassName="mars-select-dropdown">
                 <a-select-option key="1">
                   材质1
                 </a-select-option>
@@ -196,7 +209,7 @@ const onMessageNameChange = () => {
             </div>
             <div class="material-row">
               <div>颜色：&nbsp;&nbsp;</div>
-              <input type="color" class="material-input-color" style="width: 2em; border: none; padding: 0" >
+              <input type="color" class="material-input-color" style="width: 2em; border: none; padding: 0">
             </div>
             <div class="material-row">
               <div>贴图：&nbsp;&nbsp;</div>
@@ -204,7 +217,7 @@ const onMessageNameChange = () => {
             </div>
             <div class="material-row">
               <div>透明度：</div>
-              <a-slider class="material-slider" :min="0" :max="1"  :step="0.01" />
+              <a-slider class="material-slider" :min="0" :max="1" :step="0.01" />
             </div>
             <div style="height: 2px"></div>
           </div>
@@ -213,7 +226,7 @@ const onMessageNameChange = () => {
       </a-collapse>
     </div>
 
-    <div style="height: 3em"/>
+    <div style="height: 3em" />
     <div class="draw-panel">
       <a-collapse>
         <a-collapse-panel header="图上标绘" key="4">
@@ -221,19 +234,13 @@ const onMessageNameChange = () => {
             <div class="draw-row">
               <div>样式：</div>
               <a-select v-model:value="selectedGraphicDrawStyle"
-                        style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;"
-                        class="c_mars-select"
-                        popupClassName="mars-select-dropdown"
-                        :options="graphicDrawOptions"
-              />
+                style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;" class="c_mars-select"
+                popupClassName="mars-select-dropdown" :options="graphicDrawOptions" />
             </div>
             <div class="draw-row">
               <div>内容：</div>
-              <a-input class="draw-input"
-                       placeholder="1号楼"
-                       style="margin-left: 11px;"
-                       v-model:value="selectedGraphicDrawContent"
-              />
+              <a-input class="draw-input" placeholder="1号楼" style="margin-left: 11px;"
+                v-model:value="selectedGraphicDrawContent" />
             </div>
             <div class="draw-row">
               <div><mars-button class="my-button" @click="handleGraphicDraw">图上标绘</mars-button></div>
@@ -243,7 +250,7 @@ const onMessageNameChange = () => {
       </a-collapse>
     </div>
 
-    <div style="height: 3em"/>
+    <div style="height: 3em" />
     <div class="other-panel">
       <a-collapse>
         <a-collapse-panel header="其他" key="5">
@@ -266,7 +273,7 @@ const onMessageNameChange = () => {
         </a-collapse-panel>
       </a-collapse>
     </div>
-    <div style="height: 8rem"/>
+    <div style="height: 8rem" />
   </div>
 
 </template>
@@ -277,19 +284,32 @@ const onMessageNameChange = () => {
   justify-content: center;
   align-items: center
 }
-.trans-panel, .msg-panel, .material-panel, .draw-panel, .other-panel {
+
+.trans-panel,
+.msg-panel,
+.material-panel,
+.draw-panel,
+.other-panel {
   width: 90%;
   background: #999999;
   border-radius: 3px;
 }
 
-.trans-box, .msg-box, .material-box, .draw-box, .other-box {
+.trans-box,
+.msg-box,
+.material-box,
+.draw-box,
+.other-box {
   color: white;
   background: #999999;
 
 }
 
-.trans-row, .msg-row, .material-row, .draw-row , .other-row{
+.trans-row,
+.msg-row,
+.material-row,
+.draw-row,
+.other-row {
   display: flex;
   align-items: center;
   margin-left: 1em;
@@ -321,19 +341,21 @@ input {
   color: white;
 }
 
-.draw-input, .other-input, .material-input {
+.draw-input,
+.other-input,
+.material-input {
   width: 15em;
   margin-right: auto;
 }
 
 
-.other-row .my-button{
+.other-row .my-button {
   margin-left: 5em;
 }
 
 .ant-select-selector {
-  background: #999999!important;
-  border: 1px solid #999999!important;
+  background: #999999 !important;
+  border: 1px solid #999999 !important;
   border-radius: 2px;
   color: white;
 }
@@ -342,7 +364,8 @@ input {
 .c_mars-select {
   width: 14em;
   height: 32px;
-  background-color: rgba(35, 39, 47, 0.7);;
+  background-color: rgba(35, 39, 47, 0.7);
+  ;
   border-radius: 2px;
   box-shadow: none;
 
@@ -393,23 +416,26 @@ input {
 /* 自定义下拉框项样式 */
 .my-custom-select::v-deep .ant-select-dropdown {
   background-color: #0a0606;
-  color: #333; /* 示例：修改文字颜色 */
+  color: #333;
+  /* 示例：修改文字颜色 */
 }
 
 /* 自定义下拉框项样式 */
 .my-custom-select::v-deep .ant-select-dropdown-menu-item {
   background-color: #2a2a2a;
-  color: #333; /* 示例：修改文字颜色 */
+  color: #333;
+  /* 示例：修改文字颜色 */
 }
 
 /* 自定义选中项的样式 */
 .my-custom-select::v-deep .ant-select-dropdown-menu-item-selected {
-  background-color: #060606; /* 示例：修改背景颜色 */
-  color: #fff; /* 示例：修改文字颜色 */
+  background-color: #060606;
+  /* 示例：修改背景颜色 */
+  color: #fff;
+  /* 示例：修改文字颜色 */
 }
 
 .ant-slider-track {
   background-color: rgb(255, 255, 255);
 }
-
 </style>

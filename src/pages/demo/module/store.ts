@@ -32,6 +32,11 @@ export const mapStore = createStore({
       state.openAirMap.set(openAir.id.toString(), openAir)
       state.graphicLayer.addGraphic(openAir.polygon)
     },
+    removeFence(state, id: string) {
+      console.log("state", state.fenceMap.get(id))
+      state.graphicLayer.remove(state.fenceMap.get(id).polygon)
+      state.fenceMap.delete(id)
+    },
     setMap(state, map) {
       state.map = map
     },
@@ -63,19 +68,19 @@ export const mapStore = createStore({
     }
   },
   getters: {
-    getBuildingById: state => (id: string):Building => {
+    getBuildingById: state => (id: string): Building => {
       return state.buildingMap.get(id)
     },
     getBuildingByFloorId: state => (id: string): Building => {
       return state.buildingMap.get(state.floorBuildingMap.get(id))
     },
-    getFloorByFloorId: state => (floorId: string):Floor => {
+    getFloorByFloorId: state => (floorId: string): Floor => {
       const buildingId = state.floorBuildingMap.get(floorId)
       const building = state.buildingMap.get(buildingId)
       console.log("building", building)
       return building.floors.get(floorId)
     },
-    getSpaceBySpaceId: state => (spaceId: string):Space => {
+    getSpaceBySpaceId: state => (spaceId: string): Space => {
       const floorId = state.spaceFloorMap.get(spaceId)
       const building = state.buildingMap.get(state.floorBuildingMap.get(floorId))
       console.log("building", building)
@@ -83,10 +88,10 @@ export const mapStore = createStore({
       console.log("floor", floor)
       return floor.spaces.get(spaceId)
     },
-    getFenceByFenceId: state => (fenceId: string):Fence => {
+    getFenceByFenceId: state => (fenceId: string): Fence => {
       return state.fenceMap.get(fenceId)
     },
-    getOpenAirByOpenAirId: state => (id: string):OpenAir => {
+    getOpenAirByOpenAirId: state => (id: string): OpenAir => {
       return state.openAirMap.get(id)
     },
     getGraphicDrawByGraphicDrawId: state => (id: string):GraphicDraw => {
