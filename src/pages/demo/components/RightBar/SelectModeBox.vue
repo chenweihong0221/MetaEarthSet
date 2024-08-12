@@ -134,7 +134,7 @@ const handleAddCamera = () => {
             </div>
             <div class="material-row">
               <div>透明度：</div>
-              <a-slider class="material-slider" :min="0" :max="1"  step="0.01" />
+              <a-slider class="material-slider" :min="0" :max="1"  :step="0.01" />
             </div>
             <div style="height: 2px"></div>
           </div>
