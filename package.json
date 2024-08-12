@@ -26,6 +26,7 @@
     "dayjs": "^1.11.10",
     "echarts": "^5.5.0",
     "echarts-gl": "^2.0.9",
+    "flv.js": "^1.6.2",
     "font-awesome": "^4.7.0",
     "kml-geojson": "^1.2.2",
     "localforage": "^1.10.0",
