@@ -230,12 +230,12 @@ export class Floor {
    * @param name 空间名称
    * @param height
    */
-  addSpace(positions?: Cesium.Cartesian3[], name?: string, height?: number): Floor {
+  addSpace(positions?: Cesium.Cartesian3[], name?: string, height?: number): Space {
     // 设置postions的高度和楼层高度一致
     const newPositions = setHeight(positions, this.alt + 1)
     const space = new Space(newPositions, this, name, height)
     this.spaces.set(space.id, space)
-    return this
+    return space
   }
 
 }

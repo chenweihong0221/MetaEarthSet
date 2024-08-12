@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, watch } from "vue"
+import { useStore } from "vuex"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import graphicDrawStore from "@mars/pages/demo/module/GraphicDrawStore"
 import cameraStore from "@mars/pages/demo/module/CameraStore"
+import { mapKey, stateKey } from "@mars/pages/demo/module/store"
 
-const checked = ref(false)
+
+const stateStore = useStore(stateKey)
+const mapStore = useStore(mapKey)
 const selectedGraphicDrawStyle = ref(1)
 const selectedGraphicDrawContent = ref("1号楼")
 const graphicDrawOptions = ref([
@@ -29,6 +33,25 @@ const graphicDrawOptions = ref([
     label: "样式5"
   }
 ])
+
+const selectedGraphicId = ref(stateStore.state.selectedGraphicId)
+// 变换部分
+
+// 信息部分
+const name = ref("")
+const type = ref("网格")
+const show = ref(true)
+
+watch(selectedGraphicId, val => {
+  const selectedType = stateStore.state.selectedGraphicType
+  if (selectedType === 1) { // type为1， 选中的图形为楼层
+    const floor = mapStore.getters.getFloorByFloorId(val)
+    name.value = floor.name
+    type.value = "楼层"
+    show.value = floor.polygon.show
+  }
+  console.log("selectedType", selectedType)
+})
 
 // 添加图上绘制功能
 const handleGraphicDraw = () => {
@@ -88,7 +111,7 @@ const handleAddCamera = () => {
             </div>
             <div class="msg-row">
               <div class="msg-name">显示：</div>
-              <div><a-checkbox v-model:checked="checked"/></div>
+              <div><a-checkbox v-model:checked="show"/></div>
             </div>
           </div>
 

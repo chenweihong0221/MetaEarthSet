@@ -4,7 +4,7 @@ import { mapKey, stateKey } from "@mars/pages/demo/module/store"
 
 const store = useStore(mapKey)
 const stateStore = useStore(stateKey)
-const handleSelected = (key: string) => {
+const handleSelected = (key: string, type:number) => {
   stateStore.commit("updateSelectedGraphicId", key)
   console.log("selectedGraphicId:", key)
 }
@@ -20,15 +20,15 @@ const handleSelected = (key: string) => {
         <a-collapse-panel :header="building.name">
           <a-collapse v-for="floor in building.floors.values()"
                       :key="floor.id" :bordered="false" class="floor-box">
-            <a-collapse-panel :header="floor.name" @click="handleSelected(floor.id)">
-              <div v-for="space in floor.spaces.values()" :key="space.id" class="space-box" @click="handleSelected(space.id)">
+            <a-collapse-panel :header="floor.name" @click="handleSelected(floor.id, 1)">
+              <div v-for="space in floor.spaces.values()" :key="space.id" class="space-box" @click="handleSelected(space.id, 2)">
                 {{space.name }}
               </div>
             </a-collapse-panel>
           </a-collapse>
         </a-collapse-panel>
       </a-collapse>
-      <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id" @click="handleSelected(fence.id)">
+      <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id" @click="handleSelected(fence.id, 3)">
         {{fence.name}}
       </div>
     </div>
