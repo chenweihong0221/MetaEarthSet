@@ -3,7 +3,7 @@ import { ref, watch } from "vue"
 import { useStore } from "vuex"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store"
 import * as mars3d from "mars3d"
-import { Building, Fence, Floor } from "@mars/pages/demo/module/Building"
+import { Building, Fence, Floor, OpenAir } from "@mars/pages/demo/module/Building"
 import { Cesium } from "mars3d"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import SelectModeBox from "@mars/pages/demo/components/RightBar/SelectModeBox.vue"
@@ -146,27 +146,35 @@ const drawFence = () => {
   })
 }
 
+const createOpenAir = (layer: mars3d.layer.GraphicLayer,
+  positions: Cesium.Cartesian3[],
+  name: string): OpenAir => {
+  const openAir = new OpenAir(layer, positions, name)
+  store.commit("addOpenAir", openAir)
+  return openAir
+}
+
 const drawOpenAir = () => {
   startDraw.value = true
   store.state.map.onlyPickTerrainPosition = true
   store.state.graphicLayer.startDraw({
     type: "polygon",
     style: {
-      color: "#ffffff",
+      color: "#CECECE",
       opacity: 0.8
     }
   }).then(e => {
     startDraw.value = false
     store.state.map.onlyPickTerrainPosition = false
-    const building = createBuilding(store.state.graphicLayer, e.positionsShow, buildingName.value, 1)
-    if (buildingName.value) {
-      building.name = buildingName.value
+    const openAir = createOpenAir(store.state.graphicLayer, e.positionsShow, buildingName.value)
+    if (openAirName.value) {
+      openAir.name = openAirName.value
     }
   })
   store.state.graphicLayer2d.startDraw({
     type: "polygon",
     style: {
-      color: "#57cec0",
+      color: "#CECECE",
       opacity: 0.5
     }
   }).then((e: any) => {

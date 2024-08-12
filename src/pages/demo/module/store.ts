@@ -1,5 +1,5 @@
 import { createStore } from "vuex"
-import { Building, Fence, Floor } from "@mars/pages/demo/module/Building"
+import { Building, Fence, Floor, OpenAir } from "@mars/pages/demo/module/Building"
 
 export const mapStore = createStore({
   state() {
@@ -8,6 +8,7 @@ export const mapStore = createStore({
       buildingMap: new Map<string, Building>(), // buildingId => Building
       floorBuildingMap: new Map<string, string>(), // floorId => buildingId
       fenceMap: new Map<string, Fence>(),
+      openAirMap: new Map<string, OpenAir>(), // openAirId => OpenAir
       graphicLayer: null, // graphicLayer
       graphicLayer2d: null // graphicLayer2d
     }
@@ -22,6 +23,10 @@ export const mapStore = createStore({
     addFence(state, fence: Fence) {
       state.fenceMap.set(fence.id.toString(), fence)
       state.graphicLayer.addGraphic(fence.polygon)
+    },
+    addOpenAir(state, openAir: OpenAir) {
+      state.openAirMap.set(openAir.id.toString(), openAir)
+      state.graphicLayer.addGraphic(openAir.polygon)
     },
     setMap(state, map) {
       state.map = map
