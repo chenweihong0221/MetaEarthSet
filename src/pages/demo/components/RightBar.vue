@@ -40,6 +40,8 @@ const stopDraw = () => {
   startDraw.value = false
   store.state.graphicLayer.stopDraw()
   store.state.graphicLayer2d.stopDraw()
+  const selectedBuilding = store.getters.getBuildingById(selectedBuildingId.value)
+  selectedBuilding.showAllFloors()
 }
 
 const drawBuilding = () => {
@@ -101,22 +103,14 @@ const drawSpace = () => {
   }).then(e => {
     startDraw.value = false
     store.state.map.onlyPickTerrainPosition = false
+    let space
     if (spaceName.value) {
-      floor.addSpace(e.positionsShow, spaceName.value)
+      space = floor.addSpace(e.positionsShow, spaceName.value)
     } else {
-      floor.addSpace(e.positionsShow)
+      space = floor.addSpace(e.positionsShow)
     }
     selectedBuilding.showAllFloors()
     e.remove()
-  })
-  store.state.graphicLayer2d.startDraw({
-    type: "polygon",
-    style: {
-      color: "#57cec0",
-      opacity: 0.5
-    }
-  }).then((e: any) => {
-    e.destroy()
   })
 }
 

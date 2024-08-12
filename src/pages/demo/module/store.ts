@@ -7,6 +7,7 @@ export const mapStore = createStore({
       map: null,
       buildingMap: new Map<string, Building>(), // buildingId => Building
       floorBuildingMap: new Map<string, string>(), // floorId => buildingId
+      spaceFloorMap: new Map<string, string>(), // spaceId => floorId
       fenceMap: new Map<string, Fence>(),
       openAirMap: new Map<string, OpenAir>(), // openAirId => OpenAir
       graphicLayer: null, // graphicLayer
@@ -66,13 +67,9 @@ export const mapStore = createStore({
       return state.buildingMap.get(state.floorBuildingMap.get(id))
     },
     getFloorByFloorId: state => (floorId: string):Floor => {
-      console.log("input floodId", floorId)
       const buildingId = state.floorBuildingMap.get(floorId)
-      console.log("get buildingId from hash index", buildingId)
       const building = state.buildingMap.get(buildingId)
-      console.log("get building from buildingMap", building)
       const floor = state.buildingMap.get(buildingId).floors.get(floorId)
-      console.log("get floor from building", floor)
       return floor
     },
     getFencePositions: state => () => {
@@ -88,16 +85,19 @@ export const stateStore = createStore({
   state() {
     return {
       topBarState: "1",
-      selectedGraphicId: ""
+      selectedGraphicId: "",
+      selectedGraphicType: 0 // 0未选中，1楼层，2空间，3围栏，4露天场所
     }
   },
   mutations: {
     updateTopBarState(state, topBarState) {
       state.topBarState = topBarState
     },
-    updateSelectedGraphicId(state, selectedGraphicId) {
+    updateSelectedGraphicId(state, selectedGraphicId, selectedGraphicType) {
       state.selectedGraphicId = selectedGraphicId
+      state.selectedGraphicType = selectedGraphicType
     }
+
   }
 })
 
