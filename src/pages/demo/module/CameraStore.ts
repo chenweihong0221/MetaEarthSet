@@ -5,7 +5,7 @@ const cameraDrawStore = createStore({
     cameraDraw: false
   },
   mutations: {
-    toggleCameraDraw(state) {
+    toggleCameraDraw (state) {
       state.cameraDraw = !state.cameraDraw
     }
   },

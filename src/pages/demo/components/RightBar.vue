@@ -6,13 +6,7 @@ import * as mars3d from "mars3d"
 import { Building, Fence, Floor } from "@mars/pages/demo/module/Building"
 import { Cesium } from "mars3d"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
-import Transform from "@mars/pages/demo/components/RightBar/Transform.vue"
-import InfoDisplay from "@mars/pages/demo/components/RightBar/InfoDisplay.vue"
-import Material from "@mars/pages/demo/components/RightBar/Material.vue"
-import GraphicDraw from "@mars/pages/demo/components/RightBar/GraphicDraw.vue"
-import Other from "@mars/pages/demo/components/RightBar/Other.vue"
 import SelectModeBox from "@mars/pages/demo/components/RightBar/SelectModeBox.vue"
-
 
 // 1，3的时候直接绘制即可，2的时候要先选择楼层
 const selectedState = ref<string>("1") // 当前状态，0 未绘制， 1 绘制建筑物， 2 绘制楼层内空间， 3 绘制围栏
@@ -218,17 +212,6 @@ const drawFence = () => {
 
     <div class="wrapper" v-show="stateStore.state.topBarState === '2'">
       <select-mode-box />
-      <!--      <transform />-->
-      <!--      <div style="margin-top: 30px"/>-->
-      <!--      <info-display />-->
-      <!--      <div style="margin-top: 30px"/>-->
-      <!--      <material />-->
-      <!--      <div style="margin-top: 30px"/>-->
-      <!--      <graphic-draw />-->
-      <!--      <div style="margin-top: 30px"/>-->
-      <!--      <other />-->
-      <!--      <div style="margin-top: 30px"/>-->
-      <!--      <div style="margin-bottom: 15vh"/>-->
     </div>
   </div>
 </template>
