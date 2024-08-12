@@ -70,6 +70,11 @@ watch(() => stateStore.state.selectedGraphicId, val => {
     name.value = openAir.name
     type.value = "露天场所"
     show.value = openAir.polygon.show
+  } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
+    const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(val)
+    name.value = graphicDraw.name
+    type.value = "图上标绘"
+    show.value = graphicDraw.graphic.show
   }
 })
 

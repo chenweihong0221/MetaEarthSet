@@ -12,7 +12,7 @@ import MarsMap from "@mars/components/mars-work/mars-map.vue"
 import { useRouter } from "vue-router"
 import { provide, ref, watchEffect } from "vue"
 import * as mars3d from "mars3d"
-import { Building } from "@mars/pages/demo/module/Building"
+import { Building, GraphicDraw } from "@mars/pages/demo/module/Building"
 import RightBar from "@mars/pages/demo/components/RightBar.vue"
 import LeftBar from "@mars/pages/demo/components/LeftBar.vue"
 import TopBar from "@mars/pages/demo/components/TopBar.vue"
@@ -159,7 +159,7 @@ const marsOnload = (map: any) => {
 
 watchEffect(() => {
   if (graphicDrawStore.state.graphicDraw) {
-    GraphicDraw()
+    graphicDraw()
     graphicDrawStore.commit("toggleGraphicDraw")
   }
   if (cameraDrawStore.state.cameraDraw) {
@@ -169,7 +169,7 @@ watchEffect(() => {
 })
 
 // 添加图上标绘
-const GraphicDraw = () => {
+const graphicDraw = () => {
   graphicLayer.startDraw({
     type: "divBillboard"
   })
@@ -200,7 +200,7 @@ const addGraphicDraw = (graphicLayer, position) => {
     style: {
       html: `     <div class="mars3d-graphicDraw-content">
                       <img class="mars3d-graphicDraw-img"
-                        src="/public/img/icon/textPnl.png"
+                        src="/img/icon/textPnl.png"
                         alt="样式一"
                       >
 <!--                      <img class="mars3d-graphicDraw-img" -->
@@ -222,7 +222,8 @@ const addGraphicDraw = (graphicLayer, position) => {
     }
   })
   graphicLayer.addGraphic(graphicImg)
-  store.state.graphicDrawMap.set(graphicImg.id, graphicImg)
+  const graphicDraw = new GraphicDraw(graphicDrawStore.state.selectedGraphicDrawContent, graphicImg)
+  store.state.graphicDrawMap.set(graphicDraw.id, graphicDraw)
 }
 
 const addCamera = () => {
