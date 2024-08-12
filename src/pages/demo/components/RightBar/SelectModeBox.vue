@@ -44,7 +44,7 @@ const show = ref(true)
 
 watch(() => stateStore.state.selectedGraphicId, val => {
   const selectedType = stateStore.state.selectedGraphicType
-  if (selectedType === 0) {
+  if (selectedType === -1) {
     const building = mapStore.state.buildingMap.get(val)
     name.value = building.name
     type.value = "建筑"
@@ -64,6 +64,11 @@ watch(() => stateStore.state.selectedGraphicId, val => {
     name.value = fence.name
     type.value = "围栏"
     show.value = fence.polygon.show
+  } else if (selectedType === 4) { // type为4， 选中的图形为露天场所
+    const openAir = mapStore.getters.getOpenAirByOpenAirId(val)
+    name.value = openAir.name
+    type.value = "露天场所"
+    show.value = openAir.polygon.show
   }
 })
 

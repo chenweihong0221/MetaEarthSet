@@ -1,5 +1,5 @@
 import { createStore } from "vuex"
-import { Building, Fence, Floor, OpenAir } from "@mars/pages/demo/module/Building"
+import { Building, Fence, Floor, OpenAir, Space } from "@mars/pages/demo/module/Building"
 import * as mars3d from "mars3d"
 
 export const mapStore = createStore({
@@ -86,6 +86,9 @@ export const mapStore = createStore({
     getFenceByFenceId: state => (fenceId: string):Fence => {
       return state.fenceMap.get(fenceId)
     },
+    getOpenAirByOpenAirId: state => (id: string):OpenAir => {
+      return state.openAirMap.get(id)
+    },
     getFencePositions: state => () => {
       return Array.from(state.fenceMap.values()).map(fence => {
         return fence.polygon.positions
@@ -107,10 +110,10 @@ export const stateStore = createStore({
     updateTopBarState(state, topBarState) {
       state.topBarState = topBarState
     },
-    updateSelectedGraphicId(state: any, selectedGraphicId: string) {
+    updateSelectedGraphicId(state, selectedGraphicId: string) {
       state.selectedGraphicId = selectedGraphicId
     },
-    updateSelectedGraphicType(state: any, selectedGraphicType: number) {
+    updateSelectedGraphicType(state, selectedGraphicType: number) {
       state.selectedGraphicType = selectedGraphicType
     }
 
