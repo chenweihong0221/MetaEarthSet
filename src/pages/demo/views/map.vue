@@ -21,6 +21,7 @@ import { useStore } from "vuex"
 import { mapKey } from "@mars/pages/demo/module/store"
 import cameraDrawStore from "@mars/pages/demo/module/CameraStore"
 import graphicDrawStore from "@mars/pages/demo/module/GraphicDrawStore"
+import Flv from "flv.js"
 
 const Cesium = mars3d.Cesium
 
@@ -251,6 +252,7 @@ const addCamera = () => {
 }
 // 增加摄像头，并控制视频流的导入
 const addCameraGraphicDraw = (graphicLayer, position) => {
+  const flvUrl = "http://47.93.190.98:80/rtp/34020000001310000002_34020000001310000001.live.flv"
   const graphicImg = new mars3d.graphic.DivGraphic({
     position,
     style: {
@@ -263,12 +265,20 @@ const addCameraGraphicDraw = (graphicLayer, position) => {
       offsetX: -16,
       distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
     },
-    popup: `<video src='http://data.mars3d.cn/file/video/lukou.mp4' controls autoplay style="width: 300px;" ></video>`,
+    popup: `<video style="width: 250px;height:130px;"
+                    id="videoFLV"
+                    autoplay="autoplay"
+                    loop=""
+                    crossorigin=""
+                    controls="controls"
+                    >
+              </video>`,
     popupOptions: {
-      offsetY: -170, // 显示Popup的偏移值，是DivGraphic本身的像素高度值
+      offsetY: -240, // 显示Popup的偏移值，是DivGraphic本身的像素高度值
       template: `<div class="marsBlackPanel animation-spaceInDown">
                         <div class="marsBlackPanel-text">{content}</div>
                         <span class="mars3d-popup-close-button closeButton" style="color: white" >×</span>
+
                       </div>`,
       horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
       verticalOrigin: Cesium.VerticalOrigin.CENTER
@@ -276,6 +286,22 @@ const addCameraGraphicDraw = (graphicLayer, position) => {
   })
   graphicLayer.addGraphic(graphicImg)
   store.state.cameraMap.set(graphicImg.id, graphicImg)
+
+  graphicImg.on(mars3d.EventType.popupOpen, function (event) {
+    const videoElement = event.container.querySelector("#videoFLV") // popup对应的DOM
+    if (Flv.isSupported() && videoElement) {
+      const flvPlayer = Flv.createPlayer({
+        type: "flv",
+        url: flvUrl
+      })
+      flvPlayer.attachMediaElement(videoElement)
+      flvPlayer.load()
+      flvPlayer.play()
+    } else {
+      console.log("camera error: 无法解析视频流格式")
+      console.log("url:" + flvUrl)
+    }
+  })
 }
 
 const back = () => {
