@@ -20,7 +20,7 @@ const handleSelected = (key: string, type: number, event: Event) => {
                   :key="building.id"
                   :bordered="false"
       >
-        <a-collapse-panel :header="building.name" @click="handleSelected(building.id, -1, $event)">
+        <a-collapse-panel :header="building.name" @click="handleSelected(building.id, 0, $event)">
           <a-collapse v-for="floor in building.floors.values()"
                       :key="floor.id" :bordered="false" class="floor-box">
             <a-collapse-panel :header="floor.name" @click="handleSelected(floor.id, 1, $event)">

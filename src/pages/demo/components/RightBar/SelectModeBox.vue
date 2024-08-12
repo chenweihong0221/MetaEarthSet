@@ -34,7 +34,7 @@ const graphicDrawOptions = ref([
   }
 ])
 
-const selectedGraphicId = ref(stateStore.state.selectedGraphicId)
+const selectedGraphicId = ref("")
 // 变换部分
 
 // 信息部分
@@ -43,8 +43,9 @@ const type = ref("网格")
 const show = ref(true)
 
 watch(() => stateStore.state.selectedGraphicId, val => {
+  selectedGraphicId.value = val
   const selectedType = stateStore.state.selectedGraphicType
-  if (selectedType === -1) {
+  if (selectedType === 0) {
     const building = mapStore.state.buildingMap.get(val)
     name.value = building.name
     type.value = "建筑"
@@ -141,7 +142,7 @@ const onMessageNameChange = () => {
             </div>
             <div class="msg-row">
               <div class="msg-name" >id：&nbsp;&nbsp;&nbsp;&nbsp;</div>
-              <input class="msg-name-input" v-bind="stateStore.state.selectedGraphicId" disabled @change="onMessageNameChange">
+              <input class="msg-name-input" v-model="selectedGraphicId" disabled @change="onMessageNameChange">
             </div>
             <div class="msg-row">
               <div class="msg-name">类型：</div>
