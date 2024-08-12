@@ -69,6 +69,11 @@ export const mapStore = createStore({
       const floor = state.buildingMap.get(buildingId).floors.get(floorId)
       console.log("get floor from building", floor)
       return floor
+    },
+    getFencePositions: state => () => {
+      return state.fenceMap.values().map(fence => {
+        return fence.polygon.positions
+      })
     }
   }
 })
@@ -77,12 +82,16 @@ export const mapKey = Symbol("mapKey")
 export const stateStore = createStore({
   state() {
     return {
-      topBarState: "1"
+      topBarState: "1",
+      selectedGraphicId: ""
     }
   },
   mutations: {
     updateTopBarState(state, topBarState) {
       state.topBarState = topBarState
+    },
+    updateSelectedGraphicId(state, selectedGraphicId) {
+      state.selectedGraphicId = selectedGraphicId
     }
   }
 })

@@ -285,9 +285,11 @@ export class Fence {
   id: string
   polygon: mars3d.graphic.ScrollWall
   height: number
+  name: string
 
   constructor(positions: Cesium.Cartesian3[] | LngLatPoint[], name?:string, height?: number) {
     this.height = height || 30
+    this.name = name || "围栏"
     this.polygon = new mars3d.graphic.ScrollWall({
       positions,
       name: name || "围栏",

@@ -32,7 +32,6 @@ const collapseActiveKey = ref<string[]>(["1"]) // 折叠面板激活的key
 const style = "padding: 0; color: white; background: #999999; width:90%; " // 折叠面板样式
 
 
-
 watch(selectedBuildingId, val => {
   console.log("selectedGraphicId changed", val)
   if (val) {
@@ -160,22 +159,22 @@ const drawFence = () => {
     <div class="draw-mode-box" v-show="stateStore.state.topBarState === '1'">
       <a-collapse v-model:active-key="collapseActiveKey" :style="style">
         <a-collapse-panel key="1" header="绘制" :style="style">
-          <div class="draw-box" >
+          <div class="draw-box">
             <div class="left-box">
               <div class="message" style="margin-left: 10px">
                 选择绘制类型
               </div>
               <a-select v-model:value="selectedState" style="left: 10px"
-                        class="c_mars-select" popupClassName="mars-select-dropdown" >
+                        class="c_mars-select" popupClassName="mars-select-dropdown">
                 <a-select-option key="1">
                   绘制建筑
                 </a-select-option>
                 <a-select-option key="2">
                   绘制场所
                 </a-select-option>
-                <!--        <a-select-option key="3">-->
-                <!--          绘制围栏-->
-                <!--        </a-select-option>-->
+                <a-select-option key="3">
+                  绘制围栏
+                </a-select-option>
               </a-select>
             </div>
             <div class="right-box">
@@ -218,18 +217,18 @@ const drawFence = () => {
     </div>
 
     <div class="wrapper" v-show="stateStore.state.topBarState === '2'">
-      <select-mode-box/>
-<!--      <transform />-->
-<!--      <div style="margin-top: 30px"/>-->
-<!--      <info-display />-->
-<!--      <div style="margin-top: 30px"/>-->
-<!--      <material />-->
-<!--      <div style="margin-top: 30px"/>-->
-<!--      <graphic-draw />-->
-<!--      <div style="margin-top: 30px"/>-->
-<!--      <other />-->
-<!--      <div style="margin-top: 30px"/>-->
-<!--      <div style="margin-bottom: 15vh"/>-->
+      <select-mode-box />
+      <!--      <transform />-->
+      <!--      <div style="margin-top: 30px"/>-->
+      <!--      <info-display />-->
+      <!--      <div style="margin-top: 30px"/>-->
+      <!--      <material />-->
+      <!--      <div style="margin-top: 30px"/>-->
+      <!--      <graphic-draw />-->
+      <!--      <div style="margin-top: 30px"/>-->
+      <!--      <other />-->
+      <!--      <div style="margin-top: 30px"/>-->
+      <!--      <div style="margin-bottom: 15vh"/>-->
     </div>
   </div>
 </template>
@@ -245,7 +244,8 @@ const drawFence = () => {
   overflow-y: scroll;
 
 }
-.draw-mode-box{
+
+.draw-mode-box {
   display: flex;
   justify-content: center;
   align-items: center

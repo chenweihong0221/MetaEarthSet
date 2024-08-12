@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { useStore } from "vuex"
-import { mapKey } from "@mars/pages/demo/module/store"
-
+import { mapKey, stateKey } from "@mars/pages/demo/module/store"
 
 const store = useStore(mapKey)
+const stateStore = useStore(stateKey)
+const handleSelected = (key: string) => {
+  stateStore.commit("updateSelectedGraphicId", key)
+  console.log("selectedGraphicId:", key)
+}
+
 </script>
 <template>
   <div class="border" style="position: absolute; top: 4em;  width: 15em; height: 100%; background: #555555">
@@ -13,16 +18,24 @@ const store = useStore(mapKey)
                   :bordered="false"
       >
         <a-collapse-panel :header="building.name">
-          <a-collapse v-for="floor in building.floors.values()" :key="floor.id" :bordered="false" class="floor-box">
-            <a-collapse-panel :header="floor.name">
-              <div v-for="space in floor.spaces.values()" :key="space.id" class="space-box">
+          <a-collapse v-for="floor in building.floors.values()"
+                      :key="floor.id" :bordered="false" class="floor-box">
+            <a-collapse-panel :header="floor.name" @click="handleSelected(floor.id)">
+              <div v-for="space in floor.spaces.values()" :key="space.id" class="space-box" @click="handleSelected(space.id)">
                 {{space.name }}
               </div>
             </a-collapse-panel>
           </a-collapse>
         </a-collapse-panel>
       </a-collapse>
+      <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id" @click="handleSelected(fence.id)">
+        {{fence.name}}
+      </div>
     </div>
+    <div>
+
+    </div>
+
 
   </div>
 </template>
@@ -35,9 +48,15 @@ const store = useStore(mapKey)
   width: 90%;
 
 }
-.space-box {
+.space-box , .fence-box{
   padding:  1em 3em;
   color: #ffffff;
+  background: #4d4d4d;
+  border-radius: 2px;
+}
+.space-box:hover, .fence-box:hover, .ant-collapse-header:hover{
+  background: #666666;
+  cursor: pointer;
 }
 .floor-box {
   margin-left: 1em;
