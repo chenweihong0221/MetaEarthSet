@@ -33,10 +33,6 @@ const handleSelected = (key: string, type: number, event: Event) => {
       </a-collapse>
       <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id" @click="handleSelected(fence.id, 3, $event)">
         {{ fence.name }}
-        <div class="openAir-box" v-for="openAir in store.state.openAirMap.values()" :key="openAir.id"
-             @click="handleSelected(openAir.id, 4, $event)">
-          {{ openAir.name }}
-        </div>
       </div>
       <div class="openAir-box" v-for="openAir in store.state.openAirMap.values()" :key="openAir.id"
            @click="handleSelected(openAir.id, 4, $event)">
