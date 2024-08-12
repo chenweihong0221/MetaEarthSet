@@ -1,5 +1,6 @@
 import { createStore } from "vuex"
-import { Building, Fence, Floor } from "@mars/pages/demo/module/Building"
+import { Building, Fence, Floor, Space } from "@mars/pages/demo/module/Building"
+import * as mars3d from "mars3d"
 
 export const mapStore = createStore({
   state() {
@@ -9,6 +10,8 @@ export const mapStore = createStore({
       floorBuildingMap: new Map<string, string>(), // floorId => buildingId
       spaceFloorMap: new Map<string, string>(), // spaceId => floorId
       fenceMap: new Map<string, Fence>(),
+      graphicDrawMap: new Map<string, mars3d.graphic.DivGraphic>(),
+      cameraMap: new Map<string, mars3d.graphic.DivGraphic>(),
       graphicLayer: null, // graphicLayer
       graphicLayer2d: null // graphicLayer2d
     }
@@ -26,9 +29,6 @@ export const mapStore = createStore({
     },
     setMap(state, map) {
       state.map = map
-    },
-    setOnlyPickText(state, text) {
-      state.graphicLayer.setOnlyPickText(text)
     },
     setGraphicLayer(state, layer) {
       state.graphicLayer = layer
@@ -64,11 +64,22 @@ export const mapStore = createStore({
     getFloorByFloorId: state => (floorId: string):Floor => {
       const buildingId = state.floorBuildingMap.get(floorId)
       const building = state.buildingMap.get(buildingId)
-      const floor = state.buildingMap.get(buildingId).floors.get(floorId)
-      return floor
+      console.log("building", building)
+      return building.floors.get(floorId)
+    },
+    getSpaceBySpaceId: state => (spaceId: string):Space => {
+      const floorId = state.spaceFloorMap.get(spaceId)
+      const building = state.buildingMap.get(state.floorBuildingMap.get(floorId))
+      console.log("building", building)
+      const floor = building.floors.get(floorId)
+      console.log("floor", floor)
+      return floor.spaces.get(spaceId)
+    },
+    getFenceByFenceId: state => (fenceId: string):Fence => {
+      return state.fenceMap.get(fenceId)
     },
     getFencePositions: state => () => {
-      return state.fenceMap.values().map(fence => {
+      return Array.from(state.fenceMap.values()).map(fence => {
         return fence.polygon.positions
       })
     }
@@ -88,8 +99,10 @@ export const stateStore = createStore({
     updateTopBarState(state, topBarState) {
       state.topBarState = topBarState
     },
-    updateSelectedGraphicId(state, selectedGraphicId, selectedGraphicType) {
+    updateSelectedGraphicId(state: any, selectedGraphicId: string) {
       state.selectedGraphicId = selectedGraphicId
+    },
+    updateSelectedGraphicType(state: any, selectedGraphicType: number) {
       state.selectedGraphicType = selectedGraphicType
     }
 

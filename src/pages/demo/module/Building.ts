@@ -32,6 +32,7 @@ export class Building {
   floors: Map<string, Floor>// 楼层对象
   positions: Cesium.Cartesian3[] // 平面对象
   layer: mars3d.layer.GraphicLayer
+  show: boolean = true
 
   constructor(layer: mars3d.layer.GraphicLayer,
               positions: Cesium.Cartesian3[],
@@ -165,6 +166,18 @@ export class Building {
     return buildings
   }
 
+  // 如果show属性变为false，则隐藏建筑物
+  setShow(show: boolean): void {
+    this.show = show
+    this.floors.forEach((floor: Floor) => {
+      floor.polygon.show = show
+      floor.wall.show = show
+      floor.spaces.forEach((space: Space) => {
+        space.polygon.show = show
+        space.wall.show = show
+      })
+    })
+  }
 
 }
 

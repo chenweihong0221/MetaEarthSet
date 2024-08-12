@@ -42,15 +42,29 @@ const name = ref("")
 const type = ref("网格")
 const show = ref(true)
 
-watch(selectedGraphicId, val => {
+watch(() => stateStore.state.selectedGraphicId, val => {
   const selectedType = stateStore.state.selectedGraphicType
-  if (selectedType === 1) { // type为1， 选中的图形为楼层
+  if (selectedType === 0) {
+    const building = mapStore.state.buildingMap.get(val)
+    name.value = building.name
+    type.value = "建筑"
+    show.value = building.show
+  } else if (selectedType === 1) { // type为1， 选中的图形为楼层
     const floor = mapStore.getters.getFloorByFloorId(val)
     name.value = floor.name
     type.value = "楼层"
     show.value = floor.polygon.show
+  } else if (selectedType === 2) { // type为2， 选中的图形为空间
+    const space = mapStore.getters.getSpaceBySpaceId(val)
+    name.value = space.name
+    type.value = "空间"
+    show.value = space.polygon.show
+  } else if (selectedType === 3) { // type为3， 选中的图形为围栏
+    const fence = mapStore.getters.getFenceByFenceId(val)
+    name.value = fence.name
+    type.value = "围栏"
+    show.value = fence.polygon.show
   }
-  console.log("selectedType", selectedType)
 })
 
 // 添加图上绘制功能
@@ -63,6 +77,21 @@ const handleGraphicDraw = () => {
 // 添加监控设备功能
 const handleAddCamera = () => {
   cameraStore.commit("toggleCameraDraw")
+}
+
+const onMessageNameChange = () => {
+  const val = stateStore.state.selectedGraphicId
+  const selectedType = stateStore.state.selectedGraphicType
+  if (selectedType === 1) { // type为1， 选中的图形为楼层
+    const floor = mapStore.getters.getFloorByFloorId(val)
+    floor.name = name.value
+  } else if (selectedType === 2) { // type为2， 选中的图形为空间
+    const space = mapStore.getters.getSpaceBySpaceId(val)
+    space.name = name.value
+  } else if (selectedType === 3) { // type为3， 选中的图形为围栏
+    const fence = mapStore.getters.getFenceByFenceId(val)
+    fence.name = name.value
+  }
 }
 
 </script>
@@ -102,16 +131,23 @@ const handleAddCamera = () => {
         <a-collapse-panel header="信息" key="2">
           <div class="msg-box">
             <div class="msg-row">
-              <div class="msg-name">名称：</div>
-              <input class="msg-name-input">
+              <div class="msg-name" >名称：</div>
+              <input class="msg-name-input" v-model="name" @change="onMessageNameChange">
+            </div>
+            <div class="msg-row">
+              <div class="msg-name" >id：&nbsp;&nbsp;&nbsp;&nbsp;</div>
+              <input class="msg-name-input" v-bind="stateStore.state.selectedGraphicId" disabled @change="onMessageNameChange">
             </div>
             <div class="msg-row">
               <div class="msg-name">类型：</div>
-              <div>网格</div>
+              <div>{{ type }}</div>
             </div>
             <div class="msg-row">
               <div class="msg-name">显示：</div>
               <div><a-checkbox v-model:checked="show"/></div>
+            </div>
+            <div class="msg-row">
+              <mars-button class="my-button">删除</mars-button>
             </div>
           </div>
 
@@ -184,7 +220,7 @@ const handleAddCamera = () => {
               <div>内容：</div>
               <a-input class="draw-input"
                        placeholder="1号楼"
-                       style="margin-left: 11px; width: 14.9vw;"
+                       style="margin-left: 11px;"
                        v-model:value="selectedGraphicDrawContent"
               />
             </div>
@@ -254,7 +290,8 @@ const handleAddCamera = () => {
 }
 
 .msg-name-input {
-  width: 10em
+  width: 10em;
+  padding-left: 0.5em;
 }
 
 .material-slider {

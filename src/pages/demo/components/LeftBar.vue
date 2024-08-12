@@ -4,9 +4,12 @@ import { mapKey, stateKey } from "@mars/pages/demo/module/store"
 
 const store = useStore(mapKey)
 const stateStore = useStore(stateKey)
-const handleSelected = (key: string, type:number) => {
+const handleSelected = (key: string, type:number, event: Event) => {
   stateStore.commit("updateSelectedGraphicId", key)
-  console.log("selectedGraphicId:", key)
+  stateStore.commit("updateSelectedGraphicType", type)
+  console.log("selectedGraphicId:", key, type)
+  // 阻止事件冒泡
+  event.stopPropagation()
 }
 
 </script>
@@ -17,18 +20,18 @@ const handleSelected = (key: string, type:number) => {
                   :key="building.id"
                   :bordered="false"
       >
-        <a-collapse-panel :header="building.name">
+        <a-collapse-panel :header="building.name" @click="handleSelected(building.id, 0, $event)">
           <a-collapse v-for="floor in building.floors.values()"
                       :key="floor.id" :bordered="false" class="floor-box">
-            <a-collapse-panel :header="floor.name" @click="handleSelected(floor.id, 1)">
-              <div v-for="space in floor.spaces.values()" :key="space.id" class="space-box" @click="handleSelected(space.id, 2)">
+            <a-collapse-panel :header="floor.name" @click="handleSelected(floor.id, 1, $event)">
+              <div v-for="space in floor.spaces.values()" :key="space.id" class="space-box" @click="handleSelected(space.id, 2, $event)">
                 {{space.name }}
               </div>
             </a-collapse-panel>
           </a-collapse>
         </a-collapse-panel>
       </a-collapse>
-      <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id" @click="handleSelected(fence.id, 3)">
+      <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id" @click="handleSelected(fence.id, 3, $event)">
         {{fence.name}}
       </div>
     </div>

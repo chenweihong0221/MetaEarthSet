@@ -221,6 +221,7 @@ const addGraphicDraw = (graphicLayer, position) => {
     }
   })
   graphicLayer.addGraphic(graphicImg)
+  store.state.graphicDrawMap.set(graphicImg.id, graphicImg)
 }
 
 const addCamera = () => {
@@ -274,6 +275,7 @@ const addCameraGraphicDraw = (graphicLayer, position) => {
     }
   })
   graphicLayer.addGraphic(graphicImg)
+  store.state.cameraMap.set(graphicImg.id, graphicImg)
 }
 
 const back = () => {

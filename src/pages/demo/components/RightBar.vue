@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { useStore } from "vuex"
-import { mapKey, stateKey } from "@mars/pages/demo/module/store"
+import { mapKey, mapStore, stateKey } from "@mars/pages/demo/module/store"
 import * as mars3d from "mars3d"
 import { Building, Fence, Floor } from "@mars/pages/demo/module/Building"
 import { Cesium } from "mars3d"
@@ -109,6 +109,7 @@ const drawSpace = () => {
     } else {
       space = floor.addSpace(e.positionsShow)
     }
+    mapStore.state.spaceFloorMap.set(space.id, selectedFloorId.value)
     selectedBuilding.showAllFloors()
     e.remove()
   })
