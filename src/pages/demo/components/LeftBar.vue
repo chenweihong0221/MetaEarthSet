@@ -4,7 +4,7 @@ import { mapKey, stateKey } from "@mars/pages/demo/module/store"
 
 const store = useStore(mapKey)
 const stateStore = useStore(stateKey)
-const handleSelected = (key: string, type:number, event: Event) => {
+const handleSelected = (key: string, type: number, event: Event) => {
   stateStore.commit("updateSelectedGraphicId", key)
   stateStore.commit("updateSelectedGraphicType", type)
   console.log("selectedGraphicId:", key, type)
@@ -25,28 +25,20 @@ const handleSelected = (key: string, type:number, event: Event) => {
                       :key="floor.id" :bordered="false" class="floor-box">
             <a-collapse-panel :header="floor.name" @click="handleSelected(floor.id, 1, $event)">
               <div v-for="space in floor.spaces.values()" :key="space.id" class="space-box" @click="handleSelected(space.id, 2, $event)">
-                {{space.name }}
+                {{ space.name }}
               </div>
             </a-collapse-panel>
           </a-collapse>
         </a-collapse-panel>
       </a-collapse>
       <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id" @click="handleSelected(fence.id, 3, $event)">
-        {{fence.name}}
-      <div class="openAir-box" v-for="openAir in store.state.openAirMap.values()" :key="openAir.id"
-        @click="handleSelected(openAir.id)">
-        {{ openAir.name }}
-      </div>
-      <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id"
-        @click="handleSelected(fence.id)">
         {{ fence.name }}
+        <div class="openAir-box" v-for="openAir in store.state.openAirMap.values()" :key="openAir.id"
+             @click="handleSelected(openAir.id, 4, $event)">
+          {{ openAir.name }}
+        </div>
       </div>
     </div>
-    <div>
-
-    </div>
-
-
   </div>
 </template>
 <style scoped lang="less">
@@ -76,6 +68,7 @@ const handleSelected = (key: string, type:number, event: Event) => {
   background: #666666;
   cursor: pointer;
 }
+
 .floor-box {
   margin-left: 1em;
 }

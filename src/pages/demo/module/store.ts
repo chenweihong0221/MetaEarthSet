@@ -1,6 +1,5 @@
 import { createStore } from "vuex"
 import { Building, Fence, Floor, OpenAir } from "@mars/pages/demo/module/Building"
-import { Building, Fence, Floor, Space } from "@mars/pages/demo/module/Building"
 import * as mars3d from "mars3d"
 
 export const mapStore = createStore({
