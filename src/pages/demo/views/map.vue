@@ -321,7 +321,6 @@ const getFloorByFloorIdAndBuildingId = (floorId: string, buildingId: string) => 
   const building = store.getters.getBuildingById(buildingId)
   return building.floors.get(floorId)
 }
-
 </script>
 
 <style>
