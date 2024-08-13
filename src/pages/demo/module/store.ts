@@ -1,5 +1,5 @@
 import { createStore } from "vuex"
-import { Building, Fence, Floor, OpenAir } from "@mars/pages/demo/module/Building"
+import { Building, Fence, Floor, GraphicDraw, OpenAir, Space } from "@mars/pages/demo/module/Building"
 import * as mars3d from "mars3d"
 
 export const mapStore = createStore({
@@ -10,7 +10,7 @@ export const mapStore = createStore({
       floorBuildingMap: new Map<string, string>(), // floorId => buildingId
       spaceFloorMap: new Map<string, string>(), // spaceId => floorId
       fenceMap: new Map<string, Fence>(),
-      graphicDrawMap: new Map<string, mars3d.graphic.DivGraphic>(),
+      graphicDrawMap: new Map<string, GraphicDraw>(),
       cameraMap: new Map<string, mars3d.graphic.DivGraphic>(),
       openAirMap: new Map<string, OpenAir>(), // openAirId => OpenAir
       graphicLayer: null, // graphicLayer
@@ -31,6 +31,11 @@ export const mapStore = createStore({
     addOpenAir(state, openAir: OpenAir) {
       state.openAirMap.set(openAir.id.toString(), openAir)
       state.graphicLayer.addGraphic(openAir.polygon)
+    },
+    removeFence(state, id: string) {
+      console.log("state", state.fenceMap.get(id))
+      state.graphicLayer.remove(state.fenceMap.get(id).polygon)
+      state.fenceMap.delete(id)
     },
     setMap(state, map) {
       state.map = map
@@ -63,19 +68,19 @@ export const mapStore = createStore({
     }
   },
   getters: {
-    getBuildingById: state => (id: string):Building => {
+    getBuildingById: state => (id: string): Building => {
       return state.buildingMap.get(id)
     },
     getBuildingByFloorId: state => (id: string): Building => {
       return state.buildingMap.get(state.floorBuildingMap.get(id))
     },
-    getFloorByFloorId: state => (floorId: string):Floor => {
+    getFloorByFloorId: state => (floorId: string): Floor => {
       const buildingId = state.floorBuildingMap.get(floorId)
       const building = state.buildingMap.get(buildingId)
       console.log("building", building)
       return building.floors.get(floorId)
     },
-    getSpaceBySpaceId: state => (spaceId: string):Space => {
+    getSpaceBySpaceId: state => (spaceId: string): Space => {
       const floorId = state.spaceFloorMap.get(spaceId)
       const building = state.buildingMap.get(state.floorBuildingMap.get(floorId))
       console.log("building", building)
@@ -83,8 +88,14 @@ export const mapStore = createStore({
       console.log("floor", floor)
       return floor.spaces.get(spaceId)
     },
-    getFenceByFenceId: state => (fenceId: string):Fence => {
+    getFenceByFenceId: state => (fenceId: string): Fence => {
       return state.fenceMap.get(fenceId)
+    },
+    getOpenAirByOpenAirId: state => (id: string): OpenAir => {
+      return state.openAirMap.get(id)
+    },
+    getGraphicDrawByGraphicDrawId: state => (id: string):GraphicDraw => {
+      return state.graphicDrawMap.get(id)
     },
     getFencePositions: state => () => {
       return Array.from(state.fenceMap.values()).map(fence => {
@@ -107,10 +118,10 @@ export const stateStore = createStore({
     updateTopBarState(state, topBarState) {
       state.topBarState = topBarState
     },
-    updateSelectedGraphicId(state: any, selectedGraphicId: string) {
+    updateSelectedGraphicId(state, selectedGraphicId: string) {
       state.selectedGraphicId = selectedGraphicId
     },
-    updateSelectedGraphicType(state: any, selectedGraphicType: number) {
+    updateSelectedGraphicType(state, selectedGraphicType: number) {
       state.selectedGraphicType = selectedGraphicType
     }
 

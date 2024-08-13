@@ -41,7 +41,9 @@ const stopDraw = () => {
   store.state.graphicLayer.stopDraw()
   store.state.graphicLayer2d.stopDraw()
   const selectedBuilding = store.getters.getBuildingById(selectedBuildingId.value)
-  selectedBuilding.showAllFloors()
+  if (selectedBuilding) {
+    selectedBuilding.showAllFloors()
+  }
 }
 
 const drawBuilding = () => {

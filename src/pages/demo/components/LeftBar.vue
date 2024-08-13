@@ -33,10 +33,14 @@ const handleSelected = (key: string, type: number, event: Event) => {
       </a-collapse>
       <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id" @click="handleSelected(fence.id, 3, $event)">
         {{ fence.name }}
-        <div class="openAir-box" v-for="openAir in store.state.openAirMap.values()" :key="openAir.id"
-             @click="handleSelected(openAir.id, 4, $event)">
-          {{ openAir.name }}
-        </div>
+      </div>
+      <div class="openAir-box" v-for="openAir in store.state.openAirMap.values()" :key="openAir.id"
+           @click="handleSelected(openAir.id, 4, $event)">
+        {{ openAir.name }}
+      </div>
+      <div class="graphic-draw-box" v-for="graphicDraw in store.state.graphicDrawMap.values()" :key="graphicDraw.id"
+            @click="handleSelected(graphicDraw.id, 5, $event)">
+          {{ graphicDraw.name }}
       </div>
     </div>
   </div>
@@ -54,7 +58,9 @@ const handleSelected = (key: string, type: number, event: Event) => {
 
 .space-box,
 .fence-box,
-.openAir-box {
+.openAir-box,
+.graphic-draw-box
+{
   padding: 1em 3em;
   color: #ffffff;
   background: #4d4d4d;
@@ -64,7 +70,8 @@ const handleSelected = (key: string, type: number, event: Event) => {
 .space-box:hover,
 .fence-box:hover,
 .ant-collapse-header:hover,
-.openAir-box:hover {
+.openAir-box:hover,
+.graphic-draw-box:hover {
   background: #666666;
   cursor: pointer;
 }

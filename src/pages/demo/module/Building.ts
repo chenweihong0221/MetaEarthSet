@@ -47,7 +47,7 @@ export class Building {
     this.floorNumber = floorNumber || 3
     this.floorHeight = floorHeight || 5
     this.spaceHeight = spaceHeight || 3
-    this.floorInterval = 0.5
+    this.floorInterval = 0.1
     this.layer = layer
     this.floors = new Map()
     let i = 0
@@ -342,7 +342,7 @@ export class OpenAir {
       name: name || "露天场所",
       style: {
         // color: "#be3aea",
-        color: "#CECECE", 
+        color: "#CECECE",
         opacity: 1
       }
     })
@@ -360,6 +360,18 @@ export class OpenAir {
     })
     this.layer.addGraphic(this.polygon)
     this.layer.addGraphic(this.wall)
+  }
+}
+
+export class GraphicDraw {
+  id: string
+  name: string
+  graphic: mars3d.graphic.DivGraphic
+
+  constructor(name:string, graphic: mars3d.graphic.DivGraphic) {
+    this.graphic = graphic
+    this.name = name
+    this.id = graphic.id.toString()
   }
 }
 
