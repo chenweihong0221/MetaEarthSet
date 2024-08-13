@@ -265,12 +265,11 @@ const addCameraGraphicDraw = (graphicLayer, position) => {
       offsetX: -16,
       distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
     },
-    popup: `<video style="width: 250px;height:130px;"
+    popup: `<video style="width: 240px;height:130px;"
                     id="videoFLV"
                     autoplay="autoplay"
                     loop=""
                     crossorigin=""
-                    controls="controls"
                     >
               </video>`,
     popupOptions: {
@@ -278,7 +277,6 @@ const addCameraGraphicDraw = (graphicLayer, position) => {
       template: `<div class="marsBlackPanel animation-spaceInDown">
                         <div class="marsBlackPanel-text">{content}</div>
                         <span class="mars3d-popup-close-button closeButton" style="color: white" >×</span>
-
                       </div>`,
       horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
       verticalOrigin: Cesium.VerticalOrigin.CENTER

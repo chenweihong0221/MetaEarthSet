@@ -38,3 +38,9 @@
   margin-left: calc(50% - 3px);
   background-color: #5b8fee;
 }
+
+.camera-full-screen-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
