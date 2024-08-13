@@ -21,7 +21,7 @@ import { useStore } from "vuex"
 import { mapKey } from "@mars/pages/demo/module/store"
 import cameraDrawStore from "@mars/pages/demo/module/CameraStore"
 import graphicDrawStore from "@mars/pages/demo/module/GraphicDrawStore"
-import Flv from "flv.js"
+import Flv from "flv-h265.js"
 
 const Cesium = mars3d.Cesium
 
@@ -253,7 +253,7 @@ const addCamera = () => {
 }
 // 增加摄像头，并控制视频流的导入
 const addCameraGraphicDraw = (graphicLayer, position) => {
-  const flvUrl = "http://47.93.190.98:80/rtp/34020000001310000002_34020000001310000001.live.flv"
+  const flvUrl = "ws://47.93.190.98:80/rtp/34020000001320000111_34020000001320000011.live.flv"
   const graphicImg = new mars3d.graphic.DivGraphic({
     position,
     style: {
@@ -267,10 +267,11 @@ const addCameraGraphicDraw = (graphicLayer, position) => {
       distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
     },
     popup: `<video style="width: 240px;height:130px;"
-                    id="videoFLV"
+                    id="videoPlay"
                     autoplay="autoplay"
                     loop=""
                     crossorigin=""
+                    controls="controls"
                     >
               </video>`,
     popupOptions: {
@@ -287,7 +288,9 @@ const addCameraGraphicDraw = (graphicLayer, position) => {
   store.state.cameraMap.set(graphicImg.id, graphicImg)
 
   graphicImg.on(mars3d.EventType.popupOpen, function (event) {
-    const videoElement = event.container.querySelector("#videoFLV") // popup对应的DOM
+    const videoElement = event.container.querySelector("#videoPlay") // popup对应的DOM
+
+    // flv格式转换
     if (Flv.isSupported() && videoElement) {
       const flvPlayer = Flv.createPlayer({
         type: "flv",
@@ -296,6 +299,9 @@ const addCameraGraphicDraw = (graphicLayer, position) => {
       flvPlayer.attachMediaElement(videoElement)
       flvPlayer.load()
       flvPlayer.play()
+    } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
+      videoElement.src = flvUrl
+      videoElement.play()
     } else {
       console.log("camera error: 无法解析视频流格式")
       console.log("url:" + flvUrl)
