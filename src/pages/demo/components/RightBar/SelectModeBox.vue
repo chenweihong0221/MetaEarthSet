@@ -9,30 +9,8 @@ import { mapKey, stateKey } from "@mars/pages/demo/module/store"
 
 const stateStore = useStore(stateKey)
 const mapStore = useStore(mapKey)
-const selectedGraphicDrawStyle = ref(1)
-const selectedGraphicDrawContent = ref("1号楼")
-const graphicDrawOptions = ref([
-  {
-    value: 1,
-    label: "传统样式"
-  },
-  {
-    value: 2,
-    label: "样式2"
-  },
-  {
-    value: 3,
-    label: "样式3"
-  },
-  {
-    value: 4,
-    label: "样式4"
-  },
-  {
-    value: 5,
-    label: "样式5"
-  }
-])
+
+
 
 const selectedGraphicId = ref("")
 // 变换部分
@@ -78,17 +56,7 @@ watch(() => stateStore.state.selectedGraphicId, val => {
   }
 })
 
-// 添加图上绘制功能
-const handleGraphicDraw = () => {
-  graphicDrawStore.commit("toggleGraphicDraw")
-  graphicDrawStore.commit("setSelectedGraphicDrawStyle", selectedGraphicDrawStyle.value)
-  graphicDrawStore.commit("setSelectedGraphicDrawContent", selectedGraphicDrawContent.value)
-}
 
-// 添加监控设备功能
-const handleAddCamera = () => {
-  cameraStore.commit("toggleCameraDraw")
-}
 
 const onMessageNameChange = () => {
   const val = stateStore.state.selectedGraphicId
@@ -233,54 +201,6 @@ const deleteStore = () => {
       </a-collapse>
     </div>
 
-    <div style="height: 3em" />
-    <div class="draw-panel">
-      <a-collapse>
-        <a-collapse-panel header="图上标绘" key="4">
-          <div class="draw-box">
-            <div class="draw-row">
-              <div>样式：</div>
-              <a-select v-model:value="selectedGraphicDrawStyle"
-                style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;" class="c_mars-select"
-                popupClassName="mars-select-dropdown" :options="graphicDrawOptions" />
-            </div>
-            <div class="draw-row">
-              <div>内容：</div>
-              <a-input class="draw-input" placeholder="1号楼" style="margin-left: 11px;"
-                v-model:value="selectedGraphicDrawContent" />
-            </div>
-            <div class="draw-row">
-              <div><mars-button class="my-button" @click="handleGraphicDraw">图上标绘</mars-button></div>
-            </div>
-          </div>
-        </a-collapse-panel>
-      </a-collapse>
-    </div>
-
-    <div style="height: 3em" />
-    <div class="other-panel">
-      <a-collapse>
-        <a-collapse-panel header="其他" key="5">
-          <div class="other-box">
-            <div class="other-row">
-              <div>设备ID：</div>
-              <input class="other-input">
-            </div>
-            <div class="other-row">
-              <mars-button class="my-button" @click="handleAddCamera">监控设备</mars-button>
-            </div>
-            <div class="other-row">
-              <div>人员ID： </div>
-              <input class="other-input">
-            </div>
-            <div class="other-row">
-              <mars-button class="my-button">监控人员</mars-button>
-            </div>
-          </div>
-        </a-collapse-panel>
-      </a-collapse>
-    </div>
-    <div style="height: 8rem" />
   </div>
 
 </template>
