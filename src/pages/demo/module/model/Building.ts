@@ -1,8 +1,6 @@
 import * as mars3d from "mars3d"
 import { Cesium, LngLatPoint } from "mars3d"
 import * as uuid from "uuid"
-import { useStore } from "vuex"
-import { mapStore } from "@mars/pages/demo/module/store"
 
 function getHeight(positions: Cesium.Cartesian3[] | Cesium.Cartesian3): number {
   const position = positions instanceof Array ? positions[0] : positions
@@ -292,87 +290,3 @@ export class Space {
     this.parent.layer.addGraphic(this.wall)
   }
 }
-
-
-
-export class Fence {
-  id: string
-  polygon: mars3d.graphic.ScrollWall
-  height: number
-  name: string
-
-  constructor(positions: Cesium.Cartesian3[] | LngLatPoint[], name?: string, height?: number) {
-    this.height = height || 30
-    this.name = name || "围栏"
-    this.polygon = new mars3d.graphic.ScrollWall({
-      positions,
-      name: name || "围栏",
-      style: {
-        materialType: mars3d.MaterialType.WallScroll,
-        diffHeight: this.height,
-        materialOptions: {
-          color: "#d75ee1",
-          count: 3,
-          speed: 20,
-          bloom: true
-        },
-        opacity: 0.8
-      }
-    })
-    this.id = this.polygon.id.toString()
-  }
-}
-
-export class OpenAir {
-  id: string
-  name: string
-  positions: Cesium.Cartesian3[]
-  height: number
-  layer: mars3d.layer.GraphicLayer
-  polygon: mars3d.graphic.PolygonEntity
-  wall: mars3d.graphic.ThickWall
-
-  constructor(layer: mars3d.layer.GraphicLayer, positions: Cesium.Cartesian3[], name?: string, height?: number) {
-    this.id = uuid.v4()
-    this.positions = positions
-    this.name = name || "露天场所"
-    this.height = height || 5
-    this.layer = layer
-    this.polygon = new mars3d.graphic.PolygonEntity({
-      positions,
-      name: name || "露天场所",
-      style: {
-        // color: "#be3aea",
-        color: "#CECECE",
-        opacity: 1
-      }
-    })
-    this.wall = new mars3d.graphic.ThickWall({
-      positions,
-      name: name || "露天场所",
-      style: {
-        // color: "#be3aea",
-        color: "#A9A9A9", // modify by cwh 202408081127
-        opacity: 1,
-        diffHeight: this.height,
-        width: 0.1,
-        closure: true
-      }
-    })
-    this.layer.addGraphic(this.polygon)
-    this.layer.addGraphic(this.wall)
-  }
-}
-
-export class GraphicDraw {
-  id: string
-  name: string
-  graphic: mars3d.graphic.DivGraphic
-
-  constructor(name:string, graphic: mars3d.graphic.DivGraphic) {
-    this.graphic = graphic
-    this.name = name
-    this.id = graphic.id.toString()
-  }
-}
-

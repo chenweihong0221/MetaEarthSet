@@ -12,7 +12,7 @@ import store from "./widget-store"
 import MarsUI from "@mars/components/mars-ui"
 import { router } from "./routes"
 import "@mars/components/mars-ui/common"
-import { mapKey, mapStore, stateKey, stateStore } from "@mars/pages/demo/module/store"
+import { mapKey, mapStore, stateKey, stateStore } from "@mars/pages/demo/module/store/store"
 
 // 导入全局样式
 import "./style/main.css"

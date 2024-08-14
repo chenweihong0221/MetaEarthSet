@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { useStore } from "vuex"
-import { mapKey, mapStore, stateKey } from "@mars/pages/demo/module/store"
+import { mapKey, mapStore, stateKey } from "@mars/pages/demo/module/store/store"
 import * as mars3d from "mars3d"
-import { Building, Fence, Floor, OpenAir, setHeight } from "@mars/pages/demo/module/Building"
+import { Building, Floor, setHeight } from "@mars/pages/demo/module/model/Building"
 import { Cesium } from "mars3d"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
-import { CesiumRoleController } from "@mars/pages/demo/module/CesiumRoleController"
-import graphicDrawStore from "@mars/pages/demo/module/GraphicDrawStore"
-import cameraStore from "@mars/pages/demo/module/CameraStore"
+import { CesiumRoleController } from "@mars/pages/demo/module/store/CesiumRoleController"
+import graphicDrawStore from "@mars/pages/demo/module/store/GraphicDrawStore"
+import cameraStore from "@mars/pages/demo/module/store/CameraStore"
+import { Fence } from "@mars/pages/demo/module/model/Fence"
+import { OpenAir } from "@mars/pages/demo/module/model/OpenAir"
+import { Human } from "@mars/pages/demo/module/model/Human"
 
 // 1，3的时候直接绘制即可，2的时候要先选择楼层
 const selectedState = ref<string>("1") // 当前状态，0 未绘制， 1 绘制建筑物， 2 绘制楼层内空间， 3 绘制围栏
@@ -22,10 +25,12 @@ const floorNum = ref<number>(3) // 绘制建筑时输入的楼层数量
 const spaceName = ref<string>("办公室1") // 绘制空间时输入的空间名称
 const fenceName = ref<string>("围栏") // 绘制围栏时输入的围栏名称
 const openAirName = ref<string>("露天场所") // 绘制露天场所时输入的露天场所名称
+const deviceId = ref<string>("") // 绘制围栏时选择的设备id
+const humanId = ref<string>("") // 绘制围栏时选择的人员id
 const selectedBuildingId = ref<string>("") // 绘制空间时选择的建筑物id
 const selectedFloorId = ref<string>("") // 绘制空间时选择的楼层id
 const selectableFloor = ref<Floor[]>([]) // 绘制空间时可选择的楼层
-const collapseActiveKey = ref<string[]>(["1"]) // 折叠面板激活的key
+const collapseActiveKey = ref<string[]>(["1", "4", "5"]) // 折叠面板激活的key
 const selectedGraphicDrawStyle = ref(1)
 const selectedGraphicDrawContent = ref("1号楼")
 const graphicDrawOptions = ref([
@@ -219,6 +224,10 @@ const drawOpenAir = () => {
 }
 
 const drawPerson = () => {
+  if (humanId.value === "") {
+    alert("请输入人员ID")
+    return
+  }
   startDraw.value = true
   store.state.map.setCursor("crosshair")
   store.state.map.once("click", event => {
@@ -249,6 +258,20 @@ const handleGraphicDraw = () => {
 const handleAddCamera = () => {
   cameraStore.commit("toggleCameraDraw")
 }
+
+const handleAddHuman = () => {
+  if (humanId.value === "") {
+    alert("请输入人员ID")
+    return
+  }
+  mapStore.state.map.setCursor("crosshair")
+  mapStore.state.map.once("click", event => {
+    mapStore.state.map.setCursor("default")
+    const human = new Human(humanId.value, event.cartesian, mapStore.state.graphicLayer)
+    mapStore.state.humanMap.set(human.id, human)
+    humanId.value = ""
+  })
+}
 </script>
 
 <template>
@@ -275,9 +298,9 @@ const handleAddCamera = () => {
                 <a-select-option key="4">
                   绘制露天场所
                 </a-select-option>
-                <a-select-option key="6">
-                  绘制人员
-                </a-select-option>
+<!--                <a-select-option key="6">-->
+<!--                  绘制人员-->
+<!--                </a-select-option>-->
               </a-select>
             </div>
             <div class="right-box">
@@ -334,7 +357,7 @@ const handleAddCamera = () => {
 
     <div style="height: 3em" />
     <div class="draw-panel">
-      <a-collapse :style="style">
+      <a-collapse :style="style" v-model:active-key="collapseActiveKey">
         <a-collapse-panel header="图上标绘" key="4">
           <div class="draw-box">
             <div class="draw-row">
@@ -358,22 +381,22 @@ const handleAddCamera = () => {
 
     <div style="height: 3em" />
     <div class="other-panel">
-      <a-collapse>
+      <a-collapse v-model:active-key="collapseActiveKey">
         <a-collapse-panel header="其他" key="5">
           <div class="other-box">
             <div class="other-row">
               <div>设备ID：</div>
-              <input class="other-input">
+              <input class="other-input" v-model="deviceId">
             </div>
             <div class="other-row">
               <mars-button class="my-button" @click="handleAddCamera">监控设备</mars-button>
             </div>
             <div class="other-row">
               <div>人员ID： </div>
-              <input class="other-input">
+              <input class="other-input" v-model="humanId">
             </div>
             <div class="other-row">
-              <mars-button class="my-button">监控人员</mars-button>
+              <mars-button class="my-button" @click="handleAddHuman">监控人员</mars-button>
             </div>
           </div>
         </a-collapse-panel>

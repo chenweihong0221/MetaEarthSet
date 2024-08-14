@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useStore } from "vuex"
-import { mapKey, stateKey } from "@mars/pages/demo/module/store"
+import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 
 const store = useStore(mapKey)
 const stateStore = useStore(stateKey)
@@ -42,6 +42,9 @@ const handleSelected = (key: string, type: number, event: Event) => {
             @click="handleSelected(graphicDraw.id, 5, $event)">
           {{ graphicDraw.name }}
       </div>
+      <div class="human-box" v-for="human in store.state.humanMap.values()" :key="human.id" @click="handleSelected(human.id, 6, $event)">
+        {{human.id}}
+      </div>
     </div>
   </div>
 </template>
@@ -59,7 +62,8 @@ const handleSelected = (key: string, type: number, event: Event) => {
 .space-box,
 .fence-box,
 .openAir-box,
-.graphic-draw-box
+.graphic-draw-box,
+.human-box
 {
   padding: 1em 3em;
   color: #ffffff;
@@ -71,7 +75,8 @@ const handleSelected = (key: string, type: number, event: Event) => {
 .fence-box:hover,
 .ant-collapse-header:hover,
 .openAir-box:hover,
-.graphic-draw-box:hover {
+.graphic-draw-box:hover,
+.human-box:hover{
   background: #666666;
   cursor: pointer;
 }

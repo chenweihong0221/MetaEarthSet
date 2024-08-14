@@ -6,7 +6,7 @@ import type { Dayjs } from "dayjs"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import MarsIcon from "@mars/components/mars-ui/mars-icon/index.vue"
 import { useStore } from "vuex"
-import { mapKey, stateKey } from "@mars/pages/demo/module/store"
+import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 
 interface FormState {
   url: string

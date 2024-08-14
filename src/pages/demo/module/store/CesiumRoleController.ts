@@ -1,5 +1,5 @@
 import { Cesium } from "mars3d"
-import { mapStore } from "@mars/pages/demo/module/store"
+import { mapStore } from "@mars/pages/demo/module/store/store"
 import { message } from "ant-design-vue"
 
 /**

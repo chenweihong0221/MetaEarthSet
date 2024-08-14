@@ -2,12 +2,12 @@
 import { ref, watch } from "vue"
 import { useStore } from "vuex"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
-import { mapKey, stateKey } from "@mars/pages/demo/module/store"
+import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 
 
 const stateStore = useStore(stateKey)
 const mapStore = useStore(mapKey)
-
+const graphicDrawOptions = ref(["材质1", "材质2", "材质3", "材质4"])
 
 
 const selectedGraphicId = ref("")
@@ -51,6 +51,11 @@ watch(() => stateStore.state.selectedGraphicId, val => {
     name.value = graphicDraw.name
     type.value = "图上标绘"
     show.value = graphicDraw.graphic.show
+  } else if (selectedType === 6) { // type为6， 选中的图形为模型
+    const model = mapStore.getters.getHumanByHumanId(val)
+    name.value = model.id
+    type.value = "人员"
+    show.value = model.show
   }
 })
 
@@ -269,6 +274,13 @@ input {
   margin-left: 1.15em;
 }
 
+.material-input-color {
+  margin-left: 1.15em;
+}
+.material-slider {
+  margin-left: 1.15em;
+  width: 15em;
+}
 
 
 .ant-select-selector {

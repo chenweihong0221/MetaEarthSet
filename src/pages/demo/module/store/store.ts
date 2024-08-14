@@ -1,7 +1,11 @@
 import { createStore } from "vuex"
-import { Building, Fence, Floor, GraphicDraw, OpenAir, Space } from "@mars/pages/demo/module/Building"
+import { Building, Floor, Space } from "@mars/pages/demo/module/model/Building"
+import { Fence } from "@mars/pages/demo/module/model/Fence"
+import { OpenAir } from "@mars/pages/demo/module/model/OpenAir"
+import { GraphicDraw } from "@mars/pages/demo/module/model/GraphicDraw"
 import * as mars3d from "mars3d"
 import { Cesium } from "mars3d"
+import { Human } from "@mars/pages/demo/module/model/Human"
 
 export const mapStore = createStore({
   state() {
@@ -13,6 +17,7 @@ export const mapStore = createStore({
       fenceMap: new Map<string, Fence>(),
       graphicDrawMap: new Map<string, GraphicDraw>(),
       cameraMap: new Map<string, mars3d.graphic.DivGraphic>(),
+      humanMap: new Map<string, Human>(),
       openAirMap: new Map<string, OpenAir>(), // openAirId => OpenAir
       graphicLayer: null, // graphicLayer
       graphicLayer2d: null // graphicLayer2d
@@ -152,6 +157,9 @@ export const mapStore = createStore({
       return Array.from(state.fenceMap.values()).map(fence => {
         return fence.polygon.positions
       })
+    },
+    getHumanByHumanId: state => (id: string): Human => {
+      return state.humanMap.get(id)
     },
     isPositionInFence: state => (position: Cesium.Cartesian3): boolean => {
       for (const fence of state.fenceMap.values()) {
