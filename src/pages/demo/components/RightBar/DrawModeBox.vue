@@ -340,7 +340,7 @@ const handleAddCamera = () => {
             <div class="draw-row">
               <div style="width: 7ch">样式：</div>
               <a-select v-model:value="selectedGraphicDrawStyle"
-                        style="left: 12px; color: white; rgba(35, 39, 47, 0.7);!important;" class="c_mars-select"
+                        style="left: 15px; color: white; rgba(35, 39, 47, 0.7);!important;" class="c_mars-select"
                         popupClassName="mars-select-dropdown" :options="graphicDrawOptions" />
             </div>
             <div class="draw-row">
@@ -586,11 +586,9 @@ input {
 }
 
 .draw-row .c_mars-select {
-  width: 14.3em;
+  width: 14em;
   padding: 0;
   margin: 0;
-  /*左对齐*/
-  text-align: left;
 }
 
 

@@ -2,8 +2,6 @@
 import { ref, watch } from "vue"
 import { useStore } from "vuex"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
-import graphicDrawStore from "@mars/pages/demo/module/GraphicDrawStore"
-import cameraStore from "@mars/pages/demo/module/CameraStore"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store"
 
 
@@ -90,6 +88,8 @@ const deleteStore = () => {
   } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
     mapStore.commit("removeGraphicDraw", id)
   }
+  name.value = ""
+  selectedGraphicId.value = ""
 }
 
 </script>
@@ -214,9 +214,7 @@ const deleteStore = () => {
 
 .trans-panel,
 .msg-panel,
-.material-panel,
-.draw-panel,
-.other-panel {
+.material-panel {
   width: 90%;
   background: #999999;
   border-radius: 3px;
@@ -224,9 +222,7 @@ const deleteStore = () => {
 
 .trans-box,
 .msg-box,
-.material-box,
-.draw-box,
-.other-box {
+.material-box {
   color: white;
   background: #999999;
 
@@ -234,9 +230,7 @@ const deleteStore = () => {
 
 .trans-row,
 .msg-row,
-.material-row,
-.draw-row,
-.other-row {
+.material-row {
   display: flex;
   align-items: center;
   margin-left: 1em;
@@ -248,7 +242,7 @@ const deleteStore = () => {
 }
 
 .msg-name-input {
-  width: 10em;
+  width: 15em;
   padding-left: 0.5em;
 }
 
@@ -268,17 +262,14 @@ input {
   color: white;
 }
 
-.draw-input,
-.other-input,
+.msg-name-input,
 .material-input {
   width: 15em;
   margin-right: auto;
+  margin-left: 1.15em;
 }
 
 
-.other-row .my-button {
-  margin-left: 5em;
-}
 
 .ant-select-selector {
   background: #999999 !important;
@@ -289,7 +280,7 @@ input {
 
 
 .c_mars-select {
-  width: 14em;
+  width: 15em;
   height: 32px;
   background-color: rgba(35, 39, 47, 0.7);
   ;
