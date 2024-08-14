@@ -298,9 +298,9 @@ const handleAddHuman = () => {
                 <a-select-option key="4">
                   绘制露天场所
                 </a-select-option>
-<!--                <a-select-option key="6">-->
-<!--                  绘制人员-->
-<!--                </a-select-option>-->
+                <a-select-option key="6">
+                  绘制人员
+                </a-select-option>
               </a-select>
             </div>
             <div class="right-box">
