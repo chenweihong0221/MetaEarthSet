@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { onMounted, ref, watch } from "vue"
 import { useStore } from "vuex"
 import { mapKey, mapStore, stateKey } from "@mars/pages/demo/module/store"
 import * as mars3d from "mars3d"
-import { Building, Fence, Floor, OpenAir } from "@mars/pages/demo/module/Building"
+import { Building, Fence, Floor, OpenAir, setHeight } from "@mars/pages/demo/module/Building"
 import { Cesium } from "mars3d"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import SelectModeBox from "@mars/pages/demo/components/RightBar/SelectModeBox.vue"
+import { CesiumRoleController } from "@mars/pages/demo/module/CesiumRoleController"
 
 // 1，3的时候直接绘制即可，2的时候要先选择楼层
 const selectedState = ref<string>("1") // 当前状态，0 未绘制， 1 绘制建筑物， 2 绘制楼层内空间， 3 绘制围栏
@@ -25,7 +26,7 @@ const selectedFloorId = ref<string>("") // 绘制空间时选择的楼层id
 const selectableFloor = ref<Floor[]>([]) // 绘制空间时可选择的楼层
 const collapseActiveKey = ref<string[]>(["1"]) // 折叠面板激活的key
 const style = "padding: 0; color: white; background: #999999; width:90%; " // 折叠面板样式
-
+let personController = null
 
 watch(selectedBuildingId, val => {
   console.log("selectedGraphicId changed", val)
@@ -44,6 +45,7 @@ const stopDraw = () => {
   if (selectedBuilding) {
     selectedBuilding.showAllFloors()
   }
+  personController.destroy()
 }
 
 const drawBuilding = () => {
@@ -62,6 +64,7 @@ const drawBuilding = () => {
     if (buildingName.value) {
       building.name = buildingName.value
     }
+    e.destroy()
   })
 
   store.state.graphicLayer2d.startDraw({
@@ -86,6 +89,15 @@ const drawSpace = () => {
   console.log("selectedFloorName", floor.name)
   const selectedBuilding = store.getters.getBuildingById(selectedBuildingId.value)
   selectedBuilding.onlyShowFloor(selectedFloorId.value)
+  const groundFloor = setHeight(selectedBuilding.positions, 0)
+  const groundPolygon = new mars3d.graphic.PolygonEntity({
+    positions: groundFloor,
+    style: {
+      color: "#57cec0",
+      opacity: 0.5
+    }
+  })
+  store.state.graphicLayer2d.addGraphic(groundPolygon)
   startDraw.value = true
   store.state.map.onlyPickTerrainPosition = true
   store.state.graphicLayer.startDraw({
@@ -114,6 +126,7 @@ const drawSpace = () => {
     mapStore.state.spaceFloorMap.set(space.id, selectedFloorId.value)
     selectedBuilding.showAllFloors()
     e.remove()
+    groundPolygon.remove()
   })
 }
 
@@ -179,6 +192,26 @@ const drawOpenAir = () => {
   })
 }
 
+const drawPerson = () => {
+  startDraw.value = true
+  store.state.map.setCursor("crosshair")
+  store.state.map.once("click", event => {
+    store.state.map.setCursor("default")
+    personController = new CesiumRoleController(Cesium, store.state.map.viewer, store.getters.getA)
+    const point = mars3d.LngLatPoint.fromCartesian(event.cartesian)
+    personController.init({
+      position: [point.lng, point.lat],
+      url: "//data.mars3d.cn/gltf/mars/man/running.glb",
+      animation: "run",
+      lockViewLevel: 1,
+      pitch: -25,
+      speed: 2,
+      range: 300.0
+    })
+  })
+
+}
+
 </script>
 
 <template>
@@ -204,6 +237,9 @@ const drawOpenAir = () => {
                 </a-select-option>
                 <a-select-option key="4">
                   绘制露天场所
+                </a-select-option>
+                <a-select-option key="6">
+                  绘制人员
                 </a-select-option>
               </a-select>
             </div>
@@ -251,6 +287,8 @@ const drawOpenAir = () => {
                 v-show="selectedState == '3' && !startDraw">开始绘制</mars-button>
               <mars-button class="my-button" @click="drawOpenAir"
                 v-show="selectedState == '4' && !startDraw">开始绘制</mars-button>
+              <mars-button class="my-button" @click="drawPerson"
+                v-show="selectedState == '6' && !startDraw">开始绘制</mars-button>
             </div>
           </div>
         </a-collapse-panel>

@@ -1,6 +1,7 @@
 import { createStore } from "vuex"
 import { Building, Fence, Floor, GraphicDraw, OpenAir, Space } from "@mars/pages/demo/module/Building"
 import * as mars3d from "mars3d"
+import { Cesium } from "mars3d"
 
 export const mapStore = createStore({
   state() {
@@ -32,10 +33,60 @@ export const mapStore = createStore({
       state.openAirMap.set(openAir.id.toString(), openAir)
       state.graphicLayer.addGraphic(openAir.polygon)
     },
+    removeBuilding(state, id: string) {
+      const building = state.buildingMap.get(id)
+      state.buildingMap.delete(id)
+      for (const floor of building.floors.values()) {
+        for (const space of floor.spaces.values()) {
+          const s = floor.spaces.get(space.id.toString())
+          state.spaceFloorMap.delete(space.id.toString())
+          s.polygon.destroy()
+          s.wall.destroy()
+        }
+        const f = building.floors.get(floor.id.toString())
+        state.floorBuildingMap.delete(floor.id.toString())
+        f.polygon.destroy()
+        f.wall.destroy()
+      }
+      state.buildingMap.delete(id)
+    },
+    removeFloor(state, id: string) {
+      const building = state.buildingMap.get(state.floorBuildingMap.get(id))
+      const floor = state.buildingMap.get(state.floorBuildingMap.get(id)).floors.get(id)
+      for (const space of floor.spaces.values()) {
+        const s = floor.spaces.get(space.id.toString())
+        state.spaceFloorMap.delete(space.id.toString())
+        s.polygon.destroy()
+        s.wall.destroy()
+      }
+      state.floorBuildingMap.delete(id)
+      building.floors.delete(id)
+      floor.polygon.destroy()
+      floor.wall.destroy()
+    },
+    removeSpace(state, id: string) {
+      const space = state.buildingMap.get(state.floorBuildingMap.get(state.spaceFloorMap.get(id))).floors.get(state.spaceFloorMap.get(id)).spaces.get(id)
+      const floor = state.buildingMap.get(state.floorBuildingMap.get(state.spaceFloorMap.get(id))).floors.get(state.spaceFloorMap.get(id))
+      floor.spaces.delete(id)
+      state.spaceFloorMap.delete(id)
+      space.polygon.destroy()
+      space.wall.destroy()
+    },
     removeFence(state, id: string) {
-      console.log("state", state.fenceMap.get(id))
-      state.graphicLayer.remove(state.fenceMap.get(id).polygon)
+      const fence = state.fenceMap.get(id)
       state.fenceMap.delete(id)
+      fence.polygon.destroy()
+    },
+    removeOpenAir(state, id: string) {
+      const openAir = state.openAirMap.get(id)
+      state.openAirMap.delete(id)
+      openAir.polygon.destroy()
+      openAir.wall.destroy()
+    },
+    removeGraphicDraw(state, id: string) {
+      const graphicDraw = state.graphicDrawMap.get(id)
+      state.graphicDrawMap.delete(id)
+      graphicDraw.graphic.destroy()
     },
     setMap(state, map) {
       state.map = map
@@ -101,6 +152,14 @@ export const mapStore = createStore({
       return Array.from(state.fenceMap.values()).map(fence => {
         return fence.polygon.positions
       })
+    },
+    isPositionInFence: state => (position: Cesium.Cartesian3): boolean => {
+      for (const fence of state.fenceMap.values()) {
+        if (mars3d.PolyUtil.isInPoly(position, fence.polygon.positions)) {
+          return true
+        }
+      }
+      return false
     }
   }
 })

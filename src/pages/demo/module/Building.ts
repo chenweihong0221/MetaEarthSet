@@ -11,7 +11,7 @@ function getHeight(positions: Cesium.Cartesian3[] | Cesium.Cartesian3): number {
 }
 
 
-function setHeight(positions: Cesium.Cartesian3[], height: number): Cesium.Cartesian3[] {
+export function setHeight(positions: Cesium.Cartesian3[], height: number): Cesium.Cartesian3[] {
   return positions.map((position) => {
     const cartographic = Cesium.Cartographic.fromCartesian(position)
     cartographic.height = height
@@ -91,6 +91,7 @@ export class Building {
   }
 
   onlyShowFloor(floorNo: string): void {
+
     this.floors.forEach((floor: Floor) => {
       if (floor.floorNo.toString() === floorNo) {
         floor.polygon.show = true

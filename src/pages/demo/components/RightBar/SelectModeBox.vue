@@ -109,11 +109,18 @@ const deleteStore = () => {
   const id = stateStore.state.selectedGraphicId
   const selectedType = stateStore.state.selectedGraphicType
   console.log("selectedType", stateStore.state.selectedGraphicType)
-  if (selectedType === 1) { // type为1， 选中的图形为楼层
-
+  if (selectedType === 0) {
+    mapStore.commit("removeBuilding", id)
+  } else if (selectedType === 1) { // type为1， 选中的图形为楼层
+    mapStore.commit("removeFloor", id)
   } else if (selectedType === 2) { // type为2， 选中的图形为空间
+    mapStore.commit("removeSpace", id)
   } else if (selectedType === 3) { // type为3， 选中的图形为围栏
     mapStore.commit("removeFence", id)
+  } else if (selectedType === 4) { // type为4， 选中的图形为露天场所
+    mapStore.commit("removeOpenAir", id)
+  } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
+    mapStore.commit("removeGraphicDraw", id)
   }
 }
 
