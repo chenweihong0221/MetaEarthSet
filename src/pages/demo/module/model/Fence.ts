@@ -7,6 +7,8 @@ export class Fence {
   height: number
   name: string
 
+  show: boolean = true // 是否显示
+
   constructor(positions: Cesium.Cartesian3[] | LngLatPoint[], name?: string, height?: number) {
     this.height = height || 30
     this.name = name || "围栏"
@@ -26,5 +28,10 @@ export class Fence {
       }
     })
     this.id = this.polygon.id.toString()
+  }
+
+  setShow(show: boolean): void {
+    this.show = show
+    this.polygon.show = show
   }
 }

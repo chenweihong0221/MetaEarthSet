@@ -11,6 +11,8 @@ export class OpenAir {
   polygon: mars3d.graphic.PolygonEntity
   wall: mars3d.graphic.ThickWall
 
+  show: boolean = true // 是否显示
+
   constructor(layer: mars3d.layer.GraphicLayer, positions: Cesium.Cartesian3[], name?: string, height?: number) {
     this.id = uuid.v4()
     this.positions = positions
@@ -40,5 +42,11 @@ export class OpenAir {
     })
     this.layer.addGraphic(this.polygon)
     this.layer.addGraphic(this.wall)
+  }
+
+  setShow(show: boolean): void {
+    this.show = show
+    this.polygon.show = show
+    this.wall.show = show
   }
 }

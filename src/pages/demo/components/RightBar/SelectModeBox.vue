@@ -15,7 +15,7 @@ const selectedGraphicId = ref("")
 
 // 信息部分
 const name = ref("")
-const type = ref("网格")
+const type = ref("")
 const show = ref(true)
 
 watch(() => stateStore.state.selectedGraphicId, val => {
@@ -73,6 +73,15 @@ const onMessageNameChange = () => {
   } else if (selectedType === 3) { // type为3， 选中的图形为围栏
     const fence = mapStore.getters.getFenceByFenceId(val)
     fence.name = name.value
+  } else if (selectedType === 4) { // type为4， 选中的图形为露天场所
+    const openAir = mapStore.getters.getOpenAirByOpenAirId(val)
+    openAir.name = name.value
+  } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
+    const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(val)
+    graphicDraw.name = name.value
+  } else if (selectedType === 6) { // type为6， 选中的图形为模型
+    const human = mapStore.getters.getHumanByHumanId(val)
+    human.id = name.value
   }
 }
 
@@ -92,9 +101,41 @@ const deleteStore = () => {
     mapStore.commit("removeOpenAir", id)
   } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
     mapStore.commit("removeGraphicDraw", id)
+  } else if (selectedType === 6) {
+    mapStore.commit("removeHuman", id)
   }
   name.value = ""
   selectedGraphicId.value = ""
+  type.value = ""
+}
+
+const handleShowChange = (param) => {
+  const value = param.target.checked
+  console.log("handleShowChange", value)
+  const selectedType = stateStore.state.selectedGraphicType
+  const id = stateStore.state.selectedGraphicId
+  if (selectedType === 0) {
+    const building = mapStore.state.buildingMap.get(id)
+    building.setShow(value)
+  } else if (selectedType === 1) { // type为1， 选中的
+    const floor = mapStore.getters.getFloorByFloorId(id)
+    floor.setShow(value)
+  } else if (selectedType === 2) { // type为2， 选中的图形为空间
+    const space = mapStore.getters.getSpaceBySpaceId(id)
+    space.setShow(value)
+  } else if (selectedType === 3) { // type为3， 选中的图形为围栏
+    const fence = mapStore.getters.getFenceByFenceId(id)
+    fence.setShow(value)
+  } else if (selectedType === 4) { // type为4， 选中的图形为露天场所
+    const openAir = mapStore.getters.getOpenAirByOpenAirId(id)
+    openAir.setShow(value)
+  } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
+    const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(id)
+    graphicDraw.setShow(value)
+  } else if (selectedType === 6) { // type为6， 选中的图形为模型
+    const human = mapStore.getters.getHumanByHumanId(id)
+    human.setShow(value)
+  }
 }
 
 </script>
@@ -147,7 +188,7 @@ const deleteStore = () => {
             </div>
             <div class="msg-row">
               <div class="msg-name">显示：</div>
-              <div><a-checkbox v-model:checked="show" /></div>
+              <div><a-checkbox v-model:checked="show" @change="handleShowChange" /></div>
             </div>
             <div class="msg-row">
               <mars-button class="my-button" @click="deleteStore">删除</mars-button>

@@ -169,12 +169,7 @@ export class Building {
   setShow(show: boolean): void {
     this.show = show
     this.floors.forEach((floor: Floor) => {
-      floor.polygon.show = show
-      floor.wall.show = show
-      floor.spaces.forEach((space: Space) => {
-        space.polygon.show = show
-        space.wall.show = show
-      })
+      floor.setShow(show)
     })
   }
 
@@ -194,6 +189,8 @@ export class Floor {
   spaceNumber: number // 空间数量
   floorNo: number // 楼层号
   alt: number // 楼层所在高度
+
+  show: boolean = true // 是否显示
 
   constructor(positions: Cesium.Cartesian3 | Cesium.Cartesian3[], parent: Building, name: string, floorNo: number, height?: number, alt?: number) {
     this.id = uuid.v4()
@@ -250,6 +247,17 @@ export class Floor {
     return space
   }
 
+  setShow(show: boolean): void {
+    this.show = show
+    this.polygon.show = show
+    this.wall.show = show
+    this.spaces.forEach((space: Space) => {
+      space.show = show
+      space.polygon.show = show
+      space.wall.show = show
+    })
+  }
+
 }
 
 export class Space {
@@ -259,6 +267,8 @@ export class Space {
   parent: Floor
   polygon: mars3d.graphic.PolygonEntity
   wall: mars3d.graphic.ThickWall
+
+  show: boolean = true // 是否显示
 
   constructor(positions: Cesium.Cartesian3[], parent: Floor, name?: string, height?: number) {
     this.id = uuid.v4()
@@ -288,5 +298,11 @@ export class Space {
     })
     this.parent.layer.addGraphic(this.polygon)
     this.parent.layer.addGraphic(this.wall)
+  }
+
+  setShow(show: boolean): void {
+    this.show = show
+    this.polygon.show = show
+    this.wall.show = show
   }
 }

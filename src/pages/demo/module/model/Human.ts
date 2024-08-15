@@ -12,7 +12,7 @@ export class Human {
     this.id = id
     this.positions = position
     this.model = new mars3d.graphic.ModelEntity({
-      position: position,
+      position,
       style: {
         url: "//data.mars3d.cn/gltf/mars/man/walk.gltf",
         scale: 1,
@@ -22,5 +22,10 @@ export class Human {
     this.layer = layer
     this.layer.addGraphic(this.model)
     console.log("human added to layer", this.model)
+  }
+
+  setShow(show: boolean): void {
+    this.show = show
+    this.model.show = show
   }
 }

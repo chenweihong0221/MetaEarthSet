@@ -93,11 +93,13 @@ export const mapStore = createStore({
       state.graphicDrawMap.delete(id)
       graphicDraw.graphic.destroy()
     },
+    removeHuman(state, id: string) {
+      const human = state.humanMap.get(id)
+      state.humanMap.delete(id)
+      human.model.destroy()
+    },
     setMap(state, map) {
       state.map = map
-    },
-    setOnlyPickText(state, text) {
-      state.graphicLayer.setOnlyPickText(text)
     },
     setGraphicLayer(state, layer) {
       state.graphicLayer = layer
@@ -133,15 +135,12 @@ export const mapStore = createStore({
     getFloorByFloorId: state => (floorId: string): Floor => {
       const buildingId = state.floorBuildingMap.get(floorId)
       const building = state.buildingMap.get(buildingId)
-      console.log("building", building)
       return building.floors.get(floorId)
     },
     getSpaceBySpaceId: state => (spaceId: string): Space => {
       const floorId = state.spaceFloorMap.get(spaceId)
       const building = state.buildingMap.get(state.floorBuildingMap.get(floorId))
-      console.log("building", building)
       const floor = building.floors.get(floorId)
-      console.log("floor", floor)
       return floor.spaces.get(spaceId)
     },
     getFenceByFenceId: state => (fenceId: string): Fence => {

@@ -211,6 +211,7 @@ const drawOpenAir = () => {
     if (openAirName.value) {
       openAir.name = openAirName.value
     }
+    e.destroy()
   })
   store.state.graphicLayer2d.startDraw({
     type: "polygon",
@@ -267,6 +268,7 @@ const handleAddHuman = () => {
   mapStore.state.map.setCursor("crosshair")
   mapStore.state.map.once("click", event => {
     mapStore.state.map.setCursor("default")
+    mapStore.state.humanMap.get(humanId.value)?.model.destroy()
     const human = new Human(humanId.value, event.cartesian, mapStore.state.graphicLayer)
     mapStore.state.humanMap.set(human.id, human)
     humanId.value = ""
