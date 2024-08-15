@@ -1,8 +1,10 @@
 import { Cesium } from "mars3d"
 import * as mars3d from "mars3d"
 import * as uuid from "uuid"
+import { mapStore } from "@mars/pages/demo/module/store/store"
+import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
 
-export class OpenAir {
+export class OpenAir implements GraphicInterface {
   id: string
   name: string
   positions: Cesium.Cartesian3[]
@@ -48,5 +50,35 @@ export class OpenAir {
     this.show = show
     this.polygon.show = show
     this.wall.show = show
+  }
+
+  highLight(): void {
+    this.polygon.setOptions({
+      style: {
+        color: "#FFFF00"
+      }
+    })
+    this.wall.setOptions({
+      style: {
+        color: "#FFFF00"
+      }
+    })
+  }
+
+  removeHighLight(): void {
+    this.polygon.setOptions({
+      style: {
+        color: "#CECECE"
+      }
+    })
+    this.wall.setOptions({
+      style: {
+        color: "#A9A9A9"
+      }
+    })
+  }
+
+  flyTo(): void {
+    mapStore.state.map.flyToGraphic(this.polygon)
   }
 }

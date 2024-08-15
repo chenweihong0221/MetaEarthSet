@@ -1,6 +1,8 @@
 import * as mars3d from "mars3d"
-import { Cesium, LngLatPoint } from "mars3d"
+import { Cesium } from "mars3d"
 import * as uuid from "uuid"
+import { mapStore } from "@mars/pages/demo/module/store/store"
+import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
 
 function getHeight(positions: Cesium.Cartesian3[] | Cesium.Cartesian3): number {
   const position = positions instanceof Array ? positions[0] : positions
@@ -17,7 +19,7 @@ export function setHeight(positions: Cesium.Cartesian3[], height: number): Cesiu
   })
 }
 
-export class Building {
+export class Building implements GraphicInterface {
   id: string
   name: string
   floorNumber: number
@@ -33,12 +35,12 @@ export class Building {
   show: boolean = true
 
   constructor(layer: mars3d.layer.GraphicLayer,
-    positions: Cesium.Cartesian3[],
-    name?: string,
-    floorNumber?: number,
-    floorHeight?: number,
-    spaceHeight?: number,
-    autoCreateFloor = true) {
+              positions: Cesium.Cartesian3[],
+              name?: string,
+              floorNumber?: number,
+              floorHeight?: number,
+              spaceHeight?: number,
+              autoCreateFloor = true) {
     this.id = uuid.v4()
     this.positions = positions
     this.name = name || "建筑物"
@@ -173,9 +175,26 @@ export class Building {
     })
   }
 
+  highLight(): void {
+    this.floors.forEach((floor: Floor) => {
+      floor.highLight()
+    })
+  }
+
+  removeHighLight(): void {
+    this.floors.forEach((floor: Floor) => {
+      floor.removeHighLight()
+    })
+  }
+
+  flyTo(): void {
+    const firstFloor = this.floors.values().next().value
+    mapStore.state.map.flyToGraphic(firstFloor.polygon)
+  }
+
 }
 
-export class Floor {
+export class Floor implements GraphicInterface {
   id: string
   name: string // 楼层名称
   positions: Cesium.Cartesian3[]
@@ -258,9 +277,40 @@ export class Floor {
     })
   }
 
+  highLight(): void {
+    this.polygon.setOptions({
+      style: {
+        color: "#FFFF00"
+      }
+    })
+
+    this.wall.setOptions({
+      style: {
+        color: "#FFFF00"
+      }
+    })
+  }
+
+  removeHighLight(): void {
+    this.polygon.setOptions({
+      style: {
+        color: "#647BB1"
+      }
+    })
+    this.wall.setOptions({
+      style: {
+        color: "#647BB1"
+      }
+    })
+  }
+
+  flyTo(): void {
+    mapStore.state.map.flyToGraphic(this.polygon)
+  }
+
 }
 
-export class Space {
+export class Space implements GraphicInterface {
   id: string
   name: string
   height: number
@@ -304,5 +354,36 @@ export class Space {
     this.show = show
     this.polygon.show = show
     this.wall.show = show
+  }
+
+  highLight(): void {
+    this.polygon.setOptions({
+      style: {
+        color: "#FFFF00"
+      }
+    })
+    this.wall.setOptions({
+      style: {
+        color: "#FFFF00"
+      }
+    })
+  }
+
+  removeHighLight(): void {
+    this.polygon.setOptions({
+      style: {
+        color: "#8D79C0"
+      }
+    })
+    this.wall.setOptions({
+      style: {
+        color: "#8D79C0"
+      }
+    })
+  }
+
+
+  flyTo(): void {
+    mapStore.state.map.flyToGraphic(this.polygon)
   }
 }

@@ -1,7 +1,9 @@
 import * as mars3d from "mars3d"
 import { Cesium } from "mars3d"
+import { mapStore } from "@mars/pages/demo/module/store/store"
+import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
 
-export class Human {
+export class Human implements GraphicInterface {
   id: string
   model: mars3d.graphic.ModelEntity
   layer: mars3d.layer.GraphicLayer
@@ -27,5 +29,17 @@ export class Human {
   setShow(show: boolean): void {
     this.show = show
     this.model.show = show
+  }
+
+  highLight(): void {
+
+  }
+
+  removeHighLight(): void {
+
+  }
+
+  flyTo(): void {
+    mapStore.state.map.flyToGraphic(this.model)
   }
 }

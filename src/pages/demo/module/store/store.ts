@@ -6,6 +6,7 @@ import { GraphicDraw } from "@mars/pages/demo/module/model/GraphicDraw"
 import * as mars3d from "mars3d"
 import { Cesium } from "mars3d"
 import { Human } from "@mars/pages/demo/module/model/Human"
+import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
 
 export const mapStore = createStore({
   state() {
@@ -126,6 +127,26 @@ export const mapStore = createStore({
     }
   },
   getters: {
+    getGraphicByIdAndType: state => (id: string, type: number): GraphicInterface => {
+      switch (type) {
+        case 0:
+          return state.buildingMap.get(id)
+        case 1:
+          return state.buildingMap.get(state.floorBuildingMap.get(id))
+        case 2:
+          return state.buildingMap.get(state.floorBuildingMap.get(state.spaceFloorMap.get(id))).floors.get(state.spaceFloorMap.get(id)).spaces.get(id)
+        case 3:
+          return state.fenceMap.get(id)
+        case 4:
+          return state.openAirMap.get(id)
+        case 5:
+          return state.graphicDrawMap.get(id)
+        case 6:
+          return state.humanMap.get(id)
+        default:
+          return null
+      }
+    },
     getBuildingById: state => (id: string): Building => {
       return state.buildingMap.get(id)
     },

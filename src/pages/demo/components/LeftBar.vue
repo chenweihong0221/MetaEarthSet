@@ -8,9 +8,19 @@ const handleSelected = (key: string, type: number, event: Event) => {
   stateStore.commit("updateSelectedGraphicId", key)
   stateStore.commit("updateSelectedGraphicType", type)
   console.log("selectedGraphicId:", key, type)
+  const graphic = store.getters.getGraphicByIdAndType(key, type)
+  graphic.highLight()
+  graphic.flyTo()
   // 阻止事件冒泡
   event.stopPropagation()
 }
+
+const handleMouseOut = (key: string, type: number, event: Event) => {
+  const graphic = store.getters.getGraphicByIdAndType(key, type)
+  graphic.removeHighLight()
+  event.stopPropagation()
+}
+
 
 </script>
 <template>
@@ -19,30 +29,40 @@ const handleSelected = (key: string, type: number, event: Event) => {
       <a-collapse v-for="building in store.state.buildingMap.values()"
                   :key="building.id"
                   :bordered="false"
+
+
       >
-        <a-collapse-panel :header="building.name" @click="handleSelected(building.id, 0, $event)">
+        <a-collapse-panel :header="building.name"
+                          @click="handleSelected(building.id, 0, $event)"
+                          @mouseout="handleMouseOut(building.id, 0, $event)"
+                          >
           <a-collapse v-for="floor in building.floors.values()"
                       :key="floor.id" :bordered="false" class="floor-box">
             <a-collapse-panel :header="floor.name" @click="handleSelected(floor.id, 1, $event)">
-              <div v-for="space in floor.spaces.values()" :key="space.id" class="space-box" @click="handleSelected(space.id, 2, $event)">
+              <div v-for="space in floor.spaces.values()" :key="space.id" class="space-box"
+                   @click="handleSelected(space.id, 2, $event)"
+                   @mouseout="handleMouseOut(space.id, 2, $event)"
+              >
                 {{ space.name }}
               </div>
             </a-collapse-panel>
           </a-collapse>
         </a-collapse-panel>
       </a-collapse>
-      <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id" @click="handleSelected(fence.id, 3, $event)">
+      <div class="fence-box" v-for="fence in store.state.fenceMap.values()" :key="fence.id"
+           @click="handleSelected(fence.id, 3, $event)" @mouseout="handleMouseOut(fence.id, 3, $event)">
         {{ fence.name }}
       </div>
       <div class="openAir-box" v-for="openAir in store.state.openAirMap.values()" :key="openAir.id"
-           @click="handleSelected(openAir.id, 4, $event)">
+           @click="handleSelected(openAir.id, 4, $event)" @mouseout="handleMouseOut(openAir.id, 4, $event)">
         {{ openAir.name }}
       </div>
       <div class="graphic-draw-box" v-for="graphicDraw in store.state.graphicDrawMap.values()" :key="graphicDraw.id"
-            @click="handleSelected(graphicDraw.id, 5, $event)">
+            @click="handleSelected(graphicDraw.id, 5, $event)" @mouseout="handleMouseOut(graphicDraw.id, 5, $event)">
           {{ graphicDraw.name }}
       </div>
-      <div class="human-box" v-for="human in store.state.humanMap.values()" :key="human.id" @click="handleSelected(human.id, 6, $event)">
+      <div class="human-box" v-for="human in store.state.humanMap.values()" :key="human.id"
+           @click="handleSelected(human.id, 6, $event)" @mouseout="handleMouseOut(human.id, 6, $event)">
         {{human.id}}
       </div>
     </div>
