@@ -20,6 +20,12 @@ const show = ref(true)
 
 watch(() => stateStore.state.selectedGraphicId, val => {
   selectedGraphicId.value = val
+  if (val === "") {
+    name.value = ""
+    type.value = ""
+    show.value = true
+    return
+  }
   const selectedType = stateStore.state.selectedGraphicType
   if (selectedType === 0) {
     const building = mapStore.state.buildingMap.get(val)
@@ -87,6 +93,9 @@ const onMessageNameChange = () => {
 
 const deleteStore = () => {
   const id = stateStore.state.selectedGraphicId
+  if (id === "") {
+    return
+  }
   const selectedType = stateStore.state.selectedGraphicType
   console.log("selectedType", stateStore.state.selectedGraphicType)
   if (selectedType === 0) {
@@ -108,6 +117,7 @@ const deleteStore = () => {
   selectedGraphicId.value = ""
   type.value = ""
   stateStore.commit("updateLeftBarNeedUpdate", true)
+  stateStore.commit("updateSelectedGraphicId", "")
 }
 
 const handleShowChange = (param) => {

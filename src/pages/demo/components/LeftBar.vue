@@ -22,6 +22,7 @@ const showKeys = ref<string[]>([])
 
 
 watchEffect(() => {
+  console.log("left bar tree update!")
   graphicIdTypeMap.clear()
   const value = stateStore.state.leftBarNeedUpdate
   if (!value) {
@@ -117,15 +118,14 @@ watch(showKeys, () => {
 })
 
 const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
-
+  console.log("selectedKeys:", selectedKeys, info)
   if (selectedGraphicId !== "") {
-    const graphic = store.getters.getGraphicByIdAndType(selectedGraphicId, selectedGraphicType)
+    const graphic = store.getters.getGraphicByIdAndType(selectedKeys[0], selectedGraphicType)
     graphic.removeHighLight()
   }
   if (selectedKeys.length === 0) {
     return
   }
-  console.log("handleSelected:", selectedKeys, info, info.node.dataRef.type)
   const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
   selectedGraphicId = selectedKeys[0].toString()
   selectedGraphicType = info.node.dataRef.type
