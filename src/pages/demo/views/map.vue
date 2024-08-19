@@ -19,8 +19,6 @@ import TopBar from "@mars/pages/demo/components/TopBar.vue"
 import message from "ant-design-vue/es/message"
 import { useStore } from "vuex"
 import { mapKey } from "@mars/pages/demo/module/store/store"
-import cameraDrawStore from "@mars/pages/demo/module/store/CameraStore"
-import graphicDrawStore from "@mars/pages/demo/module/store/GraphicDrawStore"
 import Flv from "flv-h265.js"
 import { GraphicDraw } from "@mars/pages/demo/module/model/GraphicDraw"
 
@@ -166,36 +164,6 @@ const marsOnload = (map: any) => {
   })
 }
 
-watchEffect(() => {
-  if (graphicDrawStore.state.graphicDraw) {
-    graphicDraw()
-    graphicDrawStore.commit("toggleGraphicDraw")
-  }
-  if (cameraDrawStore.state.cameraDraw) {
-    addCamera()
-    cameraDrawStore.commit("toggleCameraDraw")
-  }
-})
-
-
-const addGraphicDraw = (graphicLayer, position) => {
-
-}
-
-
-
-const back = () => {
-  router.back()
-}
-const createBuilding = (layer: mars3d.layer.GraphicLayer, positions: Cesium.Cartesian3[]): Building => {
-  const building = new Building(layer, positions)
-  store.commit("addBuilding", building)
-  return building
-}
-const getFloorByFloorIdAndBuildingId = (floorId: string, buildingId: string) => {
-  const building = store.getters.getBuildingById(buildingId)
-  return building.floors.get(floorId)
-}
 </script>
 
 <style>

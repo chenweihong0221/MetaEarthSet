@@ -192,6 +192,9 @@ export const mapStore = createStore({
     getHumanByHumanId: state => (id: string): Human => {
       return state.humanMap.get(id)
     },
+    getCameraByCameraId: state => (id: string): Camera => {
+      return state.cameraMap.get(id)
+    },
     isPositionInFence: state => (position: Cesium.Cartesian3): boolean => {
       for (const fence of state.fenceMap.values()) {
         if (mars3d.PolyUtil.isInPoly(position, fence.polygon.positions)) {

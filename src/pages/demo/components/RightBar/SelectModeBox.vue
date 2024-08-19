@@ -62,6 +62,12 @@ watch(() => stateStore.state.selectedGraphicId, val => {
     name.value = model.id
     type.value = "人员"
     show.value = model.show
+  } else if (selectedType === 7) { // type为7， 选中的图形为模型
+    const model = mapStore.getters.getCameraByCameraId(val)
+    name.value = model.id
+
+    type.value = "摄像头"
+    show.value = model.show
   }
 })
 

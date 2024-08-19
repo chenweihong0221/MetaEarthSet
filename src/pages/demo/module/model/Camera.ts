@@ -19,7 +19,6 @@ export class Camera implements GraphicInterface {
     this.layer.addGraphic(this.graphic)
     this.graphic.on(mars3d.EventType.popupOpen, function(event) {
       const videoElement = event.container.querySelector("#videoPlay") // popup对应的DOM
-
       // flv格式转换
       if (Flv.isSupported() && videoElement) {
         const flvPlayer = Flv.createPlayer({

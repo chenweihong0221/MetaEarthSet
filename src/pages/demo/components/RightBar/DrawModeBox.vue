@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { useStore } from "vuex"
-import { mapKey, mapStore, stateKey } from "@mars/pages/demo/module/store/store"
+import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 import * as mars3d from "mars3d"
 import { Building, Floor, setHeight } from "@mars/pages/demo/module/model/Building"
 import { Cesium } from "mars3d"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import { CesiumRoleController } from "@mars/pages/demo/module/store/CesiumRoleController"
-import cameraStore from "@mars/pages/demo/module/store/CameraStore"
 import { Fence } from "@mars/pages/demo/module/model/Fence"
 import { OpenAir } from "@mars/pages/demo/module/model/OpenAir"
 import { Human } from "@mars/pages/demo/module/model/Human"
 import { GraphicDraw } from "@mars/pages/demo/module/model/GraphicDraw"
-import Flv from "flv-h265.js"
 import { Camera } from "@mars/pages/demo/module/model/Camera"
 
 // 1，3的时候直接绘制即可，2的时候要先选择楼层
@@ -163,7 +161,7 @@ const drawSpace = () => {
     } else {
       space = floor.addSpace(e.positionsShow)
     }
-    mapStore.state.spaceFloorMap.set(space.id, selectedFloorId.value)
+    store.state.spaceFloorMap.set(space.id, selectedFloorId.value)
     selectedBuilding.showAllFloors()
     e.remove()
     groundPolygon.remove()
@@ -263,7 +261,7 @@ const drawPerson = () => {
 
 // 添加图上绘制功能
 const handleGraphicDraw = () => {
-  mapStore.state.graphicLayer.startDraw({
+  store.state.graphicLayer.startDraw({
     type: "divBillboard"
   })
 
@@ -290,7 +288,7 @@ const handleGraphicDraw = () => {
         distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
       }
     })
-    mapStore.state.graphicLayer.addGraphic(graphicImg)
+    store.state.graphicLayer.addGraphic(graphicImg)
     const graphicDraw = new GraphicDraw(selectedGraphicDrawContent.value, graphicImg)
     store.state.graphicDrawMap.set(graphicDraw.id, graphicDraw)
   }
@@ -300,46 +298,25 @@ const handleGraphicDraw = () => {
 }
 // 添加监控设备功能
 const handleAddCamera = () => {
-  mapStore.state.graphicLayer.startDraw({
-    type: "divBillboard"
-  })
-
-  function handleClick(event) {
+  store.state.map.setCursor("crosshair")
+  store.state.map.once("click", event => {
+    store.state.map.setCursor("default")
     const cartesian = new Cesium.Cartesian3(event.cartesian.x, event.cartesian.y, event.cartesian.z)
 
-    // 将笛卡尔坐标转换为 Cartographic 坐标
-    const cartographic = Cesium.Cartographic.fromCartesian(cartesian)
-
-    // 提取经纬度和高度
-    const longitude = Cesium.Math.toDegrees(cartographic.longitude)
-    const latitude = Cesium.Math.toDegrees(cartographic.latitude)
-    const height = cartographic.height
-
-    addCameraGraphicDraw(mapStore.state.graphicLayer, [longitude, latitude, height])
-
-    // 移除事件监听器，确保只执行一次
-    store.state.map.off(mars3d.EventType.click, handleClick)
-  }
-
-  // 监听绘制完成
-  store.state.map.on(mars3d.EventType.click, handleClick)
-}
-// 增加摄像头，并控制视频流的导入
-const addCameraGraphicDraw = (graphicLayer, position) => {
-  const flvUrl = "ws://47.93.190.98:80/rtp/34020000001320000111_34020000001320000011.live.flv"
-  const graphicImg = new mars3d.graphic.DivGraphic({
-    position,
-    style: {
-      html: `     <div class="mars3d-camera-content">
+    const flvUrl = "ws://47.93.190.98:80/rtp/34020000001320000111_34020000001320000011.live.flv"
+    const graphicImg = new mars3d.graphic.DivGraphic({
+      position: cartesian,
+      style: {
+        html: `     <div class="mars3d-camera-content">
                       <img class="mars3d-camera-img" src="/public/img/icon/camera.svg" alt="camera"/>
                     </div>
                     <div class="mars3d-camera-line" ></div>
                     <div class="mars3d-camera-point"></div>
                   `,
-      offsetX: -16,
-      distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
-    },
-    popup: `<video style="width: 240px;height:130px;"
+        offsetX: -16,
+        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
+      },
+      popup: `<video style="width: 240px;height:130px;"
                     id="videoPlay"
                     autoplay="autoplay"
                     loop=""
@@ -347,32 +324,35 @@ const addCameraGraphicDraw = (graphicLayer, position) => {
                     controls="controls"
                     >
               </video>`,
-    popupOptions: {
-      offsetY: -240, // 显示Popup的偏移值，是DivGraphic本身的像素高度值
-      template: `<div class="marsBlackPanel animation-spaceInDown">
+      popupOptions: {
+        offsetY: -240, // 显示Popup的偏移值，是DivGraphic本身的像素高度值
+        template: `<div class="marsBlackPanel animation-spaceInDown">
                         <div class="marsBlackPanel-text">{content}</div>
                         <span class="mars3d-popup-close-button closeButton" style="color: white" >×</span>
                       </div>`,
-      horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
-      verticalOrigin: Cesium.VerticalOrigin.CENTER
-    }
+        horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+        verticalOrigin: Cesium.VerticalOrigin.CENTER
+      }
+    })
+    store.state.cameraMap.get(deviceId.value)?.graphic.destroy()
+    const camera = new Camera(deviceId.value, flvUrl, graphicImg, store.state.graphicLayer)
+    store.state.cameraMap.set(camera.id, camera)
+    deviceId.value = ""
+    drawCallback()
+    store.state.graphicLayer.endDraw()
   })
-  const camera = new Camera(deviceId.value, flvUrl, graphicImg, mapStore.state.graphicLayer)
-  store.state.cameraMap.set(camera.id, camera)
-  deviceId.value = ""
-  stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 const handleAddHuman = () => {
   if (humanId.value === "") {
     alert("请输入人员ID")
     return
   }
-  mapStore.state.map.setCursor("crosshair")
-  mapStore.state.map.once("click", event => {
-    mapStore.state.map.setCursor("default")
-    mapStore.state.humanMap.get(humanId.value)?.model.destroy()
-    const human = new Human(humanId.value, event.cartesian, mapStore.state.graphicLayer)
-    mapStore.state.humanMap.set(human.id, human)
+  store.state.map.setCursor("crosshair")
+  store.state.map.once("click", event => {
+    store.state.map.setCursor("default")
+    store.state.humanMap.get(humanId.value)?.model.destroy()
+    const human = new Human(humanId.value, event.cartesian, store.state.graphicLayer)
+    store.state.humanMap.set(human.id, human)
     humanId.value = ""
     drawCallback()
   })
