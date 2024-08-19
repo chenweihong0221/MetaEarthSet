@@ -180,13 +180,13 @@ const handleShowChange = (param) => {
           <div class="trans-box">
             <div class="trans-row">
               <div>经度
-                <input v-model="lng" @change="onPositionChange">
+                <input v-model="lng">
               </div>
               <div>维度
-                <input v-model="lat" @change="onPositionChange">
+                <input v-model="lat">
               </div>
               <div>海拔
-                <input v-model="alt" @change="onPositionChange">
+                <input v-model="alt">
               </div>
             </div>
             <div class="trans-row">
