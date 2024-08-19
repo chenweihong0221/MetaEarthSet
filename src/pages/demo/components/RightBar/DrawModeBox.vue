@@ -7,11 +7,13 @@ import { Building, Floor, setHeight } from "@mars/pages/demo/module/model/Buildi
 import { Cesium } from "mars3d"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import { CesiumRoleController } from "@mars/pages/demo/module/store/CesiumRoleController"
-import graphicDrawStore from "@mars/pages/demo/module/store/GraphicDrawStore"
 import cameraStore from "@mars/pages/demo/module/store/CameraStore"
 import { Fence } from "@mars/pages/demo/module/model/Fence"
 import { OpenAir } from "@mars/pages/demo/module/model/OpenAir"
 import { Human } from "@mars/pages/demo/module/model/Human"
+import { GraphicDraw } from "@mars/pages/demo/module/model/GraphicDraw"
+import Flv from "flv-h265.js"
+import { Camera } from "@mars/pages/demo/module/model/Camera"
 
 // 1，3的时候直接绘制即可，2的时候要先选择楼层
 const selectedState = ref<string>("1") // 当前状态，0 未绘制， 1 绘制建筑物， 2 绘制楼层内空间， 3 绘制围栏
@@ -32,7 +34,7 @@ const selectedFloorId = ref<string>("") // 绘制空间时选择的楼层id
 const selectableFloor = ref<Floor[]>([]) // 绘制空间时可选择的楼层
 const collapseActiveKey = ref<string[]>(["1", "4", "5"]) // 折叠面板激活的key
 const selectedGraphicDrawStyle = ref(1)
-const selectedGraphicDrawContent = ref("1号楼")
+const selectedGraphicDrawContent = ref("1号楼") // 图上标绘内容
 const graphicDrawOptions = ref([
   {
     value: 1,
@@ -261,16 +263,105 @@ const drawPerson = () => {
 
 // 添加图上绘制功能
 const handleGraphicDraw = () => {
-  graphicDrawStore.commit("toggleGraphicDraw")
-  graphicDrawStore.commit("setSelectedGraphicDrawStyle", selectedGraphicDrawStyle.value)
-  graphicDrawStore.commit("setSelectedGraphicDrawContent", selectedGraphicDrawContent.value)
-}
+  mapStore.state.graphicLayer.startDraw({
+    type: "divBillboard"
+  })
 
+  function handleClick(event) {
+    const cartesian = new Cesium.Cartesian3(event.cartesian.x, event.cartesian.y, event.cartesian.z)
+    const graphicImg = new mars3d.graphic.DivGraphic({
+      position: cartesian,
+      style: {
+        html: `     <div class="mars3d-graphicDraw-content">
+                      <img class="mars3d-graphicDraw-img"
+                        src="/img/icon/textPnl.png"
+                        alt="样式一"
+                      >
+                    </div>
+                    <div class="mars3d-draw-content-wrapper">
+                      <div class="draw-style-content"
+                            style="font-size: 23px;display: flex;align-items: center;justify-content: center;"
+                            >
+                        ${selectedGraphicDrawContent.value}
+                      </div>
+                    </div>
+                  `,
+        offsetX: -16,
+        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
+      }
+    })
+    mapStore.state.graphicLayer.addGraphic(graphicImg)
+    const graphicDraw = new GraphicDraw(selectedGraphicDrawContent.value, graphicImg)
+    store.state.graphicDrawMap.set(graphicDraw.id, graphicDraw)
+  }
+
+  // 监听绘制完成
+  store.state.map.once(mars3d.EventType.click, handleClick)
+}
 // 添加监控设备功能
 const handleAddCamera = () => {
-  cameraStore.commit("toggleCameraDraw")
-}
+  mapStore.state.graphicLayer.startDraw({
+    type: "divBillboard"
+  })
 
+  function handleClick(event) {
+    const cartesian = new Cesium.Cartesian3(event.cartesian.x, event.cartesian.y, event.cartesian.z)
+
+    // 将笛卡尔坐标转换为 Cartographic 坐标
+    const cartographic = Cesium.Cartographic.fromCartesian(cartesian)
+
+    // 提取经纬度和高度
+    const longitude = Cesium.Math.toDegrees(cartographic.longitude)
+    const latitude = Cesium.Math.toDegrees(cartographic.latitude)
+    const height = cartographic.height
+
+    addCameraGraphicDraw(mapStore.state.graphicLayer, [longitude, latitude, height])
+
+    // 移除事件监听器，确保只执行一次
+    store.state.map.off(mars3d.EventType.click, handleClick)
+  }
+
+  // 监听绘制完成
+  store.state.map.on(mars3d.EventType.click, handleClick)
+}
+// 增加摄像头，并控制视频流的导入
+const addCameraGraphicDraw = (graphicLayer, position) => {
+  const flvUrl = "ws://47.93.190.98:80/rtp/34020000001320000111_34020000001320000011.live.flv"
+  const graphicImg = new mars3d.graphic.DivGraphic({
+    position,
+    style: {
+      html: `     <div class="mars3d-camera-content">
+                      <img class="mars3d-camera-img" src="/public/img/icon/camera.svg" alt="camera"/>
+                    </div>
+                    <div class="mars3d-camera-line" ></div>
+                    <div class="mars3d-camera-point"></div>
+                  `,
+      offsetX: -16,
+      distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
+    },
+    popup: `<video style="width: 240px;height:130px;"
+                    id="videoPlay"
+                    autoplay="autoplay"
+                    loop=""
+                    crossorigin=""
+                    controls="controls"
+                    >
+              </video>`,
+    popupOptions: {
+      offsetY: -240, // 显示Popup的偏移值，是DivGraphic本身的像素高度值
+      template: `<div class="marsBlackPanel animation-spaceInDown">
+                        <div class="marsBlackPanel-text">{content}</div>
+                        <span class="mars3d-popup-close-button closeButton" style="color: white" >×</span>
+                      </div>`,
+      horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+      verticalOrigin: Cesium.VerticalOrigin.CENTER
+    }
+  })
+  const camera = new Camera(deviceId.value, flvUrl, graphicImg, mapStore.state.graphicLayer)
+  store.state.cameraMap.set(camera.id, camera)
+  deviceId.value = ""
+  stateStore.commit("updateLeftBarNeedUpdate", true)
+}
 const handleAddHuman = () => {
   if (humanId.value === "") {
     alert("请输入人员ID")

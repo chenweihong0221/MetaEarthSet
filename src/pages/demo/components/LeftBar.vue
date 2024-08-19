@@ -88,6 +88,8 @@ watchEffect(() => {
     }
   }).forEach((graphicDraw) => treeData.push(graphicDraw))
 
+
+
   // 处理人员模型
 
   Array.from(store.state.humanMap.values()).map(human => {
@@ -98,6 +100,17 @@ watchEffect(() => {
       type: 6
     }
   }).forEach((human) => treeData.push(human))
+
+  // 处理监控设备
+
+  Array.from(store.state.cameraMap.values()).map(camera => {
+    graphicIdTypeMap.set(camera.id.toString(), 7)
+    return {
+      title: camera.id.toString(),
+      key: camera.id.toString(),
+      type: 7
+    }
+  }).forEach((camera) => treeData.push(camera))
 
 
   leftBarTreeData.value = treeData
@@ -269,5 +282,6 @@ const getGraphicById = (id: string | number) => {
 .container {
   width: 14em;
 }
+
 
 </style>
