@@ -21,7 +21,8 @@ export const mapStore = createStore({
       humanMap: new Map<string, Human>(),
       openAirMap: new Map<string, OpenAir>(), // openAirId => OpenAir
       graphicLayer: null, // graphicLayer
-      graphicLayer2d: null // graphicLayer2d
+      graphicLayer2d: null, // graphicLayer2d
+      outlineEffect: null // 高亮效果
     }
   },
   mutations: {
@@ -124,6 +125,9 @@ export const mapStore = createStore({
     // add by cwh 202408081054
     flytoHome(state) {
       state.map.flyHome()
+    },
+    setOutlineEffect(state, effect) {
+      state.outlineEffect = effect
     }
   },
   getters: {
@@ -131,8 +135,14 @@ export const mapStore = createStore({
       switch (type) {
         case 0:
           return state.buildingMap.get(id)
-        case 1:
-          return state.buildingMap.get(state.floorBuildingMap.get(id))
+        case 1: {
+          console.log("id", id)
+          console.log("building exist", state.floorBuildingMap.get(id), state.floorBuildingMap)
+          console.log("floor exist", state.buildingMap.get(state.floorBuildingMap.get(id)).floors.has(id))
+          return state.buildingMap.get(state.floorBuildingMap.get(id)).floors.get(id)
+        }
+
+
         case 2:
           return state.buildingMap.get(state.floorBuildingMap.get(state.spaceFloorMap.get(id))).floors.get(state.spaceFloorMap.get(id)).spaces.get(id)
         case 3:
@@ -198,7 +208,8 @@ export const stateStore = createStore({
     return {
       topBarState: "1",
       selectedGraphicId: "",
-      selectedGraphicType: 0 // 0未选中，1楼层，2空间，3围栏，4露天场所
+      selectedGraphicType: 0, // 0未选中，1楼层，2空间，3围栏，4露天场所
+      leftBarNeedUpdate: false
     }
   },
   mutations: {
@@ -210,6 +221,9 @@ export const stateStore = createStore({
     },
     updateSelectedGraphicType(state, selectedGraphicType: number) {
       state.selectedGraphicType = selectedGraphicType
+    },
+    updateLeftBarNeedUpdate(state, leftBarNeedUpdate: boolean) {
+      state.leftBarNeedUpdate = leftBarNeedUpdate
     }
 
   }

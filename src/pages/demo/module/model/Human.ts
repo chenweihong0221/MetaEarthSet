@@ -23,7 +23,6 @@ export class Human implements GraphicInterface {
     })
     this.layer = layer
     this.layer.addGraphic(this.model)
-    console.log("human added to layer", this.model)
   }
 
   setShow(show: boolean): void {
@@ -32,11 +31,11 @@ export class Human implements GraphicInterface {
   }
 
   highLight(): void {
-
+    mapStore.state.outlineEffect.selected = [this.model]
   }
 
   removeHighLight(): void {
-
+    mapStore.state.outlineEffect.selected = []
   }
 
   flyTo(): void {

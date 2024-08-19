@@ -107,6 +107,7 @@ const deleteStore = () => {
   name.value = ""
   selectedGraphicId.value = ""
   type.value = ""
+  stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
 const handleShowChange = (param) => {

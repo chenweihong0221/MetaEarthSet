@@ -2,8 +2,8 @@
   <div id="centerDiv" class="centerDiv-container">
     <mars-map :url="configUrl" @onload="marsOnload" />
     <left-bar />
-    <right-bar/>
-    <top-bar @save="save" @import="importJson"/>
+    <right-bar />
+    <top-bar @save="save" @import="importJson" />
   </div>
 </template>
 
@@ -80,6 +80,14 @@ const importJson = () => {
 const marsOnload = (map: any) => {
   console.log("lang object:", mars3d.Lang)
   store.commit("setMap", map)
+  // 添加高亮样式
+  const highLight = new mars3d.effect.OutlineEffect({
+    color: "#FFFF00",
+    width: 4,
+    eventType: null
+  })
+  map.addEffect(highLight)
+  store.commit("setOutlineEffect", highLight)
   // 修改显示
   mars3d.Lang["_双击完成绘制"] = "点击滚轮完成绘制"
   tiles3dLayer = new mars3d.layer.TilesetLayer({
@@ -288,7 +296,7 @@ const addCameraGraphicDraw = (graphicLayer, position) => {
   graphicLayer.addGraphic(graphicImg)
   store.state.cameraMap.set(graphicImg.id, graphicImg)
 
-  graphicImg.on(mars3d.EventType.popupOpen, function (event) {
+  graphicImg.on(mars3d.EventType.popupOpen, function(event) {
     const videoElement = event.container.querySelector("#videoPlay") // popup对应的DOM
 
     // flv格式转换

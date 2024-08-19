@@ -53,29 +53,11 @@ export class OpenAir implements GraphicInterface {
   }
 
   highLight(): void {
-    this.polygon.setOptions({
-      style: {
-        color: "#FFFF00"
-      }
-    })
-    this.wall.setOptions({
-      style: {
-        color: "#FFFF00"
-      }
-    })
+    mapStore.state.outlineEffect.selected = [this.wall]
   }
 
   removeHighLight(): void {
-    this.polygon.setOptions({
-      style: {
-        color: "#CECECE"
-      }
-    })
-    this.wall.setOptions({
-      style: {
-        color: "#A9A9A9"
-      }
-    })
+    mapStore.state.outlineEffect.selected = []
   }
 
   flyTo(): void {

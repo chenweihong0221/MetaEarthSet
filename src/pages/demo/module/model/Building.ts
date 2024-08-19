@@ -1,5 +1,5 @@
 import * as mars3d from "mars3d"
-import { Cesium } from "mars3d"
+import { Cesium, EventType } from "mars3d"
 import * as uuid from "uuid"
 import { mapStore } from "@mars/pages/demo/module/store/store"
 import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
@@ -176,15 +176,11 @@ export class Building implements GraphicInterface {
   }
 
   highLight(): void {
-    this.floors.forEach((floor: Floor) => {
-      floor.highLight()
-    })
+    mapStore.state.outlineEffect.selected = Array.from(this.floors.values()).map((floor) => floor.wall)
   }
 
   removeHighLight(): void {
-    this.floors.forEach((floor: Floor) => {
-      floor.removeHighLight()
-    })
+    mapStore.state.outlineEffect.selected = []
   }
 
   flyTo(): void {
@@ -278,30 +274,11 @@ export class Floor implements GraphicInterface {
   }
 
   highLight(): void {
-    this.polygon.setOptions({
-      style: {
-        color: "#FFFF00"
-      }
-    })
-
-    this.wall.setOptions({
-      style: {
-        color: "#FFFF00"
-      }
-    })
+   mapStore.state.outlineEffect.selected = [this.wall]
   }
 
   removeHighLight(): void {
-    this.polygon.setOptions({
-      style: {
-        color: "#647BB1"
-      }
-    })
-    this.wall.setOptions({
-      style: {
-        color: "#647BB1"
-      }
-    })
+    mapStore.state.outlineEffect.selected = []
   }
 
   flyTo(): void {
@@ -357,29 +334,11 @@ export class Space implements GraphicInterface {
   }
 
   highLight(): void {
-    this.polygon.setOptions({
-      style: {
-        color: "#FFFF00"
-      }
-    })
-    this.wall.setOptions({
-      style: {
-        color: "#FFFF00"
-      }
-    })
+    mapStore.state.outlineEffect.selected = [this.wall]
   }
 
   removeHighLight(): void {
-    this.polygon.setOptions({
-      style: {
-        color: "#8D79C0"
-      }
-    })
-    this.wall.setOptions({
-      style: {
-        color: "#8D79C0"
-      }
-    })
+    mapStore.state.outlineEffect.selected = []
   }
 
 

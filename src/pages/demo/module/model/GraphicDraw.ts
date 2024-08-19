@@ -21,19 +21,11 @@ export class GraphicDraw implements GraphicInterface {
   }
 
   highLight(): void {
-    this.graphic.setOptions({
-      style: {
-        color: "#FFFF00"
-      }
-    })
+    mapStore.state.outlineEffect.selected = [this.graphic]
   }
 
   removeHighLight(): void {
-    this.graphic.setOptions({
-      style: {
-        color: "#FFFFFF"
-      }
-    })
+    mapStore.state.outlineEffect.selected = []
   }
 
   flyTo(): void {

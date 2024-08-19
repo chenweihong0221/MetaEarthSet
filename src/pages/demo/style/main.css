@@ -69,5 +69,30 @@
   /* 在这里添加你想要的样式 */
   background-color: rgba(35, 39, 47, 0.7) !important;/* 例如，修改背景颜色为黑色 */
 }
+.ant-tree-list-holder-inner {
+  background-color: #666666 !important;
+  border: #666666;
+  border-radius: 2px;
+}
+
+:where(.css-dev-only-do-not-override-19iuou).ant-tree .ant-tree-treenode .ant-tree-treenode-selected{
+  color: black;
+}
+
+
+:where(.css-dev-only-do-not-override-19iuou).ant-select-dropdown, .rc-virtual-list {
+  background-color: rgba(35, 39, 47, 0.7) !important;
+  border-color: rgba(35, 39, 47, 0.7) !important;
+  border-radius: 2px;
+  color: rgba(35, 39, 47, 0.7) !important;
+}
+
+.ant-select-item-option-content {
+  color: white;
+}
+:where(.css-dev-only-do-not-override-19iuou).ant-select-dropdown .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: rgba(64, 150, 255, 0.8) !important;
+}
+
 
 

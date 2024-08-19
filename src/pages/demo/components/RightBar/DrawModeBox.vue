@@ -68,6 +68,12 @@ watch(selectedBuildingId, val => {
     selectableFloor.value = []
   }
 })
+
+function drawCallback() {
+  stateStore.commit("updateLeftBarNeedUpdate", true)
+  console.log("drawCallback")
+}
+
 const stopDraw = () => {
   startDraw.value = false
   store.state.graphicLayer.stopDraw()
@@ -96,6 +102,7 @@ const drawBuilding = () => {
       building.name = buildingName.value
     }
     e.destroy()
+    drawCallback()
   })
 
   store.state.graphicLayer2d.startDraw({
@@ -158,6 +165,7 @@ const drawSpace = () => {
     selectedBuilding.showAllFloors()
     e.remove()
     groundPolygon.remove()
+    drawCallback()
   })
 }
 
@@ -184,6 +192,7 @@ const drawFence = () => {
     const fence = new Fence(positions)
     store.commit("addFence", fence)
     e.remove()
+    drawCallback()
   })
 }
 
@@ -211,6 +220,7 @@ const drawOpenAir = () => {
     if (openAirName.value) {
       openAir.name = openAirName.value
     }
+    drawCallback()
     e.destroy()
   })
   store.state.graphicLayer2d.startDraw({
@@ -244,6 +254,7 @@ const drawPerson = () => {
       speed: 2,
       range: 300.0
     })
+    drawCallback()
   })
 
 }
@@ -272,6 +283,7 @@ const handleAddHuman = () => {
     const human = new Human(humanId.value, event.cartesian, mapStore.state.graphicLayer)
     mapStore.state.humanMap.set(human.id, human)
     humanId.value = ""
+    drawCallback()
   })
 }
 </script>
