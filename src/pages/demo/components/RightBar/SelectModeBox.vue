@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { useStore } from "vuex"
+import * as mars3d from "mars3d"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 
@@ -17,49 +18,70 @@ const selectedGraphicId = ref("")
 const name = ref("")
 const type = ref("")
 const show = ref(true)
-
-watch(() => stateStore.state.selectedGraphicId, val => {
+const lat = ref()
+const lng = ref()
+const alt = ref()
+// mars3d.PolyUtil.centerOfMass 获取多点坐标的中心点
+// mars3d.LngLatPoint.fromCartesian 将笛卡尔坐标系转换为经纬度
+watch(() => stateStore.state.selectedGraphicId, val => { 
   selectedGraphicId.value = val
   const selectedType = stateStore.state.selectedGraphicType
+  let position: mars3d.Cesium.Cartesian3
   if (selectedType === 0) {
     const building = mapStore.state.buildingMap.get(val)
     name.value = building.name
     type.value = "建筑"
     show.value = building.show
+    position = mars3d.PolyUtil.centerOfMass(building.positions)
   } else if (selectedType === 1) { // type为1， 选中的图形为楼层
     const floor = mapStore.getters.getFloorByFloorId(val)
     name.value = floor.name
     type.value = "楼层"
     show.value = floor.polygon.show
+    position = mars3d.PolyUtil.centerOfMass(floor.positions)
   } else if (selectedType === 2) { // type为2， 选中的图形为空间
     const space = mapStore.getters.getSpaceBySpaceId(val)
     name.value = space.name
     type.value = "空间"
     show.value = space.polygon.show
+    position = mars3d.PolyUtil.centerOfMass(space.polygon.positions)
   } else if (selectedType === 3) { // type为3， 选中的图形为围栏
     const fence = mapStore.getters.getFenceByFenceId(val)
     name.value = fence.name
     type.value = "围栏"
     show.value = fence.polygon.show
+    position = mars3d.PolyUtil.centerOfMass(fence.polygon.positions)
   } else if (selectedType === 4) { // type为4， 选中的图形为露天场所
     const openAir = mapStore.getters.getOpenAirByOpenAirId(val)
     name.value = openAir.name
     type.value = "露天场所"
     show.value = openAir.polygon.show
+    position = mars3d.PolyUtil.centerOfMass(openAir.positions)
   } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
     const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(val)
     name.value = graphicDraw.name
     type.value = "图上标绘"
     show.value = graphicDraw.graphic.show
+    position = mars3d.PolyUtil.centerOfMass(graphicDraw.positions)
   } else if (selectedType === 6) { // type为6， 选中的图形为模型
     const model = mapStore.getters.getHumanByHumanId(val)
     name.value = model.id
     type.value = "人员"
     show.value = model.show
+    position = mars3d.PolyUtil.centerOfMass(model.positions)
   }
+  const point = mars3d.LngLatPoint.fromCartesian(position)
+    lat.value = point.lat
+    lng.value = point.lng
+    alt.value = point.alt
 })
 
-
+const onPositionChange = () => {
+  const val = stateStore.state.selectedGraphicId
+  const selectedType = stateStore.state.selectedGraphicType
+  console.log("val", val)
+  console.log("selectedType", selectedType)
+}
 
 const onMessageNameChange = () => {
   const val = stateStore.state.selectedGraphicId
@@ -148,22 +170,25 @@ const handleShowChange = (param) => {
         <a-collapse-panel header="变换" key="1">
           <div class="trans-box">
             <div class="trans-row">
-              位置：
-              <div>x <input></div>
-              <div>y <input></div>
-              <div>z <input></div>
+              <div>经度
+                <input v-model="lng" @change="onPositionChange">
+              </div>
+              <div>维度
+                <input v-model="lat" @change="onPositionChange">
+              </div>
+              <div>海拔
+                <input v-model="alt" @change="onPositionChange">
+              </div>
             </div>
             <div class="trans-row">
               旋转：
-              <div>x <input></div>
-              <div>y <input></div>
-              <div>z <input></div>
+              <div>x <input disabled></div>
+              <div>y <input disabled></div>
+              <div>z <input disabled></div>
             </div>
             <div class="trans-row">
               缩放：
-              <div>x <input></div>
-              <div>y <input></div>
-              <div>z <input></div>
+              <div><input disabled>%</div>
             </div>
           </div>
         </a-collapse-panel>
@@ -262,7 +287,7 @@ const handleShowChange = (param) => {
 .trans-panel,
 .msg-panel,
 .material-panel {
-  width: 90%;
+  width: 95%;
   background: #999999;
   border-radius: 3px;
 }
@@ -319,6 +344,7 @@ input {
 .material-input-color {
   margin-left: 1.15em;
 }
+
 .material-slider {
   margin-left: 1.15em;
   width: 15em;
