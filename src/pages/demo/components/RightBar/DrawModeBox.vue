@@ -339,7 +339,6 @@ const handleAddCamera = () => {
     store.state.cameraMap.set(camera.id, camera)
     deviceId.value = ""
     drawCallback()
-    store.state.graphicLayer.endDraw()
   })
 }
 const handleAddHuman = () => {

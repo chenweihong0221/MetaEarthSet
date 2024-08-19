@@ -132,13 +132,16 @@ watch(showKeys, () => {
 
 const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
   console.log("selectedKeys:", selectedKeys, info)
+  if (selectedKeys.length === 0) {
+    stateStore.commit("updateSelectedGraphicId", "")
+    selectedGraphicId = ""
+    return
+  }
   if (selectedGraphicId !== "") {
     const graphic = store.getters.getGraphicByIdAndType(selectedKeys[0], selectedGraphicType)
     graphic.removeHighLight()
   }
-  if (selectedKeys.length === 0) {
-    return
-  }
+
   const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
   selectedGraphicId = selectedKeys[0].toString()
   selectedGraphicType = info.node.dataRef.type

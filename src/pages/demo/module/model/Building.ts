@@ -40,8 +40,10 @@ export class Building implements GraphicInterface {
               floorNumber?: number,
               floorHeight?: number,
               spaceHeight?: number,
-              autoCreateFloor = true) {
-    this.id = uuid.v4()
+              autoCreateFloor = true,
+              id?: string
+              ) {
+    this.id = id || uuid.v4()
     this.positions = positions
     this.name = name || "建筑物"
     this.floorNumber = floorNumber || 3
@@ -61,9 +63,8 @@ export class Building implements GraphicInterface {
     }
   }
 
-  addFloor(position: Cesium.Cartesian3 | Cesium.Cartesian3[], name: string, floorNo: number, height?: number): Floor {
-    const newFloorAlt = this._getNewFloorAlt()
-    const newFloor = new Floor(position, this, name, floorNo, height, newFloorAlt)
+  addFloor(position: Cesium.Cartesian3 | Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string): Floor {
+    const newFloor = new Floor(position, this, name, floorNo, height, id)
     this.floors.set(newFloor.id.toString(), newFloor)
     return newFloor
   }
@@ -74,20 +75,27 @@ export class Building implements GraphicInterface {
     return {
       id: this.id,
       name: this.name,
+      positions: this.positions,
       floorNumber: this.floorNumber,
       floorHeight: this.floorHeight,
       spaceHeight: this.spaceHeight,
-      floors,
-      positions: this.positions
-    }
-  }
+      floors: floors.map((floor: Floor) => {
+        return {
+          id: floor.id,
+          name: floor.name,
+          floorNo: floor.floorNo,
+          alt: floor.alt,
+          spaces: Array.from(floor.spaces.values()).map((space: Space) => {
+            return {
+              id: space.id,
+              name: space.name,
+              positions: space.positions
+            }
+          })
+        }
 
-  _getNewFloorAlt(): number {
-    let alt = 0
-    this.floors.forEach((floor: Floor) => {
-      alt += floor.alt
-    })
-    return alt
+      })
+    }
   }
 
   onlyShowFloor(floorNo: string): void {
@@ -132,38 +140,15 @@ export class Building implements GraphicInterface {
     const buildings: Building[] = []
     console.log(obj)
     obj.forEach((item: any) => {
-      const building = new Building(layer, item.positions, item.name, item.floorNumber, item.floorHeight, item.spaceHeight,
-        false)
-      item.floors.forEach((floor: Floor) => {
-        // handle floor
-        console.log("floor created", floor)
-        const newFloor = new Floor(floor.polygon.positionsShow, building, floor.name, floor.floorNo)
-        newFloor.spaceNumber = floor.spaceNumber
-        // TODO: spaces 这部分有较大改动，择日修复
-        // floor.spaces.forEach((space: mars3d.graphic.PolygonEntity) => {
-        //   // handle space
-        //   const newSpace = new mars3d.graphic.PolygonEntity({
-        //     positions: space.positions,
-        //     name: space.name,
-        //     style: {
-        //       color: "#10acac",
-        //       opacity: 0.8,
-        //       // outline: true,
-        //       diffHeight: building.spaceHeight
-        //       // outlineColor: "#ffffff",
-        //       // outlineWidth: 2
-        //     }
-        //   })
-        //   newFloor.addSpace(space.positions)
-        //   building.layer.addGraphic(newSpace)
-        // })
-        building.floors.set(newFloor.polygon.id.toString(), newFloor)
-        console.log("building add a floor", newFloor)
+      const building = new Building(layer, item.positions, item.name, item.floorNumber,
+        item.floorHeight, item.spaceHeight, false, item.id)
+      item.floors.forEach((floor: any) => {
+        const newFloor = building.addFloor(floor.positions, floor.name, floor.floorNo, floor.alt)
+        floor.spaces.forEach((space: any) => {
+          newFloor.addSpace(space.positions, space.name, space.id)
+        })
       })
-      console.log("building floors", building.floors)
-      buildings.push(building)
     })
-    console.log(buildings)
     return buildings
   }
 
@@ -207,8 +192,8 @@ export class Floor implements GraphicInterface {
 
   show: boolean = true // 是否显示
 
-  constructor(positions: Cesium.Cartesian3 | Cesium.Cartesian3[], parent: Building, name: string, floorNo: number, height?: number, alt?: number) {
-    this.id = uuid.v4()
+  constructor(positions: Cesium.Cartesian3 | Cesium.Cartesian3[], parent: Building, name: string, floorNo: number, height?: number, id?: string) {
+    this.id = id || uuid.v4()
     this.name = name
     this.positions = positions instanceof Array ? positions : [positions]
     this.layer = parent.layer
@@ -252,12 +237,13 @@ export class Floor implements GraphicInterface {
    * 传入多边形的顶点坐标，生成空间
    * @param positions 多边形的顶点坐标
    * @param name 空间名称
-   * @param height
+   * @param height 空间高度
+   * @param id 空间id
    */
-  addSpace(positions?: Cesium.Cartesian3[], name?: string, height?: number): Space {
+  addSpace(positions?: Cesium.Cartesian3[], name?: string, height?: number, id?: string): Space {
     // 设置postions的高度和楼层高度一致
     const newPositions = setHeight(positions, this.alt + 1)
-    const space = new Space(newPositions, this, name, height)
+    const space = new Space(newPositions, this, name, height, id)
     this.spaces.set(space.id, space)
     return space
   }
@@ -292,16 +278,18 @@ export class Space implements GraphicInterface {
   name: string
   height: number
   parent: Floor
+  positions: Cesium.Cartesian3[]
   polygon: mars3d.graphic.PolygonEntity
   wall: mars3d.graphic.ThickWall
 
   show: boolean = true // 是否显示
 
-  constructor(positions: Cesium.Cartesian3[], parent: Floor, name?: string, height?: number) {
-    this.id = uuid.v4()
+  constructor(positions: Cesium.Cartesian3[], parent: Floor, name?: string, height?: number, id?: string) {
+    this.id = id || uuid.v4()
     this.name = name || "空间"
     this.height = height || 1.5
     this.parent = parent
+    this.positions = positions
     this.polygon = new mars3d.graphic.PolygonEntity({
       positions,
       name: name || "空间",

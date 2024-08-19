@@ -10,5 +10,4 @@ export interface GraphicInterface{
   removeHighLight(): void
 
   flyTo(): void
-
 }
