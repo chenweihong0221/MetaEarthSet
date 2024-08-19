@@ -7,6 +7,7 @@ import * as mars3d from "mars3d"
 import { Cesium } from "mars3d"
 import { Human } from "@mars/pages/demo/module/model/Human"
 import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
+import { Camera } from "mars3d-cesium"
 
 export const mapStore = createStore({
   state() {
@@ -17,7 +18,7 @@ export const mapStore = createStore({
       spaceFloorMap: new Map<string, string>(), // spaceId => floorId
       fenceMap: new Map<string, Fence>(),
       graphicDrawMap: new Map<string, GraphicDraw>(),
-      cameraMap: new Map<string, mars3d.graphic.DivGraphic>(),
+      cameraMap: new Map<string, Camera>(),
       humanMap: new Map<string, Human>(),
       openAirMap: new Map<string, OpenAir>(), // openAirId => OpenAir
       graphicLayer: null, // graphicLayer
@@ -141,8 +142,6 @@ export const mapStore = createStore({
           console.log("floor exist", state.buildingMap.get(state.floorBuildingMap.get(id)).floors.has(id))
           return state.buildingMap.get(state.floorBuildingMap.get(id)).floors.get(id)
         }
-
-
         case 2:
           return state.buildingMap.get(state.floorBuildingMap.get(state.spaceFloorMap.get(id))).floors.get(state.spaceFloorMap.get(id)).spaces.get(id)
         case 3:
@@ -153,6 +152,8 @@ export const mapStore = createStore({
           return state.graphicDrawMap.get(id)
         case 6:
           return state.humanMap.get(id)
+        case 7:
+          return state.cameraMap.get(id)
         default:
           return null
       }
@@ -190,6 +191,9 @@ export const mapStore = createStore({
     },
     getHumanByHumanId: state => (id: string): Human => {
       return state.humanMap.get(id)
+    },
+    getCameraByCameraId: state => (id: string): Camera => {
+      return state.cameraMap.get(id)
     },
     isPositionInFence: state => (position: Cesium.Cartesian3): boolean => {
       for (const fence of state.fenceMap.values()) {

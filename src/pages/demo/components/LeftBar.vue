@@ -22,6 +22,7 @@ const showKeys = ref<string[]>([])
 
 
 watchEffect(() => {
+  console.log("left bar tree update!")
   graphicIdTypeMap.clear()
   const value = stateStore.state.leftBarNeedUpdate
   if (!value) {
@@ -87,6 +88,8 @@ watchEffect(() => {
     }
   }).forEach((graphicDraw) => treeData.push(graphicDraw))
 
+
+
   // 处理人员模型
 
   Array.from(store.state.humanMap.values()).map(human => {
@@ -97,6 +100,17 @@ watchEffect(() => {
       type: 6
     }
   }).forEach((human) => treeData.push(human))
+
+  // 处理监控设备
+
+  Array.from(store.state.cameraMap.values()).map(camera => {
+    graphicIdTypeMap.set(camera.id.toString(), 7)
+    return {
+      title: camera.id.toString(),
+      key: camera.id.toString(),
+      type: 7
+    }
+  }).forEach((camera) => treeData.push(camera))
 
 
   leftBarTreeData.value = treeData
@@ -117,15 +131,14 @@ watch(showKeys, () => {
 })
 
 const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
-
+  console.log("selectedKeys:", selectedKeys, info)
   if (selectedGraphicId !== "") {
-    const graphic = store.getters.getGraphicByIdAndType(selectedGraphicId, selectedGraphicType)
+    const graphic = store.getters.getGraphicByIdAndType(selectedKeys[0], selectedGraphicType)
     graphic.removeHighLight()
   }
   if (selectedKeys.length === 0) {
     return
   }
-  console.log("handleSelected:", selectedKeys, info, info.node.dataRef.type)
   const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
   selectedGraphicId = selectedKeys[0].toString()
   selectedGraphicType = info.node.dataRef.type
@@ -269,5 +282,6 @@ const getGraphicById = (id: string | number) => {
 .container {
   width: 14em;
 }
+
 
 </style>

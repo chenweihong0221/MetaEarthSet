@@ -25,6 +25,12 @@ const alt = ref()
 // mars3d.LngLatPoint.fromCartesian 将笛卡尔坐标系转换为经纬度
 watch(() => stateStore.state.selectedGraphicId, val => { 
   selectedGraphicId.value = val
+  if (val === "") {
+    name.value = ""
+    type.value = ""
+    show.value = true
+    return
+  }
   const selectedType = stateStore.state.selectedGraphicType
   let position: mars3d.Cesium.Cartesian3
   if (selectedType === 0) {
@@ -68,7 +74,11 @@ watch(() => stateStore.state.selectedGraphicId, val => {
     name.value = model.id
     type.value = "人员"
     show.value = model.show
-    position = mars3d.PolyUtil.centerOfMass(model.positions)
+  } else if (selectedType === 7) { // type为7， 选中的图形为模型
+    const model = mapStore.getters.getCameraByCameraId(val)
+    name.value = model.id
+    type.value = "摄像头"
+    show.value = model.show
   }
   const point = mars3d.LngLatPoint.fromCartesian(position)
     lat.value = point.lat
@@ -76,12 +86,7 @@ watch(() => stateStore.state.selectedGraphicId, val => {
     alt.value = point.alt
 })
 
-const onPositionChange = () => {
-  const val = stateStore.state.selectedGraphicId
-  const selectedType = stateStore.state.selectedGraphicType
-  console.log("val", val)
-  console.log("selectedType", selectedType)
-}
+
 
 const onMessageNameChange = () => {
   const val = stateStore.state.selectedGraphicId
@@ -109,6 +114,9 @@ const onMessageNameChange = () => {
 
 const deleteStore = () => {
   const id = stateStore.state.selectedGraphicId
+  if (id === "") {
+    return
+  }
   const selectedType = stateStore.state.selectedGraphicType
   console.log("selectedType", stateStore.state.selectedGraphicType)
   if (selectedType === 0) {
@@ -130,6 +138,7 @@ const deleteStore = () => {
   selectedGraphicId.value = ""
   type.value = ""
   stateStore.commit("updateLeftBarNeedUpdate", true)
+  stateStore.commit("updateSelectedGraphicId", "")
 }
 
 const handleShowChange = (param) => {
