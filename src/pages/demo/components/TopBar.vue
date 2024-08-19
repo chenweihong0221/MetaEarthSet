@@ -7,6 +7,7 @@ import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import MarsIcon from "@mars/components/mars-ui/mars-icon/index.vue"
 import { useStore } from "vuex"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
+import { loadFromLocalStorage, save } from "@mars/pages/demo/module/tool/persistence"
 
 interface FormState {
   url: string
@@ -62,13 +63,11 @@ const modelOptions = [
 
 const emits = defineEmits(["save", "import"])
 const handleSave = () => {
-  emits("save")
-  console.log("save")
+  save()
 }
 
 const handleImport = () => {
-  emits("import")
-  console.log("import")
+  loadFromLocalStorage()
 }
 
 const seleiconlist = [
@@ -98,9 +97,13 @@ const handleClick = () => {
   <div class="border" style="position: absolute; top: 0;  width: 100%; height: 4em; background: #555555">
     <a-space style="position: absolute; top: 10px; left: 20px">
       <!-- <mars-button @click="handleSave">保存</mars-button> -->
-      <mars-button class="my-button">
+      <mars-button class="my-button" @click="handleSave">
         <template #icon><mars-icon icon="save" class="icon-vertical-a" width="16" /></template>
         保存
+      </mars-button>
+      <mars-button class="my-button" @click="handleImport">
+        <template #icon><mars-icon icon="save" class="icon-vertical-a" width="16" /></template>
+        导入
       </mars-button>
       <!-- <SmileOutlined />
       <SnippetsOutlined /> -->

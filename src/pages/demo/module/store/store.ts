@@ -31,15 +31,25 @@ export const mapStore = createStore({
       state.buildingMap.set(building.id, building)
       for (const floor of building.floors.values()) {
         state.floorBuildingMap.set(floor.id.toString(), building.id)
+        for (const space of floor.spaces.values()) {
+          state.spaceFloorMap.set(space.id.toString(), floor.id.toString())
+        }
       }
     },
     addFence(state, fence: Fence) {
       state.fenceMap.set(fence.id.toString(), fence)
-      state.graphicLayer.addGraphic(fence.polygon)
     },
     addOpenAir(state, openAir: OpenAir) {
       state.openAirMap.set(openAir.id.toString(), openAir)
-      state.graphicLayer.addGraphic(openAir.polygon)
+    },
+    addHuman(state, human: Human) {
+      state.humanMap.set(human.id.toString(), human)
+    },
+    addGraphicDraw(state, graphicDraw: GraphicDraw) {
+      state.graphicDrawMap.set(graphicDraw.id.toString(), graphicDraw)
+    },
+    addCamera(state, camera: Camera) {
+      state.cameraMap.set(camera.id.toString(), camera)
     },
     removeBuilding(state, id: string) {
       const building = state.buildingMap.get(id)
@@ -142,8 +152,13 @@ export const mapStore = createStore({
           console.log("floor exist", state.buildingMap.get(state.floorBuildingMap.get(id)).floors.has(id))
           return state.buildingMap.get(state.floorBuildingMap.get(id)).floors.get(id)
         }
-        case 2:
+        case 2:{
+          console.log("id", id)
+          console.log("building exist", state.floorBuildingMap.get(state.spaceFloorMap.get(id)))
+
           return state.buildingMap.get(state.floorBuildingMap.get(state.spaceFloorMap.get(id))).floors.get(state.spaceFloorMap.get(id)).spaces.get(id)
+        }
+
         case 3:
           return state.fenceMap.get(id)
         case 4:

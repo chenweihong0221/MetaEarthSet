@@ -63,4 +63,16 @@ export class OpenAir implements GraphicInterface {
   flyTo(): void {
     mapStore.state.map.flyToGraphic(this.polygon)
   }
+
+  toJSONObject(): any {
+    return {
+      id: this.id,
+      name: this.name,
+      positions: this.positions
+    }
+  }
+
+  static fromJSONObject(json: any, layer: mars3d.layer.GraphicLayer): OpenAir {
+    return new OpenAir(layer, json.positions, json.name)
+  }
 }

@@ -41,4 +41,15 @@ export class Human implements GraphicInterface {
   flyTo(): void {
     mapStore.state.map.flyToGraphic(this.model)
   }
+
+  toJSONObject(): any {
+    return {
+      id: this.id,
+      positions: this.positions
+    }
+  }
+
+  static fromJSONObject(json: any, layer: mars3d.layer.GraphicLayer): Human {
+    return new Human(json.id, json.positions, layer)
+  }
 }

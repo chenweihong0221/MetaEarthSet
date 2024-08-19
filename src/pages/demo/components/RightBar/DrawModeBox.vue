@@ -189,7 +189,7 @@ const drawFence = () => {
   }).then(e => {
     startDraw.value = false
     const positions = e.points
-    const fence = new Fence(positions)
+    const fence = new Fence(positions, fenceName.value)
     store.commit("addFence", fence)
     e.remove()
     drawCallback()
@@ -289,7 +289,7 @@ const handleGraphicDraw = () => {
       }
     })
     store.state.graphicLayer.addGraphic(graphicImg)
-    const graphicDraw = new GraphicDraw(selectedGraphicDrawContent.value, graphicImg)
+    const graphicDraw = new GraphicDraw(selectedGraphicDrawContent.value, cartesian)
     store.state.graphicDrawMap.set(graphicDraw.id, graphicDraw)
   }
 
@@ -304,38 +304,9 @@ const handleAddCamera = () => {
     const cartesian = new Cesium.Cartesian3(event.cartesian.x, event.cartesian.y, event.cartesian.z)
 
     const flvUrl = "ws://47.93.190.98:80/rtp/34020000001320000111_34020000001320000011.live.flv"
-    const graphicImg = new mars3d.graphic.DivGraphic({
-      position: cartesian,
-      style: {
-        html: `     <div class="mars3d-camera-content">
-                      <img class="mars3d-camera-img" src="/public/img/icon/camera.svg" alt="camera"/>
-                    </div>
-                    <div class="mars3d-camera-line" ></div>
-                    <div class="mars3d-camera-point"></div>
-                  `,
-        offsetX: -16,
-        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
-      },
-      popup: `<video style="width: 240px;height:130px;"
-                    id="videoPlay"
-                    autoplay="autoplay"
-                    loop=""
-                    crossorigin=""
-                    controls="controls"
-                    >
-              </video>`,
-      popupOptions: {
-        offsetY: -240, // 显示Popup的偏移值，是DivGraphic本身的像素高度值
-        template: `<div class="marsBlackPanel animation-spaceInDown">
-                        <div class="marsBlackPanel-text">{content}</div>
-                        <span class="mars3d-popup-close-button closeButton" style="color: white" >×</span>
-                      </div>`,
-        horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
-        verticalOrigin: Cesium.VerticalOrigin.CENTER
-      }
-    })
+
     store.state.cameraMap.get(deviceId.value)?.graphic.destroy()
-    const camera = new Camera(deviceId.value, flvUrl, graphicImg, store.state.graphicLayer)
+    const camera = new Camera(deviceId.value, flvUrl, cartesian, store.state.graphicLayer)
     store.state.cameraMap.set(camera.id, camera)
     deviceId.value = ""
     drawCallback()
