@@ -24,10 +24,27 @@ function saveToJSON(): string {
   }
   return JSON.stringify(jsonObject)
 }
-export function save() {
+export async function save() {
   const json = saveToJSON()
   console.log(json)
   localStorage.setItem("mars3d_data", json)
+
+  // 创建 Blob 对象
+  const blob = new Blob([json], { type: "application/json" })
+  // 自定义写入资源
+  try {
+    if ("showSaveFilePicker" in window) {
+      const handle = await window.showSaveFilePicker({ suggestedName: "data.json" })
+      const writable = await handle.createWritable()
+      await writable.write(blob)
+      await writable.close()
+      console.log("文件已成功写入")
+    } else {
+      throw new Error("浏览器不支持 File System Access API")
+    }
+  } catch (error) {
+    console.error("写入文件失败:", error)
+  }
 }
 
 export function loadFromLocalStorage() {
