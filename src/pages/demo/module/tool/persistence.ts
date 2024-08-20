@@ -36,7 +36,7 @@ export function loadFromLocalStorage() {
     console.error("未找到本地存储数据")
     return
   }
-
+    console.log(json)
   const jsonObj = JSON.parse(json)
   console.log(jsonObj)
   const buildings = Building.fromJSONArray(jsonObj.buildings, mapStore.state.graphicLayer)

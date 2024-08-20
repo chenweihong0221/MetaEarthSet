@@ -261,9 +261,6 @@ const drawPerson = () => {
 
 // 添加图上绘制功能
 const handleGraphicDraw = () => {
-  store.state.graphicLayer.startDraw({
-    type: "divBillboard"
-  })
 
   function handleClick(event) {
     const cartesian = new Cesium.Cartesian3(event.cartesian.x, event.cartesian.y, event.cartesian.z)
