@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { SmileOutlined, SnippetsOutlined, SelectOutlined, EditOutlined } from "@ant-design/icons-vue"
 // import "ant-design-vue/dist/antd.css"
-import { defineEmits, reactive, ref } from "vue"
+import { defineEmits, reactive, ref, watch } from "vue"
 import type { Dayjs } from "dayjs"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import MarsIcon from "@mars/components/mars-ui/mars-icon/index.vue"
@@ -66,7 +66,35 @@ const handleSave = () => {
   save()
 }
 
-const handleImport = () => {
+const handleImport = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    const reader = new FileReader()
+    reader.readAsArrayBuffer(file)
+    reader.onload = function (e) {
+      try {
+        console.log(e)
+        // 将读取到的内容转换为字符串，并尝试将其解析为 JSON 对象
+        const data = e.target.result
+        // 创建一个 TextDecoder 实例
+        const decoder = new TextDecoder()
+        // 假设 data 是可能为 string 或 ArrayBuffer 的变量
+        let jsonString
+        if (typeof data === "string") {
+          jsonString = data
+        } else if (data instanceof ArrayBuffer) {
+          jsonString = decoder.decode(data)
+        }
+        // 现在可以安全地解析 jsonString
+        const jsonObj = JSON.parse(jsonString)
+        console.log("jsonObj", jsonObj)
+        // 如果需要，你可以在这里调用 loadFromLocalStorage 或其他处理逻辑
+        // loadFromLocalStorage(jsonObj)
+      } catch (error) {
+        console.error("Error parsing JSON:", error)
+      }
+    }
+  }
   loadFromLocalStorage()
 }
 
@@ -90,8 +118,6 @@ const handleClick = () => {
   store.commit("flytoHome")
 }
 
-
-
 </script>
 
 <template>
@@ -103,7 +129,8 @@ const handleClick = () => {
         <template #icon><mars-icon icon="save" class="icon-vertical-a" width="16" /></template>
         保存
       </mars-button>
-      <mars-button  class="my-button" @click="handleImport">
+      <mars-button class="my-button" @click="handleImport">
+        <input type="file" @change="handleImport" accept=".json">
         <template #icon><mars-icon icon="save" class="icon-vertical-a" width="16" /></template>
         导入
       </mars-button>
