@@ -90,6 +90,8 @@ const handleClick = () => {
   store.commit("flytoHome")
 }
 
+
+
 </script>
 
 <template>
@@ -101,12 +103,23 @@ const handleClick = () => {
         <template #icon><mars-icon icon="save" class="icon-vertical-a" width="16" /></template>
         保存
       </mars-button>
-      <mars-button class="my-button" @click="handleImport">
+      <mars-button  class="my-button" @click="handleImport">
         <template #icon><mars-icon icon="save" class="icon-vertical-a" width="16" /></template>
         导入
       </mars-button>
       <!-- <SmileOutlined />
       <SnippetsOutlined /> -->
+      <a-select v-model:value="selectedValue" style="width: 130px; " class="c_mars-select"
+        popupClassName="mars-select-dropdown" @change="handleChange">
+        <a-select-option key="2">
+          <SelectOutlined />
+          选项模式
+        </a-select-option>
+        <a-select-option key="1">
+          <EditOutlined />
+          绘制模式
+        </a-select-option>
+      </a-select>
     </a-space>
     <!-- <a-space style="position: absolute; top: 10px; left: 240px">
       <mars-button @click="handleImport">导入</mars-button>
@@ -118,20 +131,6 @@ const handleClick = () => {
         </mars-select>
       </div>
     </a-space> -->
-
-    <a-space style="position: absolute; top: 10px; left: 150px">
-      <a-select v-model:value="selectedValue" style="width: 130px; " class="c_mars-select"
-                popupClassName="mars-select-dropdown" @change="handleChange">
-        <a-select-option key="2">
-          <SelectOutlined />
-          选项模式
-        </a-select-option>
-        <a-select-option key="1">
-          <EditOutlined />
-          绘制模式
-        </a-select-option>
-      </a-select>
-    </a-space>
 
     <!-- <a-space style="position: absolute; top: 10px; left: 350px">
       <a-select size="large" placeholder="请选择图标" style="width: 200px" @change="handleChange">
@@ -227,19 +226,22 @@ const handleClick = () => {
 /* 自定义下拉框项样式 */
 .my-custom-select::v-deep .ant-select-dropdown {
   background-color: #0a0606;
-  color: #333; /* 示例：修改文字颜色 */
+  color: #333;
+  /* 示例：修改文字颜色 */
 }
 
 /* 自定义下拉框项样式 */
 .my-custom-select::v-deep .ant-select-dropdown-menu-item {
   background-color: #2a2a2a;
-  color: #333; /* 示例：修改文字颜色 */
+  color: #333;
+  /* 示例：修改文字颜色 */
 }
 
 /* 自定义选中项的样式 */
 .my-custom-select::v-deep .ant-select-dropdown-menu-item-selected {
-  background-color: #060606; /* 示例：修改背景颜色 */
-  color: #fff; /* 示例：修改文字颜色 */
+  background-color: #060606;
+  /* 示例：修改背景颜色 */
+  color: #fff;
+  /* 示例：修改文字颜色 */
 }
-
 </style>
