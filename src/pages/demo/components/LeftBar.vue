@@ -133,6 +133,8 @@ watch(showKeys, () => {
 
 const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
   console.log("selectedKeys:", selectedKeys, info)
+
+
   if (selectedKeys.length === 0) {
     stateStore.commit("updateSelectedGraphicId", "")
     selectedGraphicId = ""
@@ -159,11 +161,50 @@ const handleRightClick: TreeProps["onRightClick"] = (info) => {
 const handleCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
   const id = info.node.dataRef.key.toString()
   const show = !showGraphicIdSet.has(id)
+  const type = info.node.dataRef.type
+
   getGraphicById(id).setShow(show)
   if (show) {
+    // 针对于type为0，1的情况，需要处理子节点
     showGraphicIdSet.add(id)
+    if (type === 0) {
+      const children = info.node.children
+      children.forEach((child: any) => {
+        showGraphicIdSet.add(child.key)
+        getGraphicById(child.key).setShow(true)
+        child.children.forEach((grandChild: any) => {
+          showGraphicIdSet.add(grandChild.key)
+          getGraphicById(grandChild.key).setShow(true)
+        })
+      })
+    }
+    if (type === 1) {
+      const children = info.node.children
+      children.forEach((child: any) => {
+        showGraphicIdSet.add(child.key)
+        getGraphicById(child.key).setShow(true)
+      })
+    }
   } else {
     showGraphicIdSet.delete(id)
+    if (type === 0) {
+      const children = info.node.children
+      children.forEach((child: any) => {
+        showGraphicIdSet.delete(child.key)
+        getGraphicById(child.key).setShow(false)
+        child.children.forEach((grandChild: any) => {
+          showGraphicIdSet.delete(grandChild.key)
+          getGraphicById(grandChild.key).setShow(false)
+        })
+      })
+    }
+    if (type === 1) {
+      const children = info.node.children
+      children.forEach((child: any) => {
+        showGraphicIdSet.delete(child.key)
+        getGraphicById(child.key).setShow(false)
+      })
+    }
   }
   showKeys.value = Array.from(showGraphicIdSet)
   console.log("showKeys:", showKeys.value)
