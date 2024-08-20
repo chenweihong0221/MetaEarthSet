@@ -21,9 +21,15 @@ const show = ref(true)
 const lat = ref()
 const lng = ref()
 const alt = ref()
+const scale = ref()
+const rotateX = ref()
+const rotateY = ref()
+const rotateZ = ref()
+
+
 // mars3d.PolyUtil.centerOfMass 获取多点坐标的中心点
 // mars3d.LngLatPoint.fromCartesian 将笛卡尔坐标系转换为经纬度
-watch(() => stateStore.state.selectedGraphicId, val => { 
+watch(() => stateStore.state.selectedGraphicId, val => {
   selectedGraphicId.value = val
   if (val === "") {
     name.value = ""
@@ -81,9 +87,9 @@ watch(() => stateStore.state.selectedGraphicId, val => {
     show.value = model.show
   }
   const point = mars3d.LngLatPoint.fromCartesian(position)
-    lat.value = point.lat
-    lng.value = point.lng
-    alt.value = point.alt
+  lat.value = point.lat
+  lng.value = point.lng
+  alt.value = point.alt
 })
 
 
@@ -191,13 +197,13 @@ const handleShowChange = (param) => {
             </div>
             <div class="trans-row">
               旋转：
-              <div>x <input disabled></div>
-              <div>y <input disabled></div>
-              <div>z <input disabled></div>
+              <div>x <input v-model="rotateX" disabled></div>
+              <div>y <input v-model="rotateY" disabled></div>
+              <div>z <input v-model="rotateZ" disabled></div>
             </div>
             <div class="trans-row">
               缩放：
-              <div><input disabled>%</div>
+              <div><input v-model="scale" disabled>%</div>
             </div>
           </div>
         </a-collapse-panel>
