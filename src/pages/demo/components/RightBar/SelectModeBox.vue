@@ -23,7 +23,7 @@ const lng = ref()
 const alt = ref()
 // mars3d.PolyUtil.centerOfMass 获取多点坐标的中心点
 // mars3d.LngLatPoint.fromCartesian 将笛卡尔坐标系转换为经纬度
-watch(() => stateStore.state.selectedGraphicId, val => { 
+watch(() => stateStore.state.selectedGraphicId, val => {
   selectedGraphicId.value = val
   if (val === "") {
     name.value = ""
@@ -133,6 +133,8 @@ const deleteStore = () => {
     mapStore.commit("removeGraphicDraw", id)
   } else if (selectedType === 6) {
     mapStore.commit("removeHuman", id)
+  } else if (selectedType === 7) {
+    mapStore.commit("removeCamera", id)
   }
   name.value = ""
   selectedGraphicId.value = ""

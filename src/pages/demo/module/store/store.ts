@@ -111,6 +111,11 @@ export const mapStore = createStore({
       state.humanMap.delete(id)
       human.model.destroy()
     },
+    removeCamera(state, id: string) {
+      const camera = state.cameraMap.get(id)
+      state.cameraMap.delete(id)
+      camera.graphic.destroy()
+    },
     setMap(state, map) {
       state.map = map
     },
