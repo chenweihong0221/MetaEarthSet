@@ -19,8 +19,6 @@ import TopBar from "@mars/pages/demo/components/TopBar.vue"
 import message from "ant-design-vue/es/message"
 import { useStore } from "vuex"
 import { mapKey } from "@mars/pages/demo/module/store/store"
-import Flv from "flv-h265.js"
-import { GraphicDraw } from "@mars/pages/demo/module/model/GraphicDraw"
 
 const Cesium = mars3d.Cesium
 

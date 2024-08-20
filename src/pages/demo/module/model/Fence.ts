@@ -11,7 +11,7 @@ export class Fence implements GraphicInterface {
 
   show: boolean = true // 是否显示
 
-  constructor(positions: Cesium.Cartesian3[] | LngLatPoint[], name?: string, height?: number) {
+  constructor(positions: Cesium.Cartesian3[] | LngLatPoint[], name?: string, height?: number, id?: string) {
     this.height = height || 5
     this.name = name || "围栏"
     this.polygon = new mars3d.graphic.ScrollWall({
@@ -23,7 +23,8 @@ export class Fence implements GraphicInterface {
         opacity: 0.8
       }
     })
-    this.id = this.polygon.id.toString()
+    this.id = id || this.polygon.id.toString()
+    mapStore.state.graphicLayer.addGraphic(this.polygon)
   }
 
   setShow(show: boolean): void {
@@ -43,5 +44,21 @@ export class Fence implements GraphicInterface {
 
   flyTo(): void {
     mapStore.state.map.flyToGraphic(this.polygon)
+  }
+
+  toJSONObject(): any {
+    return {
+      id: this.id,
+      name: this.name,
+      height: this.height,
+      positions: this.polygon.positions
+    }
+  }
+
+  static fromJSONObject(json: any, layer: mars3d.layer.GraphicLayer): Fence {
+    const positions = json.positions
+    const height = json.height
+    const name = json.name
+    return new Fence(positions, name, height, json.id)
   }
 }

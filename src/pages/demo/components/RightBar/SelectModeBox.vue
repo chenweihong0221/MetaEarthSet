@@ -139,6 +139,8 @@ const deleteStore = () => {
     mapStore.commit("removeGraphicDraw", id)
   } else if (selectedType === 6) {
     mapStore.commit("removeHuman", id)
+  } else if (selectedType === 7) {
+    mapStore.commit("removeCamera", id)
   }
   name.value = ""
   selectedGraphicId.value = ""

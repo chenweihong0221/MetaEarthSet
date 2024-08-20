@@ -30,6 +30,7 @@ watchEffect(() => {
   }
   const treeData = []
   // 处理建筑物树状数据
+  console.log("store.state.buildingMap:", store.state.buildingMap)
   Array.from(store.state.buildingMap.values()).map(building => {
     graphicIdTypeMap.set(building.id.toString(), 0)
     return {
@@ -138,21 +139,19 @@ const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
     return
   }
   if (selectedGraphicId !== "") {
-    const graphic = store.getters.getGraphicByIdAndType(selectedKeys[0], selectedGraphicType)
+    const graphic = store.getters.getGraphicByIdAndType(selectedGraphicId, selectedGraphicType)
     graphic.removeHighLight()
   }
 
   const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
   selectedGraphicId = selectedKeys[0].toString()
   selectedGraphicType = info.node.dataRef.type
-  console.log("graphic:", graphic)
   graphic.highLight()
   stateStore.commit("updateSelectedGraphicId", selectedKeys[0])
   stateStore.commit("updateSelectedGraphicType", info.node.type)
 }
 
 const handleRightClick: TreeProps["onRightClick"] = (info) => {
-  console.log("handleRightClick:", info)
   const graphic = getGraphicById(info.node.dataRef.key)
   graphic.flyTo()
 }
@@ -160,7 +159,6 @@ const handleRightClick: TreeProps["onRightClick"] = (info) => {
 const handleCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
   const id = info.node.dataRef.key.toString()
   const show = !showGraphicIdSet.has(id)
-  console.log("checkedKeys:", checkedKeys, info)
   getGraphicById(id).setShow(show)
   if (show) {
     showGraphicIdSet.add(id)
