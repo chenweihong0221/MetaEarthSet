@@ -18,7 +18,8 @@ import LeftBar from "@mars/pages/demo/components/LeftBar.vue"
 import TopBar from "@mars/pages/demo/components/TopBar.vue"
 import message from "ant-design-vue/es/message"
 import { useStore } from "vuex"
-import { mapKey } from "@mars/pages/demo/module/store/store"
+import { mapKey, stateStore } from "@mars/pages/demo/module/store/store"
+import { Area } from "@mars/pages/demo/module/model/Area"
 
 const Cesium = mars3d.Cesium
 
@@ -29,17 +30,11 @@ const selectedGraphicId = ref("")
 provide("selectedGraphicId", selectedGraphicId)
 const router = useRouter()
 
-const graphicLayer = new mars3d.layer.GraphicLayer({
-  drawEndEventType: mars3d.EventType.middleClick
-})
-const graphicLayer2d = new mars3d.layer.GraphicLayer({
-  drawEndEventType: mars3d.EventType.middleClick
-})
+
 
 // 获取自定义的store， 存储全局变量
 const store = useStore(mapKey)
-store.commit("setGraphicLayer", graphicLayer)
-store.commit("setGraphicLayer2d", graphicLayer2d)
+
 
 const configUrl = `${process.env.BASE_URL}config/config.json`
 let tiles3dLayer: any
@@ -128,7 +123,14 @@ const marsOnload = (map: any) => {
     // center: { lat: 34.82, lng: 113.5264, alt: 3361, heading: 358, pitch: -51 }
   })
   map.addLayer(tiles3dLayer2)
-
+  const graphicLayer = new mars3d.layer.GraphicLayer({
+    drawEndEventType: mars3d.EventType.middleClick
+  })
+  const graphicLayer2d = new mars3d.layer.GraphicLayer({
+    drawEndEventType: mars3d.EventType.middleClick
+  })
+  store.commit("setGraphicLayer", graphicLayer)
+  store.commit("setGraphicLayer2d", graphicLayer2d)
   // del by cwh 20240809
   // const label = new mars3d.graphic.LabelEntity({
   //   position: { lng: 113.526183, lat: 34.816372, alt: 26.8 },
@@ -160,6 +162,7 @@ const marsOnload = (map: any) => {
     selectedGraphicId.value = event.graphic.id
     console.log("selectedGraphicId", selectedGraphicId.value)
   })
+  Area.getFromLocalStorage(stateStore.state.selectedAreaId)
 }
 
 </script>

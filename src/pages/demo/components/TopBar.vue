@@ -49,8 +49,7 @@ const inputAreaName = ref("")
 const showModal = ref(false)
 
 onMounted(() => {
-  store.state.graphicLayer.clear()
-  Area.getFromLocalStorage(selectedArea.value)
+  stateStore.commit("updateSelectedAreaId", selectedArea.value)
 })
 
 const handleSave = () => {
