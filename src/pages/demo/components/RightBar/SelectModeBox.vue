@@ -116,6 +116,7 @@ const onMessageNameChange = () => {
     const human = mapStore.getters.getHumanByHumanId(val)
     human.id = name.value
   }
+  stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
 const deleteStore = () => {
