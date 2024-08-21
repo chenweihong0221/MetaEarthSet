@@ -13,7 +13,7 @@ export class GraphicDraw implements GraphicInterface {
 
   constructor(name:string, position: mars3d.Cesium.Cartesian3, id?: string) {
     this.graphic = new mars3d.graphic.DivGraphic({
-      position: position,
+      position,
       style: {
         html: `     <div class="mars3d-graphicDraw-content">
                       <img class="mars3d-graphicDraw-img"
@@ -35,7 +35,7 @@ export class GraphicDraw implements GraphicInterface {
     })
     this.id = id || this.graphic.id.toString()
     this.name = name
-
+    mapStore.state.graphicLayer.addGraphic(this.graphic)
   }
 
   setShow(show: boolean): void {
