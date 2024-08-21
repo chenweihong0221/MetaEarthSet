@@ -44,7 +44,7 @@ const formState = reactive<FormState>({
 // 下拉列表数据
 const areaOptions = ref<{id: string, name: string}[]>(getAllAreaIdAndName())
 const selectedValue = ref("1") // 假设默认选中“选项1”
-const selectedArea = ref(areaOptions.value[0].id || "")
+const selectedArea = ref(areaOptions.value && areaOptions.value[0] && areaOptions.value[0].id ? areaOptions.value[0].id : "")
 const inputAreaName = ref("")
 const showModal = ref(false)
 

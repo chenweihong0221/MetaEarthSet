@@ -42,6 +42,9 @@ export class Area {
   static getFromJson(json: string): Area {
     console.log("area found json", json)
     const areaLocalStorage = JSON.parse(json)
+    if (!areaLocalStorage) {
+      return null
+    }
     const area = new Area(areaLocalStorage.name, false)
     area.id = areaLocalStorage.id
     area.data = loadJSON(areaLocalStorage.data)
@@ -49,7 +52,8 @@ export class Area {
   }
 
   static getFromLocalStorage(id: string): Area {
-    return Area.getFromJson(localStorage.getItem(`#area_${id}`))
+    const localStorageDataJson = localStorage.getItem(`#area_${id}`)
+    return localStorageDataJson ? Area.getFromJson(localStorageDataJson) : null
   }
 }
 
