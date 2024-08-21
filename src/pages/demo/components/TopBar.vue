@@ -87,15 +87,13 @@ const handleImport = (event) => {
         }
         // 现在可以安全地解析 jsonString
         const jsonObj = JSON.parse(jsonString)
-        console.log("jsonObj", jsonObj)
         // 如果需要，你可以在这里调用 loadFromLocalStorage 或其他处理逻辑
-        // loadFromLocalStorage(jsonObj)
+        loadFromLocalStorage(jsonObj)
       } catch (error) {
         console.error("Error parsing JSON:", error)
       }
     }
   }
-  loadFromLocalStorage()
 }
 
 const seleiconlist = [

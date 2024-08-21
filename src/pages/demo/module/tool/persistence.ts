@@ -47,15 +47,15 @@ export async function save() {
   }
 }
 
-export function loadFromLocalStorage() {
+export function loadFromLocalStorage(jsonObj: any) {
   const json = localStorage.getItem("mars3d_data")
   if (!json) {
     console.error("未找到本地存储数据")
     return
   }
-    console.log(json)
-  const jsonObj = JSON.parse(json)
-  console.log(jsonObj)
+  const jsonObject = JSON.parse(json)
+  console.log("jsonObject", jsonObject)
+  console.log("jsonObj", jsonObj)
   const buildings = Building.fromJSONArray(jsonObj.buildings, mapStore.state.graphicLayer)
   buildings.forEach((building) => {
     console.log("building", building)
