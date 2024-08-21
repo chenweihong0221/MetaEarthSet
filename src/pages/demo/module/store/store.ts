@@ -7,7 +7,7 @@ import * as mars3d from "mars3d"
 import { Cesium } from "mars3d"
 import { Human } from "@mars/pages/demo/module/model/Human"
 import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
-import { Camera } from "mars3d-cesium"
+import { Camera } from "@mars/pages/demo/module/model/Camera"
 
 export const mapStore = createStore({
   state() {
@@ -144,6 +144,16 @@ export const mapStore = createStore({
     },
     setOutlineEffect(state, effect) {
       state.outlineEffect = effect
+    },
+    clearMap(state) {
+      state.buildingMap.clear()
+      state.floorBuildingMap.clear()
+      state.spaceFloorMap.clear()
+      state.fenceMap.clear()
+      state.openAirMap.clear()
+      state.graphicDrawMap.clear()
+      state.humanMap.clear()
+      state.cameraMap.clear()
     }
   },
   getters: {
@@ -233,7 +243,8 @@ export const stateStore = createStore({
       topBarState: "1",
       selectedGraphicId: "",
       selectedGraphicType: 0, // 0未选中，1楼层，2空间，3围栏，4露天场所
-      leftBarNeedUpdate: false
+      leftBarNeedUpdate: false,
+      selectedAreaId: ""
     }
   },
   mutations: {
@@ -248,8 +259,10 @@ export const stateStore = createStore({
     },
     updateLeftBarNeedUpdate(state, leftBarNeedUpdate: boolean) {
       state.leftBarNeedUpdate = leftBarNeedUpdate
+    },
+    updateSelectedAreaId(state, selectedAreaId: string) {
+      state.selectedAreaId = selectedAreaId
     }
-
   }
 })
 

@@ -29,8 +29,6 @@ watchEffect(() => {
     return
   }
   const treeData = []
-  // 处理建筑物树状数据
-  console.log("store.state.buildingMap:", store.state.buildingMap)
   Array.from(store.state.buildingMap.values()).map(building => {
     graphicIdTypeMap.set(building.id.toString(), 0)
     return {
@@ -115,24 +113,20 @@ watchEffect(() => {
 
 
   leftBarTreeData.value = treeData
+  console.log("treeData", treeData)
+  stateStore.commit("updateLeftBarNeedUpdate", false)
 })
 watch(leftBarTreeData, () => {
-  console.log("leftBarTreeData:", leftBarTreeData.value)
   for (const id of graphicIdTypeMap.keys()) {
     showGraphicIdSet.add(id)
   }
   nextTick(() => {
     showKeys.value = Array.from(showGraphicIdSet)
   })
-  console.log("showKeys:", showKeys.value, typeof showKeys.value)
 })
 
-watch(showKeys, () => {
-  console.log("showKeys:", showKeys, showKeys.value)
-})
 
 const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
-  console.log("selectedKeys:", selectedKeys, info)
 
 
   if (selectedKeys.length === 0) {
@@ -207,7 +201,6 @@ const handleCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
     }
   }
   showKeys.value = Array.from(showGraphicIdSet)
-  console.log("showKeys:", showKeys.value)
 }
 
 const getGraphicById = (id: string | number) => {

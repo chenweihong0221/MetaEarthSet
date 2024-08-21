@@ -3,7 +3,7 @@
     <mars-map :url="configUrl" @onload="marsOnload" />
     <left-bar />
     <right-bar />
-    <top-bar @save="save" @import="importJson" />
+    <top-bar />
   </div>
 </template>
 

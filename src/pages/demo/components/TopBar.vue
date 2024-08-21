@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { SmileOutlined, SnippetsOutlined, SelectOutlined, EditOutlined } from "@ant-design/icons-vue"
 // import "ant-design-vue/dist/antd.css"
-import { defineEmits, reactive, ref, watch } from "vue"
+import { defineEmits, onMounted, reactive, ref, watch } from "vue"
 import type { Dayjs } from "dayjs"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import MarsIcon from "@mars/components/mars-ui/mars-icon/index.vue"
 import { useStore } from "vuex"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
-import { loadFromLocalStorage, save } from "@mars/pages/demo/module/tool/persistence"
+import { loadFromLocalStorage, save, saveToLocalStorage } from "@mars/pages/demo/module/tool/persistence"
+import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
 
 interface FormState {
   url: string
@@ -40,33 +41,23 @@ const formState = reactive<FormState>({
   isScale: true,
   color: "#ffff00"
 })
-
-// 下拉列表切换事件
-const onSelectChange = (value: string, data: any) => {
-  // $message("您选择了：" + data.label)
-  console.log("下拉列表切换事件", data)
-}
-
-const selectedValue = ref("1") // 假设默认选中“选项1”
-
 // 下拉列表数据
-const modelOptions = [
-  {
-    value: "xuanxiang",
-    label: "选项模式"
-  },
-  {
-    value: "huizhi",
-    label: "绘制模式"
-  }
-]
+const areaOptions = ref<{id: string, name: string}[]>(getAllAreaIdAndName())
+const selectedValue = ref("1") // 假设默认选中“选项1”
+const selectedArea = ref(areaOptions.value[0].id || "")
+const inputAreaName = ref("")
+const showModal = ref(false)
 
-const emits = defineEmits(["save", "import"])
+onMounted(() => {
+  store.state.graphicLayer.clear()
+  Area.getFromLocalStorage(selectedArea.value)
+})
+
 const handleSave = () => {
-  save()
+  saveToLocalStorage(selectedArea.value)
 }
 
-const handleImport = (event) => {
+const handleImport = event => {
   const file = event.target.files[0]
   if (file) {
     const reader = new FileReader()
@@ -98,20 +89,46 @@ const handleImport = (event) => {
   loadFromLocalStorage()
 }
 
-const seleiconlist = [
-  {
-    value: "account-book", label: "account-book"
-  },
-  {
-    value: "appstore", label: "appstore"
-  }
-]
+const handleImportClick = () => {
+  document.getElementById("import-button").click()
+}
 
 const handleChange = (value: string) => {
   console.log(`Selected: ${value}`)
   stateStore.commit("updateTopBarState", value)
 }
 
+const handleSelectAreaChange = (value: string) => {
+
+  if (value === "0") {
+    showModal.value = true
+    store.state.graphicLayer.clear()
+    selectedArea.value = ""
+  } else {
+    store.commit("clearMap")
+    store.state.graphicLayer.clear()
+    Area.getFromLocalStorage(value)
+    console.log("selectedArea", selectedArea.value)
+  }
+
+  stateStore.commit("updateLeftBarNeedUpdate", true)
+
+}
+
+const handleOk = () => {
+  const newArea = new Area(inputAreaName.value)
+  areaOptions.value = getAllAreaIdAndName()
+  inputAreaName.value = ""
+  showModal.value = false
+  selectedArea.value = newArea.id
+  store.commit("clearMap")
+  stateStore.commit("updateLeftBarNeedUpdate", true)
+}
+
+const handleCancel = () => {
+  inputAreaName.value = ""
+  showModal.value = false
+}
 
 const handleClick = () => {
   console.log("下拉列表切换事件")
@@ -123,14 +140,25 @@ const handleClick = () => {
 <template>
   <!-- <div class="borderstyle" style="position: absolute; top: 0;  width: 100%; height: 5em; background: gray"> -->
   <div class="border" style="position: absolute; top: 0;  width: 100%; height: 4em; background: #555555">
-    <a-space style="position: absolute; top: 10px; left: 20px">
-      <!-- <mars-button @click="handleSave">保存</mars-button> -->
+    <a-space class="space" style="position: static; margin-top: 10px; margin-left: 20px">
+      <div style="color: white">选择区域：</div>
+      <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
+                @change="handleSelectAreaChange" v-model:value="selectedArea"
+      >
+        <a-select-option v-for="area in areaOptions" :key="area.id" :value="area.id">
+          {{ area.name }}
+        </a-select-option>
+        <a-select-option key="0">
+          添加区域
+        </a-select-option>
+      </a-select>
       <mars-button class="my-button" @click="handleSave">
         <template #icon><mars-icon icon="save" class="icon-vertical-a" width="16" /></template>
         保存
       </mars-button>
-      <mars-button class="my-button" @click="handleImport">
-        <input type="file" @change="handleImport" accept=".json">
+      <mars-button class="my-button" @click="handleImportClick">
+        <div style="visibility: hidden; position: absolute"><input id="import-button" type="file" @change="handleImport" accept=".json"></div>
+
         <template #icon><mars-icon icon="save" class="icon-vertical-a" width="16" /></template>
         导入
       </mars-button>
@@ -148,41 +176,6 @@ const handleClick = () => {
         </a-select-option>
       </a-select>
     </a-space>
-    <!-- <a-space style="position: absolute; top: 10px; left: 240px">
-      <mars-button @click="handleImport">导入</mars-button>
-    </a-space> -->
-    <!-- mars-select无法添加图片，所以使用a-select -->
-    <!-- <a-space style="position: absolute; top: 10px; left: 150px">
-      <div style="width: 110px; height: 100px;">
-        <mars-select v-model:value="selectedValue" :options="modelOptions" @change="onSelectChange">
-        </mars-select>
-      </div>
-    </a-space> -->
-
-    <!-- <a-space style="position: absolute; top: 10px; left: 350px">
-      <a-select size="large" placeholder="请选择图标" style="width: 200px" @change="handleChange">
-        <a-select-option v-for="item  in seleiconlist" :key="item .value" :value="item.value">
-          <template #prefix>
-            <SnippetsOutlined />
-          </template>
-          {{ item.label }}
-        </a-select-option>
-      </a-select>
-    </a-space>
-
-    <a-space style="position: absolute; top: 10px; left: 750px">
-      <a-select size="large" placeholder="请选择图标" style="width: 200px" @change="handleChange">
-        <a-select-option v-for="i in seleiconlist" :key="i.value">
-          <SnippetsOutlined />
-        </a-select-option>
-      </a-select>
-    </a-space> -->
-
-    <!-- <a-collapse>
-      <a-collapse-panel style="position: absolute; top: 10px; left: 95px; background: white" key="8" header="选项模式">
-        <p>{{ 1 }}</p>
-      </a-collapse-panel>
-    </a-collapse> -->
 
 
     <a-space style="position: absolute; top: 80px; right: 390px">
@@ -190,6 +183,15 @@ const handleClick = () => {
         <template #icon><mars-icon icon="home-two" class="icon-vertical-a" width="20" /></template>
       </a-button>
     </a-space>
+    <a-modal v-model:open="showModal" @ok="handleOk" @cancel="handleCancel">
+      <template #title>
+        <div>添加区域</div>
+      </template>
+      <div>
+        <div>区域名称：</div>
+        <div><input type="text" v-model="inputAreaName"></div>
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -270,5 +272,9 @@ const handleClick = () => {
   /* 示例：修改背景颜色 */
   color: #fff;
   /* 示例：修改文字颜色 */
+}
+
+.my-button, .c_mars-select {
+  margin-right: 20px;
 }
 </style>
