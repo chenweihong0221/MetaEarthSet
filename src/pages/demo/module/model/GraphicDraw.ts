@@ -35,6 +35,7 @@ export class GraphicDraw implements GraphicInterface {
     })
     this.id = id || this.graphic.id.toString()
     this.name = name
+    this.position = position
     mapStore.state.graphicLayer.addGraphic(this.graphic)
   }
 

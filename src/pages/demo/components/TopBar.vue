@@ -7,7 +7,7 @@ import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import MarsIcon from "@mars/components/mars-ui/mars-icon/index.vue"
 import { useStore } from "vuex"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
-import { loadFromLocalStorage, save, saveToLocalStorage } from "@mars/pages/demo/module/tool/persistence"
+import { loadFromLocalStorage, loadJSON, save, saveToLocalStorage } from "@mars/pages/demo/module/tool/persistence"
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
 
 interface FormState {
@@ -78,7 +78,7 @@ const handleImport = event => {
         // 现在可以安全地解析 jsonString
         const jsonObj = JSON.parse(jsonString)
         // 如果需要，你可以在这里调用 loadFromLocalStorage 或其他处理逻辑
-        loadFromLocalStorage(jsonObj)
+        loadJSON(jsonString)
       } catch (error) {
         console.error("Error parsing JSON:", error)
       }
