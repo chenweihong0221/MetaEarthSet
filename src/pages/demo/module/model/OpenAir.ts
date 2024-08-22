@@ -3,6 +3,8 @@ import * as mars3d from "mars3d"
 import * as uuid from "uuid"
 import { mapStore } from "@mars/pages/demo/module/store/store"
 import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
+import { ModelData } from "@mars/pages/demo/api/adopter"
+import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
 
 export class OpenAir implements GraphicInterface {
   id: string
@@ -75,4 +77,9 @@ export class OpenAir implements GraphicInterface {
   static fromJSONObject(json: any, layer: mars3d.layer.GraphicLayer): OpenAir {
     return new OpenAir(layer, json.positions, json.name)
   }
+
+  toModelData(areaId: string): ModelData {
+    return new ModelData(areaId, this.id, this.name, castTo2DArr(this.positions), 3)
+  }
+
 }

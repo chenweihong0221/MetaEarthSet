@@ -2,6 +2,8 @@ import * as mars3d from "mars3d"
 import { mapStore } from "@mars/pages/demo/module/store/store"
 import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
 import { Cesium } from "mars3d"
+import { ModelData } from "@mars/pages/demo/api/adopter"
+import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
 
 export class GraphicDraw implements GraphicInterface {
   id: string
@@ -66,6 +68,11 @@ export class GraphicDraw implements GraphicInterface {
 
   static fromJSONObject(json: any): GraphicDraw {
     return new GraphicDraw(json.name, json.position, json.id)
+  }
+
+  toModelData(areaId: string): ModelData {
+    const pos = castTo2DArr(this.position)
+    return new ModelData(areaId, this.id, this.name, pos, 1)
   }
 
 

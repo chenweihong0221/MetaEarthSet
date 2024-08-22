@@ -1,9 +1,12 @@
 import * as mars3d from "mars3d"
 import { Cesium, EventType } from "mars3d"
-import * as uuid from "uuid"
-import { mapStore } from "@mars/pages/demo/module/store/store"
+import { mapStore, stateStore } from "@mars/pages/demo/module/store/store"
 import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
-import { Cartesian3 } from "mars3d-cesium"
+import { ModelData } from "@mars/pages/demo/api/adopter"
+import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
+import * as uuid from "uuid"
+import { addModel } from "@mars/pages/demo/api/api"
+import { message } from "ant-design-vue"
 
 function getHeight(positions: Cesium.Cartesian3[] | Cesium.Cartesian3): number {
   const position = positions instanceof Array ? positions[0] : positions
@@ -64,12 +67,21 @@ export class Building implements GraphicInterface {
     if (!autoCreateFloor) {
       return
     }
-    while (i < this.floorNumber) {
-      const newPosition: Cesium.Cartesian3[] =
-        mars3d.PointUtil.addPositionsHeight(this.positions, i * (this.floorHeight + this.floorInterval)) as Cesium.Cartesian3[]
-      this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1)
-      i++
-    }
+    // 先发送请求，再创建楼层
+    const model = this.toModelData(stateStore.state.selectedAreaId)
+    addModel(model).then((res) => {
+      if(res.data.code == 200) {
+        while (i < this.floorNumber) {
+          const newPosition: Cesium.Cartesian3[] =
+            mars3d.PointUtil.addPositionsHeight(this.positions, i * (this.floorHeight + this.floorInterval)) as Cesium.Cartesian3[]
+          this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1)
+          i++
+        }
+      } else {
+        message.error(res.data.msg)
+      }
+    })
+
   }
 
   addFloor(positions:Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string): Floor {
@@ -93,7 +105,6 @@ export class Building implements GraphicInterface {
           id: floor.id,
           name: floor.name,
           floorNo: floor.floorNo,
-          alt: floor.alt,
           positions: floor.positions,
           spaces: Array.from(floor.spaces.values()).map((space: Space) => {
             return {
@@ -182,6 +193,14 @@ export class Building implements GraphicInterface {
     mapStore.state.map.flyToGraphic(firstFloor.polygon)
   }
 
+  toModelData(areaId: string): ModelData {
+    if (areaId == null) {
+      throw new Error("areaId is null")
+    }
+    const pos = castTo2DArr(this.positions)
+    return new ModelData(areaId, this.id, this.name, pos, 0, this.floorNumber, null)
+  }
+
 }
 
 export class Floor implements GraphicInterface {
@@ -217,35 +236,43 @@ export class Floor implements GraphicInterface {
     this.spaces = new Map()
     this.floorNo = floorNo
     this.alt = getHeight(this.positions)
+    // 先发送请求，成功后再创建楼层
+    const model = this.toModelData()
+    addModel(model).then((res) => {
+      if (res.data.code === 200) {
+        // 创建底面和墙体
+        this.polygon = new mars3d.graphic.PolygonEntity({
+          positions: this.positions,
+          name,
+          style: {
+            // color: "#5ec2e1",
+            color: "#647BB1", // modify by cwh 202408081127
+            opacity: 1
+            // outline: true,
+            // diffHeight: this.height
+            // outlineColor: "#ffffff",
+            // outlineWidth: 2
+          }
+        })
+        this.wall = new mars3d.graphic.ThickWall({
+          positions: this.positions,
+          name,
+          style: {
+            // color: "#5ec2e1",
+            color: "#647BB1", // modify by cwh 202408081127
+            opacity: 1,
+            diffHeight: this.height,
+            width: 0.2,
+            closure: true
+          }
+        })
+        this.layer.addGraphic(this.polygon)
+        this.layer.addGraphic(this.wall)
+      } else {
+        message.error(res.data.msg)
+      }
+    })
 
-    // 创建底面和墙体
-    this.polygon = new mars3d.graphic.PolygonEntity({
-      positions: this.positions,
-      name,
-      style: {
-        // color: "#5ec2e1",
-        color: "#647BB1", // modify by cwh 202408081127
-        opacity: 1
-        // outline: true,
-        // diffHeight: this.height
-        // outlineColor: "#ffffff",
-        // outlineWidth: 2
-      }
-    })
-    this.wall = new mars3d.graphic.ThickWall({
-      positions: this.positions,
-      name,
-      style: {
-        // color: "#5ec2e1",
-        color: "#647BB1", // modify by cwh 202408081127
-        opacity: 1,
-        diffHeight: this.height,
-        width: 0.2,
-        closure: true
-      }
-    })
-    this.layer.addGraphic(this.polygon)
-    this.layer.addGraphic(this.wall)
   }
 
   /**
@@ -286,6 +313,11 @@ export class Floor implements GraphicInterface {
     mapStore.state.map.flyToGraphic(this.polygon)
   }
 
+  toModelData(): ModelData {
+    const pos = castTo2DArr(this.positions)
+    return new ModelData(this.parent.id, this.id, this.name, pos, 1, this.floorNo, null)
+  }
+
 }
 
 export class Space implements GraphicInterface {
@@ -311,29 +343,37 @@ export class Space implements GraphicInterface {
         return Cesium.Cartesian3.fromDegrees(item.x, item.y, item.z)
       })
     }
-    this.polygon = new mars3d.graphic.PolygonEntity({
-      positions,
-      name: name || "空间",
-      style: {
-        // color: "#be3aea",
-        color: "#8D79C0", // modify by cwh 202408081127
-        opacity: 1
+    const model = this.toModelData()
+    addModel(model).then((res) => {
+      if (res.data.code === 200) {
+        this.polygon = new mars3d.graphic.PolygonEntity({
+          positions,
+          name: name || "空间",
+          style: {
+            // color: "#be3aea",
+            color: "#8D79C0", // modify by cwh 202408081127
+            opacity: 1
+          }
+        })
+        this.wall = new mars3d.graphic.ThickWall({
+          positions,
+          name: name || "空间",
+          style: {
+            // color: "#be3aea",
+            color: "#8D79C0", // modify by cwh 202408081127
+            opacity: 1,
+            diffHeight: this.height,
+            width: 0.1,
+            closure: true
+          }
+        })
+        this.parent.layer.addGraphic(this.polygon)
+        this.parent.layer.addGraphic(this.wall)
+      } else {
+        message.error(res.data.msg)
       }
     })
-    this.wall = new mars3d.graphic.ThickWall({
-      positions,
-      name: name || "空间",
-      style: {
-        // color: "#be3aea",
-        color: "#8D79C0", // modify by cwh 202408081127
-        opacity: 1,
-        diffHeight: this.height,
-        width: 0.1,
-        closure: true
-      }
-    })
-    this.parent.layer.addGraphic(this.polygon)
-    this.parent.layer.addGraphic(this.wall)
+
   }
 
   setShow(show: boolean): void {
@@ -353,5 +393,10 @@ export class Space implements GraphicInterface {
 
   flyTo(): void {
     mapStore.state.map.flyToGraphic(this.polygon)
+  }
+
+  toModelData(): ModelData {
+    const pos = castTo2DArr(this.positions)
+    return new ModelData(this.parent.id, this.id, this.name, pos, 2, this.parent.floorNo, null)
   }
 }

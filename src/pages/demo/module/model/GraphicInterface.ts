@@ -1,6 +1,8 @@
+import { ModelData } from "@mars/pages/demo/api/adopter"
 
 export interface GraphicInterface{
   id: string
+  name: string
   show: boolean
 
   setShow(show: boolean): void
@@ -10,4 +12,6 @@ export interface GraphicInterface{
   removeHighLight(): void
 
   flyTo(): void
+
+  toModelData(areaId?: string): ModelData
 }

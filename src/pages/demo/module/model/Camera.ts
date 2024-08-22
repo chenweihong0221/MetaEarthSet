@@ -3,9 +3,12 @@ import Flv from "flv-h265.js"
 import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
 import { mapStore } from "@mars/pages/demo/module/store/store"
 import { Cesium } from "mars3d"
+import { ModelData } from "@mars/pages/demo/api/adopter"
+import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
 
 export class Camera implements GraphicInterface {
   id: string
+  name: string
   graphic: mars3d.graphic.DivGraphic
   layer: mars3d.layer.GraphicLayer
   position: mars3d.Cesium.Cartesian3
@@ -14,8 +17,8 @@ export class Camera implements GraphicInterface {
   flvUrl: string
 
   constructor(id: string, flvUrl: string, position: mars3d.Cesium.Cartesian3, layer: mars3d.layer.GraphicLayer) {
-
     this.id = id
+    this.name = id
     this.flvUrl = flvUrl
     this.layer = layer
     this.position = position
@@ -99,5 +102,12 @@ export class Camera implements GraphicInterface {
   static fromJSONObject(json: any): Camera {
     return new Camera(json.id, json.flvUrl, json.position, mapStore.state.graphicLayer)
   }
+
+  toModelData(areaId: string): ModelData {
+    const pos = castTo2DArr(this.position)
+    return new ModelData(areaId, this.id, this.id, pos, 2)
+  }
+
+
 
 }

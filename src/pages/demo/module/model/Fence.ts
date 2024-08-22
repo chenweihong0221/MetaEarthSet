@@ -2,6 +2,8 @@ import * as mars3d from "mars3d"
 import { Cesium, LngLatPoint } from "mars3d"
 import { mapStore } from "@mars/pages/demo/module/store/store"
 import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
+import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
+import { ModelData } from "@mars/pages/demo/api/adopter"
 
 export class Fence implements GraphicInterface {
   id: string
@@ -60,5 +62,9 @@ export class Fence implements GraphicInterface {
     const height = json.height
     const name = json.name
     return new Fence(positions, name, height, json.id)
+  }
+
+  toModelData(areaId?: string): ModelData {
+    return new ModelData(areaId, this.id, this.name, castTo2DArr(this.polygon.positions), 3)
   }
 }
