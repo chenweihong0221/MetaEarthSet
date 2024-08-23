@@ -14,7 +14,6 @@ function getHeight(positions: Cesium.Cartesian3[] | Cesium.Cartesian3): number {
   return cartographic.height
 }
 
-
 export function setHeight(positions: Cesium.Cartesian3[], height: number): Cesium.Cartesian3[] {
   return positions.map((position) => {
     const cartographic = Cesium.Cartographic.fromCartesian(position)
@@ -31,28 +30,28 @@ export class Building implements GraphicInterface {
   spaceHeight: number
   floorInterval: number
 
-
   // eslint-disable-next-line no-use-before-define
-  floors: Map<string, Floor>// 楼层对象
+  floors: Map<string, Floor> // 楼层对象
   positions: Cesium.Cartesian3[] // 平面对象
   layer: mars3d.layer.GraphicLayer
   show: boolean = true
 
-  constructor(layer: mars3d.layer.GraphicLayer,
-              positions: Cesium.Cartesian3[] | { x: number, y: number, z: number }[],
-              name?: string,
-              floorNumber?: number,
-              floorHeight?: number,
-              spaceHeight?: number,
-              autoCreateFloor = true,
-              id?: string
+  constructor(
+    layer: mars3d.layer.GraphicLayer,
+    positions: Cesium.Cartesian3[] | { x: number; y: number; z: number }[],
+    name?: string,
+    floorNumber?: number,
+    floorHeight?: number,
+    spaceHeight?: number,
+    autoCreateFloor = true,
+    id?: string
   ) {
     this.id = id || uuid.v4()
     const firstPositionItem = positions[0]
     if (firstPositionItem instanceof mars3d.Cesium.Cartesian3) {
       this.positions = positions as Cesium.Cartesian3[]
     } else {
-      this.positions = (positions as { x: number, y: number, z: number }[]).map((item) => {
+      this.positions = (positions as { x: number; y: number; z: number }[]).map((item) => {
         return Cesium.Cartesian3.fromDegrees(item.x, item.y, item.z)
       })
     }
@@ -70,10 +69,13 @@ export class Building implements GraphicInterface {
     // 先发送请求，再创建楼层
     const model = this.toModelData(stateStore.state.selectedAreaId)
     addModel(model).then((res) => {
-      if(res.data.code == 200) {
+      // eslint-disable-next-line eqeqeq
+      if (res.data.code == 200) {
         while (i < this.floorNumber) {
-          const newPosition: Cesium.Cartesian3[] =
-            mars3d.PointUtil.addPositionsHeight(this.positions, i * (this.floorHeight + this.floorInterval)) as Cesium.Cartesian3[]
+          const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+            this.positions,
+            i * (this.floorHeight + this.floorInterval)
+          ) as Cesium.Cartesian3[]
           this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1)
           i++
         }
@@ -81,10 +83,9 @@ export class Building implements GraphicInterface {
         message.error(res.data.msg)
       }
     })
-
   }
 
-  addFloor(positions:Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string): Floor {
+  addFloor(positions: Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string): Floor {
     const newFloor = new Floor(positions, this, name, floorNo, height, id)
     this.floors.set(newFloor.id.toString(), newFloor)
     return newFloor
@@ -114,13 +115,11 @@ export class Building implements GraphicInterface {
             }
           })
         }
-
       })
     }
   }
 
   onlyShowFloor(floorNo: string): void {
-
     this.floors.forEach((floor: Floor) => {
       if (floor.floorNo.toString() === floorNo) {
         floor.polygon.show = true
@@ -152,15 +151,14 @@ export class Building implements GraphicInterface {
   }
 
   static arrayToJSON(buildingArr: Building[]): string {
-    const buildings = buildingArr.map(item => item.toJSONObject())
+    const buildings = buildingArr.map((item) => item.toJSONObject())
     return JSON.stringify(buildings)
   }
 
   static fromJSONArray(json: any, layer: mars3d.layer.GraphicLayer): Building[] {
     const buildings: Building[] = []
     json.forEach((item: any) => {
-      const building = new Building(layer, item.positions, item.name, item.floorNumber,
-        item.floorHeight, item.spaceHeight, false, item.id)
+      const building = new Building(layer, item.positions, item.name, item.floorNumber, item.floorHeight, item.spaceHeight, false, item.id)
       buildings.push(building)
       item.floors.forEach((floor: any) => {
         const newFloor = building.addFloor(floor.positions, floor.name, floor.floorNo)
@@ -200,7 +198,6 @@ export class Building implements GraphicInterface {
     const pos = castTo2DArr(this.positions)
     return new ModelData(areaId, this.id, this.name, pos, 0, this.floorNumber, null)
   }
-
 }
 
 export class Floor implements GraphicInterface {
@@ -220,13 +217,26 @@ export class Floor implements GraphicInterface {
 
   show: boolean = true // 是否显示
 
-  constructor(positions: Cesium.Cartesian3[] | { x: number, y: number, z: number}, parent: Building, name: string, floorNo: number, height?: number, id?: string) {
+  constructor(
+    positions:
+      | Cesium.Cartesian3[]
+      | {
+      x: number
+      y: number
+      z: number
+    },
+    parent: Building,
+    name: string,
+    floorNo: number,
+    height?: number,
+    id?: string
+  ) {
     this.id = id || uuid.v4()
     this.name = name
     if (positions[0] instanceof mars3d.Cesium.Cartesian3) {
       this.positions = positions as Cesium.Cartesian3[]
     } else {
-      this.positions = (positions as { x: number, y: number, z: number }[]).map((item) => {
+      this.positions = (positions as { x: number; y: number; z: number }[]).map((item) => {
         return new Cesium.Cartesian3(item.x, item.y, item.z)
       })
     }
@@ -272,7 +282,6 @@ export class Floor implements GraphicInterface {
         message.error(res.data.msg)
       }
     })
-
   }
 
   /**
@@ -317,7 +326,6 @@ export class Floor implements GraphicInterface {
     const pos = castTo2DArr(this.positions)
     return new ModelData(this.parent.id, this.id, this.name, pos, 1, this.floorNo, null)
   }
-
 }
 
 export class Space implements GraphicInterface {
@@ -339,7 +347,7 @@ export class Space implements GraphicInterface {
     if (positions[0] instanceof mars3d.Cesium.Cartesian3) {
       this.positions = positions as Cesium.Cartesian3[]
     } else {
-      this.positions = (positions as { x: number, y: number, z: number }[]).map((item) => {
+      this.positions = (positions as { x: number; y: number; z: number }[]).map((item) => {
         return Cesium.Cartesian3.fromDegrees(item.x, item.y, item.z)
       })
     }
@@ -373,7 +381,6 @@ export class Space implements GraphicInterface {
         message.error(res.data.msg)
       }
     })
-
   }
 
   setShow(show: boolean): void {
@@ -389,7 +396,6 @@ export class Space implements GraphicInterface {
   removeHighLight(): void {
     mapStore.state.outlineEffect.selected = []
   }
-
 
   flyTo(): void {
     mapStore.state.map.flyToGraphic(this.polygon)

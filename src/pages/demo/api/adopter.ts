@@ -58,14 +58,14 @@ export class ModelData {
     let returnObj: GraphicInterface
     switch (this.type) {
       case 0 : {
-        const returnObj =  new Building(mapStore.state.graphicLayer, this.pathToCartesian3() as Cesium.Cartesian3[], this.name, null, null, null,
-        true, this.code)
+        const returnObj = new Building(mapStore.state.graphicLayer, this.pathToCartesian3() as Cesium.Cartesian3[], this.name, null, null, null,
+          true, this.code)
         mapStore.state.buildingMap.set(this.code, returnObj)
         break
       }
       case 1: {
         const building = mapStore.state.buildingMap.get(parentId)
-        const returnObj =  new Floor(this.pathToCartesian3() as Cesium.Cartesian3[], building, this.name, this.floorNumber, null, this.code)
+        const returnObj = new Floor(this.pathToCartesian3() as Cesium.Cartesian3[], building, this.name, this.floorNumber, null, this.code)
         mapStore.state.floorBuildingMap.set(this.code, this.parentCode)
         break
       }
@@ -89,10 +89,4 @@ export class ModelData {
       })
     }
   }
-
-
 }
-
-
-
-
