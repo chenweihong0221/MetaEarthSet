@@ -10,7 +10,7 @@ export const instance = axios.create({
     "Content-Type": "application/json",
     Ahj_token: "8c4efc5e-ff3b-4268-966f-e2f7aac19e7c",
     Authorization: "Bearer 896baa83-2dcd-4680-bc10-b4e9d10020d5"
-  },
+  }
 })
 
 instance.interceptors.request.use(
@@ -57,5 +57,5 @@ export function updateModel(modelData: ModelData) {
 
 
 export function deleteModel(id: string) {
-  return instance.delete("/xay/v1/sys/district/del?id="+id)
+  return instance.delete("/xay/v1/sys/district/del?id=" + id)
 }
