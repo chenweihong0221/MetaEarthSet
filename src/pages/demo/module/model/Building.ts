@@ -70,7 +70,7 @@ export class Building implements GraphicInterface {
     // 先发送请求，再创建楼层
     const model = this.toModelData(stateStore.state.selectedAreaId)
     addModel(model).then((res) => {
-    if (res.data.code === 200) {
+      if(res.data.code == 200) {
         while (i < this.floorNumber) {
           const newPosition: Cesium.Cartesian3[] =
             mars3d.PointUtil.addPositionsHeight(this.positions, i * (this.floorHeight + this.floorInterval)) as Cesium.Cartesian3[]
