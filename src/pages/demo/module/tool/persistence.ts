@@ -28,27 +28,27 @@ function getNowAreaData(): AreaData {
 function saveToJSON(): string {
   return JSON.stringify(getNowAreaData())
 }
-export function save() {
+export async function save() {
   const json = saveToJSON()
-  console.log(json)
+  console.log("json", json)
   localStorage.setItem("mars3d_data", json)
 
-  // // 创建 Blob 对象
-  // const blob = new Blob([json], { type: "application/json" })
-  // // 自定义写入资源
-  // try {
-  //   if ("showSaveFilePicker" in window) {
-  //     const handle = await window.showSaveFilePicker({ suggestedName: "data.json" })
-  //     const writable = await handle.createWritable()
-  //     await writable.write(blob)
-  //     await writable.close()
-  //     console.log("文件已成功写入")
-  //   } else {
-  //     throw new Error("浏览器不支持 File System Access API")
-  //   }
-  // } catch (error) {
-  //   console.error("写入文件失败:", error)
-  // }
+  // 创建 Blob 对象
+  const blob = new Blob([json], { type: "application/json" })
+  // 自定义写入资源
+  try {
+    if ("showSaveFilePicker" in window) {
+      const handle = await window.showSaveFilePicker({ suggestedName: "data.json" })
+      const writable = await handle.createWritable()
+      await writable.write(blob)
+      await writable.close()
+      console.log("文件已成功写入")
+    } else {
+      throw new Error("浏览器不支持 File System Access API")
+    }
+  } catch (error) {
+    console.error("写入文件失败:", error)
+  }
 }
 
 export function saveToLocalStorage(id: string) {
@@ -62,6 +62,10 @@ export function saveToLocalStorage(id: string) {
     localStorage.setItem(`#area_${id}`, JSON.stringify(new AreaLocalStorage(id, "未命名", JSON.stringify(areaData))))
   }
   console.log("#area_" + id, localStorage.getItem(`#area_${id}`))
+}
+
+export function deleteLocalStorage(id: string) {
+  localStorage.removeItem(`#area_${id}`)
 }
 
 export function loadJSON(json: string): AreaData {
@@ -79,12 +83,12 @@ export function loadJSON(json: string): AreaData {
     })
   })
   console.log("loadJson,", jsonObj)
-  const fences = jsonObj.fences.map((fence :Fence) => Fence.fromJSONObject(fence, mapStore.state.graphicLayer))
-  fences.forEach((fence :Fence) => {
+  const fences = jsonObj.fences.map((fence: Fence) => Fence.fromJSONObject(fence, mapStore.state.graphicLayer))
+  fences.forEach((fence: Fence) => {
     mapStore.state.fenceMap.set(fence.id, fence)
   })
-  const openAirs = jsonObj.openAirs.map((openAir :OpenAir) => OpenAir.fromJSONObject(openAir, mapStore.state.graphicLayer))
-  openAirs.forEach((openAir :OpenAir) => {
+  const openAirs = jsonObj.openAirs.map((openAir: OpenAir) => OpenAir.fromJSONObject(openAir, mapStore.state.graphicLayer))
+  openAirs.forEach((openAir: OpenAir) => {
     mapStore.state.openAirMap.set(openAir.id, openAir)
   })
   const humans = jsonObj.humans.map((human: Human) => Human.fromJSONObject(human, mapStore.state.graphicLayer))

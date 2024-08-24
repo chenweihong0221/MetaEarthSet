@@ -7,7 +7,7 @@ import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import MarsIcon from "@mars/components/mars-ui/mars-icon/index.vue"
 import { useStore } from "vuex"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
-import { loadFromLocalStorage, loadJSON, save, saveToLocalStorage } from "@mars/pages/demo/module/tool/persistence"
+import { loadFromLocalStorage, loadJSON, save, saveToLocalStorage, deleteLocalStorage } from "@mars/pages/demo/module/tool/persistence"
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
 
 interface FormState {
@@ -55,6 +55,17 @@ onMounted(() => {
 const handleSave = () => {
   saveToLocalStorage(selectedArea.value)
 }
+
+const handleSaveLocal = () => {
+  save()
+}
+
+const handleDelete = () => {
+  deleteLocalStorage(selectedArea.value)
+  areaOptions.value = getAllAreaIdAndName()
+  selectedArea.value = areaOptions.value && areaOptions.value[0] && areaOptions.value[0].id ? areaOptions.value[0].id : ""
+}
+
 
 const handleImport = event => {
   const file = event.target.files[0]
@@ -149,9 +160,13 @@ const handleClick = () => {
           添加区域
         </a-select-option>
       </a-select>
-      <mars-button class="my-button" @click="handleSave">
+      <mars-button class="my-button" @click="handleSave" width="100">
         <template #icon><mars-icon icon="save" class="icon-vertical-a" width="16" /></template>
         保存
+      </mars-button>
+      <mars-button class="my-button" @click="handleDelete">
+        <template #icon><mars-icon icon="delete" class="icon-vertical-a" width="16" /></template>
+        删除
       </mars-button>
       <mars-button class="my-button" @click="handleImportClick">
         <div style="visibility: hidden; position: absolute"><input id="import-button" type="file" @change="handleImport" accept=".json"></div>
