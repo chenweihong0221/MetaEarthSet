@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { SmileOutlined, SnippetsOutlined, SelectOutlined, EditOutlined } from "@ant-design/icons-vue"
+import { EditOutlined, SelectOutlined } from "@ant-design/icons-vue"
 // import "ant-design-vue/dist/antd.css"
-import { defineEmits, onMounted, reactive, ref, watch } from "vue"
-import type { Dayjs } from "dayjs"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import MarsIcon from "@mars/components/mars-ui/mars-icon/index.vue"
-import { useStore } from "vuex"
-import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
-import { loadFromLocalStorage, loadJSON, save, saveToLocalStorage } from "@mars/pages/demo/module/tool/persistence"
+import { addModel, getThree } from "@mars/pages/demo/api/api"
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
-import { getThree, addModel } from "@mars/pages/demo/api/api"
+import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
+import { loadJSON } from "@mars/pages/demo/module/tool/persistence"
+import type { Dayjs } from "dayjs"
+import { onMounted, reactive, ref } from "vue"
+import { useStore } from "vuex"
 
 interface FormState {
   url: string
@@ -104,8 +104,7 @@ const handleSave = () => {
     }
   )
   AreaAdd.value.name = selectedArea.value
-  addModel(AreaAdd.value){
-  }
+  addModel(AreaAdd.value)
 }
 
 const handleImport = event => {
@@ -203,7 +202,7 @@ const getMessage = () => {
   }
 }
 
-function handleArea(area){
+const handleArea = (area) => {
   console.log(area);
 }
 
@@ -216,7 +215,7 @@ function handleArea(area){
       <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
         @change="handleSelectAreaChange" @click="getMessage" v-model:value="selectedArea">
-        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" @click = "handleArea(area)">
+        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" @click="handleArea(area)">
           {{ area.name }}
         </a-select-option>
         <a-select-option key="0">
