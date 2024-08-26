@@ -45,7 +45,7 @@ const formState = reactive<FormState>({
 // 下拉列表数据
 const areaOptions = ref<{ id: string, name: string }[]>(getAllAreaIdAndName())
 const selectedValue = ref("1") // 假设默认选中“选项1”
-const selectedArea = ref(areaOptions.value && areaOptions.value[0] && areaOptions.value[0].id ? areaOptions.value[0].id : "")
+const selectedArea = ref()
 const inputAreaName = ref("")
 const showModal = ref(false)
 const getData = ref(true)
@@ -106,6 +106,16 @@ const handleSave = () => {
   )
   AreaAdd.value.name = selectedArea.value
   addModel(AreaAdd.value)
+  getThree()
+    .then(function (response) {
+      // 处理成功情况
+      AreaList.value = response.data.data
+      console.log("AreaList", AreaList.value)
+    })
+    .catch(function (error) {
+      // 处理错误情况
+      console.log(error)
+    })
 }
 
 const handleImport = event => {
@@ -205,6 +215,8 @@ const getMessage = () => {
 
 const handleArea = (area) => {
   districtId.value = area.districtId
+  console.log("districtId", districtId)
+  console.log("selectedArea", selectedArea.value)
 }
 
 const handleDel = () => {
