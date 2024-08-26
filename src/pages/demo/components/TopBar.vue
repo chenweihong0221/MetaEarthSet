@@ -137,21 +137,39 @@ const data = ref()
 
 const getData = ref(true)
 
+const AreaList = ref([
+  {
+    name: "",
+    code: "",
+    areaOptions: "",
+    parentCode: "",
+    parentName: "",
+    districtLevel: "",
+    districtType: "",
+    updateUserName: "",
+    updateTime: "",
+    longitudeAndLatitudeJson: ""
+  }
+])
 
 const getMessage = () => {
-  getThree()
-    .then(function (response) {
-      // 处理成功情况
-      console.log(response.data)
-    })
-    .catch(function (error) {
-      // 处理错误情况
-      console.log(error)
-    })
-    .finally(function () {
-      // 总是会执行
-      getData.value = false
-    })
+  if (getData) {
+    getThree()
+      .then(function (response) {
+        // 处理成功情况
+        AreaList.value = response.data
+        console.log(AreaList.value)
+      })
+      .catch(function (error) {
+        // 处理错误情况
+        console.log(error)
+      })
+      .finally(function () {
+        // 总是会执行
+        getData.value = false
+      })
+  }
+
 }
 
 </script>
@@ -163,7 +181,7 @@ const getMessage = () => {
       <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
         @change="handleSelectAreaChange" @click="getMessage" v-model:value="selectedArea">
-        <a-select-option v-for="area in areaOptions" :key="area.id" :value="area.id">
+        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code">
           {{ area.name }}
         </a-select-option>
         <a-select-option key="0">
