@@ -81,7 +81,7 @@
         "icon": "img/basemaps/google_img.png",
         "type": "google",
         "layer": "img_d",
-        "show": true
+        "show": false
       },
       {
         "id": 2022,
@@ -106,14 +106,15 @@
         ]
       },
       {
+        "id": 2024,
         "pid": 10,
         "name": "高德影像",
         "type": "group",
         "icon": "img/basemaps/gaode_img.png",
         "layers": [
-          { "name": "底图", "type": "gaode", "layer": "img_d" },
-          { "name": "注记", "type": "gaode", "layer": "img_z" }
-        ]
+          { "name": "底图", "type": "gaode", "layer": "img_d" }
+        ],
+        "show": true
       },
       {
         "pid": 10,

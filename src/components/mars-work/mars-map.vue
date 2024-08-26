@@ -94,7 +94,7 @@ const handleChangeLayer = () => {
   if (layerFlag.value) {
     map.basemap = 2017 // 蓝色地图
   } else {
-    map.basemap = 2022 // 天地图
+    map.basemap = 2024 // 高德影像图
   }
 }
 
