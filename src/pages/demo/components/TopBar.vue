@@ -153,12 +153,12 @@ const AreaList = ref([
 ])
 
 const getMessage = () => {
-  if (getData) {
+  if (getData.value) {
     getThree()
       .then(function (response) {
         // 处理成功情况
-        AreaList.value = response.data
-        console.log(AreaList.value)
+        AreaList.value = response.data.data
+        console.log("AreaList", AreaList.value)
       })
       .catch(function (error) {
         // 处理错误情况
