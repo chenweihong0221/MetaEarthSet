@@ -9,7 +9,7 @@ import { useStore } from "vuex"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 import { loadFromLocalStorage, loadJSON, save, saveToLocalStorage } from "@mars/pages/demo/module/tool/persistence"
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
-import { getThree } from "@mars/pages/demo/api/api"
+import { getThree, addModel } from "@mars/pages/demo/api/api"
 
 interface FormState {
   url: string
@@ -48,13 +48,64 @@ const selectedValue = ref("1") // 假设默认选中“选项1”
 const selectedArea = ref(areaOptions.value && areaOptions.value[0] && areaOptions.value[0].id ? areaOptions.value[0].id : "")
 const inputAreaName = ref("")
 const showModal = ref(false)
+const getData = ref(true)
+
+//获取区域信息
+const AreaList = ref([
+  {
+    name: "",
+    code: "",
+    areaOptions: "",
+    parentCode: "",
+    parentName: "",
+    districtLevel: "",
+    districtType: "",
+    updateUserName: "",
+    updateTime: "",
+    longitudeAndLatitudeJson: ""
+  }
+])
+
+//新增区域
+const AreaAdd = ref(
+  {
+    districtId: "",
+    name: "",
+    parentCode: "",
+    districtType: 0,
+    type: 0,
+    floorNumber: 0,
+    longitudeAndLatitudeJson: "",
+    dimension: {
+      length: 0,
+      width: 0,
+      height: 0
+    },
+    position: {
+      xAxis: 0,
+      yAxis: 0,
+      zAxis: 0
+    }
+  }
+)
 
 onMounted(() => {
   stateStore.commit("updateSelectedAreaId", selectedArea.value)
 })
 
 const handleSave = () => {
-  saveToLocalStorage(selectedArea.value)
+  // saveToLocalStorage(selectedArea.value)
+  //新增区域
+  const AreaAdd = ref(
+    {
+      districtType: 2,
+      name: "",
+      parentCode: "",
+    }
+  )
+  AreaAdd.value.name = selectedArea.value
+  addModel(AreaAdd.value){
+  }
 }
 
 const handleImport = event => {
@@ -97,7 +148,6 @@ const handleChange = (value: string) => {
 }
 
 const handleSelectAreaChange = (value: string) => {
-  getThree()
   if (value === "0") {
     showModal.value = true
     store.state.graphicLayer.clear()
@@ -133,24 +183,6 @@ const handleClick = () => {
   store.commit("flytoHome")
 }
 
-const data = ref()
-
-const getData = ref(true)
-
-const AreaList = ref([
-  {
-    name: "",
-    code: "",
-    areaOptions: "",
-    parentCode: "",
-    parentName: "",
-    districtLevel: "",
-    districtType: "",
-    updateUserName: "",
-    updateTime: "",
-    longitudeAndLatitudeJson: ""
-  }
-])
 
 const getMessage = () => {
   if (getData.value) {
@@ -169,7 +201,10 @@ const getMessage = () => {
         getData.value = false
       })
   }
+}
 
+function handleArea(area){
+  console.log(area);
 }
 
 </script>
@@ -181,7 +216,7 @@ const getMessage = () => {
       <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
         @change="handleSelectAreaChange" @click="getMessage" v-model:value="selectedArea">
-        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code">
+        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" @click = "handleArea(area)">
           {{ area.name }}
         </a-select-option>
         <a-select-option key="0">

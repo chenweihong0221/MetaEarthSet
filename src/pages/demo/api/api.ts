@@ -42,7 +42,7 @@ export function deleteReq(url: string) {
   return instance.delete(url)
 }
 
-export function addModel(modelData: ModelData) {
+export function addModel(modelData) {
   return instance.post("/xay/v1/sys/district/save", modelData)
 }
 
