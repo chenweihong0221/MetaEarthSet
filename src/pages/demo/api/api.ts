@@ -8,7 +8,7 @@ export const instance = axios.create({
   timeout: 1000,
   headers: {
     "Content-Type": "application/json",
-    Authorization: "Bearer 2f68dbbf-519d-4f01-9636-e2421b68f379"
+    Authorization: "Bearer 06f1e3cd-213f-48ce-ac94-cd180f5cf5bf"
   }
 })
 
