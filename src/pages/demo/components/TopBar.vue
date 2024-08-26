@@ -205,6 +205,9 @@ const getMessage = () => {
 
 const handleArea = (area) => {
   districtId.value = area.districtId
+}
+
+const handleDel = () =>{
   deleteModel(districtId.value)
 }
 
@@ -227,6 +230,10 @@ const handleArea = (area) => {
       <mars-button class="my-button" @click="handleSave">
         <template #icon><mars-icon icon="save" class="icon-vertical-a" width="16" /></template>
         保存
+      </mars-button>
+      <mars-button class="my-button" @click="handleDel">
+        <template #icon><mars-icon icon="delete" class="icon-vertical-a" width="16" /></template>
+        删除
       </mars-button>
       <mars-button class="my-button" @click="handleImportClick">
         <div style="visibility: hidden; position: absolute"><input id="import-button" type="file" @change="handleImport"
