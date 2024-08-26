@@ -67,29 +67,6 @@ const AreaList = ref([
   }
 ])
 
-// 新增区域
-const AreaAdd = ref(
-  {
-    districtId: "",
-    name: "",
-    parentCode: "",
-    districtType: 0,
-    type: 0,
-    floorNumber: 0,
-    longitudeAndLatitudeJson: "",
-    dimension: {
-      length: 0,
-      width: 0,
-      height: 0
-    },
-    position: {
-      xAxis: 0,
-      yAxis: 0,
-      zAxis: 0
-    }
-  }
-)
-
 onMounted(() => {
   stateStore.commit("updateSelectedAreaId", selectedArea.value)
 })
@@ -100,11 +77,12 @@ const handleSave = () => {
   const AreaAdd = ref(
     {
       districtType: 2,
-      name: "",
+      name: selectedArea.value,
       parentCode: ""
     }
   )
   AreaAdd.value.name = selectedArea.value
+  console.log("AreaAdd", AreaAdd.value)
   addModel(AreaAdd.value)
   getThree()
     .then(function (response) {
@@ -175,12 +153,28 @@ const handleSelectAreaChange = (value: string) => {
 
 const handleOk = () => {
   const newArea = new Area(inputAreaName.value)
-  areaOptions.value = getAllAreaIdAndName()
   inputAreaName.value = ""
   showModal.value = false
-  selectedArea.value = newArea.id
-  store.commit("clearMap")
-  stateStore.commit("updateLeftBarNeedUpdate", true)
+  selectedArea.value = newArea.name
+  // store.commit("clearMap")
+  // stateStore.commit("updateLeftBarNeedUpdate", true)
+  AreaList.value.push(newArea)
+  getThree()
+    .then(function (response) {
+      // 处理成功情况
+      AreaList.value = response.data.data
+      console.log("AreaList", AreaList.value)
+      inputAreaName.value = ""
+      showModal.value = false
+      selectedArea.value = newArea.name
+      // store.commit("clearMap")
+      // stateStore.commit("updateLeftBarNeedUpdate", true)
+      AreaList.value.push(newArea)
+    })
+    .catch(function (error) {
+      // 处理错误情况
+      console.log(error)
+    })
 }
 
 const handleCancel = () => {

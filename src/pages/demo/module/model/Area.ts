@@ -29,6 +29,15 @@ export class Area {
   name: string
   id: string
   data: AreaData
+  code: string
+  areaOptions: string
+  parentCode: string
+  parentName: string
+  districtLevel: string
+  districtType: string
+  updateUserName: string
+  updateTime: string
+  longitudeAndLatitudeJson: string
 
   constructor(name: string, addLocalStorage: boolean = true) {
     this.name = name
