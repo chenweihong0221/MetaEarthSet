@@ -207,8 +207,18 @@ const handleArea = (area) => {
   districtId.value = area.districtId
 }
 
-const handleDel = () =>{
+const handleDel = () => {
   deleteModel(districtId.value)
+  getThree()
+    .then(function (response) {
+      // 处理成功情况
+      AreaList.value = response.data.data
+      console.log("AreaList", AreaList.value)
+    })
+    .catch(function (error) {
+      // 处理错误情况
+      console.log(error)
+    })
 }
 
 </script>
