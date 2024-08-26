@@ -137,22 +137,24 @@ const data = ref()
 
 const getData = ref(true)
 
-const getMessage = () => {
-  if (getData.value) {
-    getModel()
-      .then(function (response) {
-        console.log(response.data)
-      })
-      .catch(function (error) {
-        // 处理错误情况
-        console.log(error)
-      })
-      .finally(function () {
-        // 总是会执行
-        getData.value = false
-      })
-  }
+const formData = new FormData()
 
+const getMessage = () => {
+  formData.append("childrenParentCode", "999428728062771001")
+  getModel(formData)
+    .then(function (response) {
+      // 处理成功情况
+      console.log(response.data)
+      console.log(data.value)
+    })
+    .catch(function (error) {
+      // 处理错误情况
+      console.log(error)
+    })
+    .finally(function () {
+      // 总是会执行
+      getData.value = false
+    })
 }
 
 </script>
@@ -213,7 +215,7 @@ const getMessage = () => {
       </div>
     </a-modal>
     <a-select placeholder="请选择所在地" style="width: 120px" @click="getMessage">
-    
+
     </a-select>
   </div>
 </template>
