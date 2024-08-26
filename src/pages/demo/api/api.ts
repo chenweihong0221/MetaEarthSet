@@ -53,3 +53,8 @@ export function updateModel(modelData: ModelData) {
 export function deleteModel(id: string) {
   return instance.delete("/xay/v1/sys/district/del?id=" + id)
 }
+
+export function getModel() {
+  return instance.get("/xay/v1/sys/district/find-tree")
+}
+

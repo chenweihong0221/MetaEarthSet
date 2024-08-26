@@ -9,6 +9,7 @@ import { useStore } from "vuex"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 import { loadFromLocalStorage, loadJSON, save, saveToLocalStorage } from "@mars/pages/demo/module/tool/persistence"
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
+import { getModel } from "@mars/pages/demo/api/api"
 
 interface FormState {
   url: string
@@ -42,7 +43,7 @@ const formState = reactive<FormState>({
   color: "#ffff00"
 })
 // 下拉列表数据
-const areaOptions = ref<{id: string, name: string}[]>(getAllAreaIdAndName())
+const areaOptions = ref<{ id: string, name: string }[]>(getAllAreaIdAndName())
 const selectedValue = ref("1") // 假设默认选中“选项1”
 const selectedArea = ref(areaOptions.value && areaOptions.value[0] && areaOptions.value[0].id ? areaOptions.value[0].id : "")
 const inputAreaName = ref("")
@@ -132,6 +133,28 @@ const handleClick = () => {
   store.commit("flytoHome")
 }
 
+const data = ref()
+
+const getData = ref(true)
+
+const getMessage = () => {
+  if (getData.value) {
+    getModel()
+      .then(function (response) {
+        console.log(response.data)
+      })
+      .catch(function (error) {
+        // 处理错误情况
+        console.log(error)
+      })
+      .finally(function () {
+        // 总是会执行
+        getData.value = false
+      })
+  }
+
+}
+
 </script>
 
 <template>
@@ -140,8 +163,7 @@ const handleClick = () => {
     <a-space class="space" style="position: static; margin-top: 10px; margin-left: 20px">
       <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
-                @change="handleSelectAreaChange" v-model:value="selectedArea"
-      >
+        @change="handleSelectAreaChange" v-model:value="selectedArea">
         <a-select-option v-for="area in areaOptions" :key="area.id" :value="area.id">
           {{ area.name }}
         </a-select-option>
@@ -154,7 +176,8 @@ const handleClick = () => {
         保存
       </mars-button>
       <mars-button class="my-button" @click="handleImportClick">
-        <div style="visibility: hidden; position: absolute"><input id="import-button" type="file" @change="handleImport" accept=".json"></div>
+        <div style="visibility: hidden; position: absolute"><input id="import-button" type="file" @change="handleImport"
+            accept=".json"></div>
 
         <template #icon><mars-icon icon="save" class="icon-vertical-a" width="16" /></template>
         导入
@@ -189,6 +212,9 @@ const handleClick = () => {
         <div><input type="text" v-model="inputAreaName"></div>
       </div>
     </a-modal>
+    <a-select placeholder="请选择所在地" style="width: 120px" @click="getMessage">
+    
+    </a-select>
   </div>
 </template>
 
@@ -271,7 +297,8 @@ const handleClick = () => {
   /* 示例：修改文字颜色 */
 }
 
-.my-button, .c_mars-select {
+.my-button,
+.c_mars-select {
   margin-right: 20px;
 }
 </style>
