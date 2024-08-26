@@ -9,7 +9,7 @@ import { useStore } from "vuex"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 import { loadFromLocalStorage, loadJSON, save, saveToLocalStorage } from "@mars/pages/demo/module/tool/persistence"
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
-import { getModel } from "@mars/pages/demo/api/api"
+import { getThree } from "@mars/pages/demo/api/api"
 
 interface FormState {
   url: string
@@ -97,7 +97,7 @@ const handleChange = (value: string) => {
 }
 
 const handleSelectAreaChange = (value: string) => {
-
+  getThree()
   if (value === "0") {
     showModal.value = true
     store.state.graphicLayer.clear()
@@ -137,15 +137,12 @@ const data = ref()
 
 const getData = ref(true)
 
-const formData = new FormData()
 
 const getMessage = () => {
-  formData.append("childrenParentCode", "999428728062771001")
-  getModel(formData)
+  getThree()
     .then(function (response) {
       // 处理成功情况
       console.log(response.data)
-      console.log(data.value)
     })
     .catch(function (error) {
       // 处理错误情况
@@ -165,7 +162,7 @@ const getMessage = () => {
     <a-space class="space" style="position: static; margin-top: 10px; margin-left: 20px">
       <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
-        @change="handleSelectAreaChange" v-model:value="selectedArea">
+        @change="handleSelectAreaChange" @click="getMessage" v-model:value="selectedArea">
         <a-select-option v-for="area in areaOptions" :key="area.id" :value="area.id">
           {{ area.name }}
         </a-select-option>
@@ -214,9 +211,6 @@ const getMessage = () => {
         <div><input type="text" v-model="inputAreaName"></div>
       </div>
     </a-modal>
-    <a-select placeholder="请选择所在地" style="width: 120px" @click="getMessage">
-
-    </a-select>
   </div>
 </template>
 

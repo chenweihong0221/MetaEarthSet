@@ -58,3 +58,8 @@ export function getModel(param) {
   return instance.get("/xay/v1/sys/district/find-tree", param)
 }
 
+export function getThree() {
+  return instance.get("/xay/v1/sys/district/find-second-level-tree")
+}
+
+
