@@ -3,7 +3,7 @@ import { EditOutlined, SelectOutlined } from "@ant-design/icons-vue"
 // import "ant-design-vue/dist/antd.css"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import MarsIcon from "@mars/components/mars-ui/mars-icon/index.vue"
-import { addModel, getThree } from "@mars/pages/demo/api/api"
+import { addModel, getThree, deleteModel } from "@mars/pages/demo/api/api"
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 import { loadJSON } from "@mars/pages/demo/module/tool/persistence"
@@ -49,8 +49,9 @@ const selectedArea = ref(areaOptions.value && areaOptions.value[0] && areaOption
 const inputAreaName = ref("")
 const showModal = ref(false)
 const getData = ref(true)
+const districtId = ref("")
 
-//获取区域信息
+// 获取区域信息
 const AreaList = ref([
   {
     name: "",
@@ -66,7 +67,7 @@ const AreaList = ref([
   }
 ])
 
-//新增区域
+// 新增区域
 const AreaAdd = ref(
   {
     districtId: "",
@@ -95,12 +96,12 @@ onMounted(() => {
 
 const handleSave = () => {
   // saveToLocalStorage(selectedArea.value)
-  //新增区域
+  // 新增区域
   const AreaAdd = ref(
     {
       districtType: 2,
       name: "",
-      parentCode: "",
+      parentCode: ""
     }
   )
   AreaAdd.value.name = selectedArea.value
@@ -203,7 +204,8 @@ const getMessage = () => {
 }
 
 const handleArea = (area) => {
-  console.log(area);
+  districtId.value = area.districtId
+  deleteModel(districtId.value)
 }
 
 </script>
