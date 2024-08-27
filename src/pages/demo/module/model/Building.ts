@@ -65,6 +65,7 @@ export class Building implements GraphicInterface {
     this.floors = new Map()
     let i = 0
     if (!autoCreateFloor) {
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", api)
       return
     }
     // 先发送请求，再创建楼层
