@@ -269,6 +269,7 @@ export const stateStore = createStore({
     },
     updateSelectedAreaId(state, selectedAreaId: string) {
       state.selectedAreaId = selectedAreaId
+      console.log("state.selectedAreaId", selectedAreaId)
     }
   }
 })

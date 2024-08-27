@@ -67,24 +67,28 @@ const AreaList = ref([
   }
 ])
 
+const firstApi = ref(true)
+
 onMounted(() => {
-  getThree()
-    .then(function (response) {
-      // 处理成功情况
-      AreaList.value = response.data.data
-      console.log("AreaList", AreaList.value)
-      selectedArea.value = response.data.data[0].code
-      console.log("selectedArea.value", selectedArea.value)
-      stateStore.commit("updateSelectedAreaId", selectedArea.value)
-    })
-    .catch(function (error) {
-      // 处理错误情况
-      console.log(error)
-    })
-    .finally(function () {
-      // 总是会执行
-      getData.value = false
-    })
+  if (firstApi.value) {
+    getThree()
+      .then(function (response) {
+        // 处理成功情况
+        AreaList.value = response.data.data
+        console.log("AreaList", AreaList.value)
+        selectedArea.value = response.data.data[0].code
+        console.log("selectedArea.value", selectedArea.value)
+        stateStore.commit("updateSelectedAreaId", selectedArea.value)
+      })
+      .catch(function (error) {
+        // 处理错误情况
+        console.log(error)
+      })
+      .finally(function () {
+        // 总是会执行
+        firstApi.value = false
+      })
+  }
 })
 
 const handleSave = () => {
@@ -211,6 +215,7 @@ const handleArea = (area) => {
       // 处理错误情况
       console.log(error)
     })
+
 }
 
 const handleDel = () => {
