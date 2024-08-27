@@ -73,7 +73,9 @@ onMounted(() => {
       // 处理成功情况
       AreaList.value = response.data.data
       console.log("AreaList", AreaList.value)
-      selectedArea.value = response.data.data[0].districtId
+      selectedArea.value = response.data.data[0].disrictId
+      console.log("selectedArea.value", selectedArea.value)  
+      stateStore.commit("updateSelectedAreaId", selectedArea.value)
     })
     .catch(function (error) {
       // 处理错误情况
@@ -83,8 +85,6 @@ onMounted(() => {
       // 总是会执行
       getData.value = false
     })
-  console.log("selectedArea.value", selectedArea.value)  
-  stateStore.commit("updateSelectedAreaId", selectedArea.value)
 })
 
 const handleSave = () => {
