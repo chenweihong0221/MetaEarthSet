@@ -65,12 +65,10 @@ export class Building implements GraphicInterface {
     this.floors = new Map()
     let i = 0
     if (!autoCreateFloor) {
-      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", api)
       return
     }
     // 先发送请求，再创建楼层
     const model = this.toModelData(stateStore.state.selectedAreaId)
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", api)
     if (api === true) {
       addModel(model).then((res) => {
         // eslint-disable-next-line 
@@ -203,7 +201,8 @@ export class Building implements GraphicInterface {
       throw new Error("areaId is null")
     }
     const pos = castTo2DArr(this.positions)
-    return new ModelData(areaId, this.id, this.name, pos, 0, this.floorNumber, null)
+    const position = mars3d.PolyUtil.centerOfMass(this.positions)
+    return new ModelData(areaId, this.id, this.name, pos, position, 3, this.floorNumber, null)
   }
 }
 

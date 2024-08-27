@@ -23,6 +23,12 @@ export class ModelData {
   name: string
   // multiple positions for polygon(0~4type), single position for point(5~8type)
   path: number[][]
+  position: {
+    xAxis: number
+    yAxis: number
+    zAxis: number
+  }
+
   /**
    * 0: building
    * 1: floor
@@ -35,6 +41,7 @@ export class ModelData {
    * 8: selfDefinedModel
    */
   type: number
+
   districtType: number
 
   floorNumber: number | null
@@ -43,11 +50,16 @@ export class ModelData {
   // for selfDefinedModel, data is url of model
   data: string
 
-  constructor(parentCode: string, code: string, name: string, path: number[][], type: number, floorNumber?: number, data?: string) {
+  constructor(parentCode: string, code: string, name: string, path: number[][], position: Cesium.Cartesian3, type: number, floorNumber?: number, data?: string) {
     this.parentCode = parentCode
     this.code = code
     this.name = name
     this.path = path
+    this.position = {
+      xAxis: position.x,
+      yAxis: position.y,
+      zAxis: position.z
+    }
     this.type = type
     this.districtType = type
     this.floorNumber = floorNumber
@@ -57,7 +69,7 @@ export class ModelData {
   toGraphicInterface(parentId: string): GraphicInterface {
     let returnObj: GraphicInterface
     switch (this.type) {
-      case 0 : {
+      case 0: {
         const returnObj = new Building(mapStore.state.graphicLayer, this.pathToCartesian3() as Cesium.Cartesian3[], this.name, null, null, null,
           true, this.code)
         mapStore.state.buildingMap.set(this.code, returnObj)
