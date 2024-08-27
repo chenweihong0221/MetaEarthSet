@@ -267,9 +267,8 @@ export const stateStore = createStore({
     updateLeftBarNeedUpdate(state, leftBarNeedUpdate: boolean) {
       state.leftBarNeedUpdate = leftBarNeedUpdate
     },
-    updateSelectedAreaId(state, selectedAreaId: string) {
-      state.selectedAreaId = selectedAreaId
-      console.log("state.selectedAreaId", selectedAreaId)
+    updateSelectedAreaId(state, data: string) {
+      state.selectedAreaId = data
     }
   }
 })

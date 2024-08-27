@@ -205,7 +205,7 @@ const handleArea = (area) => {
     childrenParentCode: "",
     name: area.name
   }
-  store.commit("updateSelectedAreaId", selectedArea.value)
+  stateStore.commit("updateSelectedAreaId", selectedArea.value)
   console.log("store.state", stateStore.state.selectedAreaId)
   getModel(params)
     .then(function (response) {
