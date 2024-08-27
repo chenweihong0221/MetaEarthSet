@@ -19,10 +19,10 @@ export interface Location {
 
 export class ModelData {
   parentCode: string
-  code: string
+  // code: string
   name: string
   // multiple positions for polygon(0~4type), single position for point(5~8type)
-  path: number[][]
+  // path: number[][]
   position: {
     xAxis: number
     yAxis: number
@@ -48,7 +48,14 @@ export class ModelData {
 
   // for camera, data is flvUrl
   // for selfDefinedModel, data is url of model
-  data: string
+  // data: string
+  longitudeAndLatitudeJson: string
+
+  dimension: {
+    length: number
+    width: number
+    depth: number
+  }
 
   constructor(parentCode: string, code: string, name: string, path: number[][], position: Cesium.Cartesian3, type: number, floorNumber?: number, data?: string) {
     this.parentCode = parentCode
