@@ -57,20 +57,23 @@ export class ModelData {
     depth: number
   }
 
-  constructor(parentCode: string, code: string, name: string, path: number[][], position: Cesium.Cartesian3, type: number, floorNumber?: number, data?: string) {
+  constructor(parentCode: string, name: string,  position: Cesium.Cartesian3, type: number, floorNumber?: number) {
     this.parentCode = parentCode
-    this.code = code
     this.name = name
-    this.path = path
     this.position = {
       xAxis: position.x,
       yAxis: position.y,
       zAxis: position.z
     }
+    this.longitudeAndLatitudeJson = ""
+    this.dimension = {
+      length: 0,
+      width: 0,
+      depth: 0
+    }
     this.type = type
     this.districtType = type
     this.floorNumber = floorNumber
-    this.data = data
   }
 
   toGraphicInterface(parentId: string): GraphicInterface {

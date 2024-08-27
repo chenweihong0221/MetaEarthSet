@@ -3,7 +3,7 @@ import { EditOutlined, SelectOutlined } from "@ant-design/icons-vue"
 // import "ant-design-vue/dist/antd.css"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import MarsIcon from "@mars/components/mars-ui/mars-icon/index.vue"
-import { addModel, getThree, deleteModel } from "@mars/pages/demo/api/api"
+import { addModel, getThree, deleteModel, getModel } from "@mars/pages/demo/api/api"
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 import { loadJSON } from "@mars/pages/demo/module/tool/persistence"
@@ -74,7 +74,7 @@ onMounted(() => {
       AreaList.value = response.data.data
       console.log("AreaList", AreaList.value)
       selectedArea.value = response.data.data[0].code
-      console.log("selectedArea.value", selectedArea.value)  
+      console.log("selectedArea.value", selectedArea.value)
       stateStore.commit("updateSelectedAreaId", selectedArea.value)
     })
     .catch(function (error) {
@@ -197,8 +197,18 @@ const handleArea = (area) => {
   store.commit("setDistrictCode", districtId.value)
   console.log("districtId", districtId)
   console.log("selectedArea", selectedArea.value)
-  const id = store.getters.getDistrictCode()
-  console.log("id", id)
+  const params = {
+    childrenParentCode: "",
+    name: area.name
+  }
+  getModel(params)
+    .then(function (response) {
+      // 处理成功情况
+      console.log("AreaList", response)
+    }).catch(function (error) {
+      // 处理错误情况
+      console.log(error)
+    })
 }
 
 const handleDel = () => {

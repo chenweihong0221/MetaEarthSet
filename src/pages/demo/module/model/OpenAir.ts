@@ -1,10 +1,11 @@
 import { Cesium } from "mars3d"
 import * as mars3d from "mars3d"
 import * as uuid from "uuid"
-import { mapStore } from "@mars/pages/demo/module/store/store"
+import { mapStore, stateStore } from "@mars/pages/demo/module/store/store"
 import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
 import { ModelData } from "@mars/pages/demo/api/adopter"
-import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
+import { addModel } from "@mars/pages/demo/api/api"
+import { message } from "ant-design-vue"
 
 export class OpenAir implements GraphicInterface {
   id: string
@@ -17,35 +18,51 @@ export class OpenAir implements GraphicInterface {
 
   show: boolean = true // 是否显示
 
-  constructor(layer: mars3d.layer.GraphicLayer, positions: Cesium.Cartesian3[], name?: string, height?: number) {
+  constructor(
+    layer: mars3d.layer.GraphicLayer,
+    positions: Cesium.Cartesian3[],
+    name?: string,
+    height?: number,
+    api?: boolean) {
+
     this.id = uuid.v4()
     this.positions = positions
     this.name = name || "露天场所"
     this.height = height || 5
     this.layer = layer
-    this.polygon = new mars3d.graphic.PolygonEntity({
-      positions,
-      name: name || "露天场所",
-      style: {
-        // color: "#be3aea",
-        color: "#CECECE",
-        opacity: 1
-      }
-    })
-    this.wall = new mars3d.graphic.ThickWall({
-      positions,
-      name: name || "露天场所",
-      style: {
-        // color: "#be3aea",
-        color: "#A9A9A9", // modify by cwh 202408081127
-        opacity: 1,
-        diffHeight: this.height,
-        width: 0.1,
-        closure: true
-      }
-    })
-    this.layer.addGraphic(this.polygon)
-    this.layer.addGraphic(this.wall)
+    const model = this.toModelData(stateStore.state.selectedAreaId)
+    if (api === true) {
+      addModel(model).then((res) => {
+        if (res.data.code == 200) {
+          this.id = res.data.data.id
+          this.polygon = new mars3d.graphic.PolygonEntity({
+            positions,
+            name: name || "露天场所",
+            style: {
+              // color: "#be3aea",
+              color: "#CECECE",
+              opacity: 1
+            }
+          })
+          this.wall = new mars3d.graphic.ThickWall({
+            positions,
+            name: name || "露天场所",
+            style: {
+              // color: "#be3aea",
+              color: "#A9A9A9", // modify by cwh 202408081127
+              opacity: 1,
+              diffHeight: this.height,
+              width: 0.1,
+              closure: true
+            }
+          })
+          this.layer.addGraphic(this.polygon)
+          this.layer.addGraphic(this.wall)
+        } else {
+          message.error(res.data.msg)
+        }
+      })
+    }
   }
 
   setShow(show: boolean): void {
@@ -79,7 +96,7 @@ export class OpenAir implements GraphicInterface {
   }
 
   toModelData(areaId: string): ModelData {
-    return new ModelData(areaId, this.id, this.name, castTo2DArr(this.positions), 3)
+    const position = mars3d.PolyUtil.centerOfMass(this.positions)
+    return new ModelData(areaId, this.name, position, 3, 0)
   }
-
 }

@@ -202,7 +202,7 @@ export class Building implements GraphicInterface {
     }
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
-    return new ModelData(areaId, this.id, this.name, pos, position, 3, this.floorNumber, null)
+    return new ModelData(areaId, this.name, position, 3, this.floorNumber)
   }
 }
 
