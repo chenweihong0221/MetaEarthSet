@@ -170,10 +170,11 @@ const drawSpace = () => {
 }
 
 const createBuilding = (layer: mars3d.layer.GraphicLayer,
-                        positions: Cesium.Cartesian3[],
-                        name: string,
-                        floorNumber: number): Building => {
-  const building = new Building(layer, positions, name, floorNumber)
+  positions: Cesium.Cartesian3[],
+  name: string,
+  floorNumber: number): Building => {
+  const api = true
+  const building = new Building(layer, positions, name, floorNumber, null, null, null, null, true)
   store.commit("addBuilding", building)
   return building
 }
@@ -197,8 +198,8 @@ const drawFence = () => {
 }
 
 const createOpenAir = (layer: mars3d.layer.GraphicLayer,
-                       positions: Cesium.Cartesian3[],
-                       name: string): OpenAir => {
+  positions: Cesium.Cartesian3[],
+  name: string): OpenAir => {
   const openAir = new OpenAir(layer, positions, name)
   store.commit("addOpenAir", openAir)
   return openAir
@@ -330,14 +331,14 @@ const handleAddHuman = () => {
   <div class="draw-mode-box" v-show="stateStore.state.topBarState === '1'">
     <div class="draw-select-panel">
       <a-collapse v-model:active-key="collapseActiveKey" :style="style">
-        <a-collapse-panel key="1" header="绘制" >
+        <a-collapse-panel key="1" header="绘制">
           <div class="select-draw-box">
             <div class="left-box">
               <div class="message" style="margin-left: 10px">
                 选择绘制类型
               </div>
               <a-select v-model:value="selectedState" style="left: 10px" class="c_mars-select"
-                        popupClassName="mars-select-dropdown">
+                popupClassName="mars-select-dropdown">
                 <a-select-option key="1">
                   绘制建筑
                 </a-select-option>
@@ -390,17 +391,17 @@ const handleAddHuman = () => {
               </div>
 
               <mars-button class="my-button" @click="stopDraw"
-                           v-show="selectedState > '0' && startDraw">停止绘制</mars-button>
+                v-show="selectedState > '0' && startDraw">停止绘制</mars-button>
               <mars-button class="my-button" @click="drawBuilding"
-                           v-show="selectedState == '1' && !startDraw">开始绘制</mars-button>
+                v-show="selectedState == '1' && !startDraw">开始绘制</mars-button>
               <mars-button class="my-button" @click="drawSpace"
-                           v-show="selectedState == '2' && !startDraw">开始绘制</mars-button>
+                v-show="selectedState == '2' && !startDraw">开始绘制</mars-button>
               <mars-button class="my-button" @click="drawFence"
-                           v-show="selectedState == '3' && !startDraw">开始绘制</mars-button>
+                v-show="selectedState == '3' && !startDraw">开始绘制</mars-button>
               <mars-button class="my-button" @click="drawOpenAir"
-                           v-show="selectedState == '4' && !startDraw">开始绘制</mars-button>
+                v-show="selectedState == '4' && !startDraw">开始绘制</mars-button>
               <mars-button class="my-button" @click="drawPerson"
-                           v-show="selectedState == '6' && !startDraw">开始绘制</mars-button>
+                v-show="selectedState == '6' && !startDraw">开始绘制</mars-button>
             </div>
           </div>
         </a-collapse-panel>
@@ -415,13 +416,13 @@ const handleAddHuman = () => {
             <div class="draw-row">
               <div style="width: 7ch">样式：</div>
               <a-select v-model:value="selectedGraphicDrawStyle"
-                        style="left: 15px; color: white; rgba(35, 39, 47, 0.7);!important;" class="c_mars-select"
-                        popupClassName="mars-select-dropdown" :options="graphicDrawOptions" />
+                style="left: 15px; color: white; rgba(35, 39, 47, 0.7);!important;" class="c_mars-select"
+                popupClassName="mars-select-dropdown" :options="graphicDrawOptions" />
             </div>
             <div class="draw-row">
               <div style="width: 7ch">内容：</div>
               <a-input class="draw-input" placeholder="1号楼" style="margin-left: 15px;"
-                       v-model:value="selectedGraphicDrawContent" />
+                v-model:value="selectedGraphicDrawContent" />
             </div>
             <div class="draw-row">
               <div><mars-button class="my-button" @click="handleGraphicDraw">图上标绘</mars-button></div>
@@ -459,7 +460,6 @@ const handleAddHuman = () => {
 </template>
 
 <style scoped lang="less">
-
 .draw-mode-box {
   display: flex;
   justify-content: center;
@@ -467,11 +467,14 @@ const handleAddHuman = () => {
 }
 
 
-.draw-select-panel, .draw-panel, .other-panel {
+.draw-select-panel,
+.draw-panel,
+.other-panel {
   width: 90%;
   background: #999999;
   border-radius: 3px;
 }
+
 .select-draw-box {
   height: 100%;
   width: 100%;
@@ -656,7 +659,8 @@ input {
   margin-left: 10px;
 }
 
-.other-row .my-button,.draw-row .my-button {
+.other-row .my-button,
+.draw-row .my-button {
   margin: auto 5em;
 }
 
@@ -665,6 +669,4 @@ input {
   padding: 0;
   margin: 0;
 }
-
-
 </style>

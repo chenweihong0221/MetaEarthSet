@@ -73,7 +73,7 @@ onMounted(() => {
       // 处理成功情况
       AreaList.value = response.data.data
       console.log("AreaList", AreaList.value)
-      selectedArea.value = response.data.data[0].disrictId
+      selectedArea.value = response.data.data[0].code
       console.log("selectedArea.value", selectedArea.value)  
       stateStore.commit("updateSelectedAreaId", selectedArea.value)
     })
