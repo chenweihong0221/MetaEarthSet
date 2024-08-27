@@ -44,7 +44,8 @@ export class Building implements GraphicInterface {
     floorHeight?: number,
     spaceHeight?: number,
     autoCreateFloor = true,
-    id?: string
+    id?: string,
+    api?: boolean
   ) {
     this.id = id || uuid.v4()
     const firstPositionItem = positions[0]
@@ -68,21 +69,25 @@ export class Building implements GraphicInterface {
     }
     // 先发送请求，再创建楼层
     const model = this.toModelData(stateStore.state.selectedAreaId)
-    addModel(model).then((res) => {
-      // eslint-disable-next-line eqeqeq
-      if (res.data.code == 200) {
-        while (i < this.floorNumber) {
-          const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
-            this.positions,
-            i * (this.floorHeight + this.floorInterval)
-          ) as Cesium.Cartesian3[]
-          this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1)
-          i++
+    if (api) {
+      addModel(model).then((res) => {
+        // eslint-disable-next-line 
+        if (res.data.code == 200) {
+          this.id = res.data.data.id
+          while (i < this.floorNumber) {
+            const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+              this.positions,
+              i * (this.floorHeight + this.floorInterval)
+            ) as Cesium.Cartesian3[]
+            this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1)
+            i++
+          }
+        } else {
+          message.error(res.data.msg)
         }
-      } else {
-        message.error(res.data.msg)
-      }
-    })
+      })
+    }
+
   }
 
   addFloor(positions: Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string): Floor {
@@ -221,10 +226,10 @@ export class Floor implements GraphicInterface {
     positions:
       | Cesium.Cartesian3[]
       | {
-      x: number
-      y: number
-      z: number
-    },
+        x: number
+        y: number
+        z: number
+      },
     parent: Building,
     name: string,
     floorNo: number,
@@ -251,6 +256,7 @@ export class Floor implements GraphicInterface {
     addModel(model).then((res) => {
       if (res.data.code === 200) {
         // 创建底面和墙体
+        this.id = res.data.data.code
         this.polygon = new mars3d.graphic.PolygonEntity({
           positions: this.positions,
           name,

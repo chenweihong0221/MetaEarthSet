@@ -4,7 +4,7 @@ import { useStore } from "vuex"
 import * as mars3d from "mars3d"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
-
+import { deleteModel } from "@mars/pages/demo/api/api"
 
 const stateStore = useStore(stateKey)
 const mapStore = useStore(mapKey)
@@ -148,6 +148,8 @@ const deleteStore = () => {
   type.value = ""
   stateStore.commit("updateLeftBarNeedUpdate", true)
   stateStore.commit("updateSelectedGraphicId", "")
+  // const code = stateStore.getters.getDistrictCode()
+  // deleteModel(code)
 }
 
 const handleShowChange = (param) => {

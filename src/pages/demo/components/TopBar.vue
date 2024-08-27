@@ -68,6 +68,22 @@ const AreaList = ref([
 ])
 
 onMounted(() => {
+  getThree()
+    .then(function (response) {
+      // 处理成功情况
+      AreaList.value = response.data.data
+      console.log("AreaList", AreaList.value)
+      selectedArea.value = response.data.data[0].code
+    })
+    .catch(function (error) {
+      // 处理错误情况
+      console.log(error)
+    })
+    .finally(function () {
+      // 总是会执行
+      getData.value = false
+    })
+  console.log("selectedArea.value", selectedArea.value)  
   stateStore.commit("updateSelectedAreaId", selectedArea.value)
 })
 
@@ -164,22 +180,6 @@ const handleOk = () => {
   AreaAdd.value.name = newArea.name
   console.log("AreaAdd", AreaAdd.value)
   addModel(AreaAdd.value)
-  getThree()
-    .then(function (response) {
-      // 处理成功情况
-      AreaList.value = response.data.data
-      console.log("AreaList", AreaList.value)
-      inputAreaName.value = ""
-      showModal.value = false
-      selectedArea.value = newArea.name
-      // store.commit("clearMap")
-      // stateStore.commit("updateLeftBarNeedUpdate", true)
-      AreaList.value.push(newArea)
-    })
-    .catch(function (error) {
-      // 处理错误情况
-      console.log(error)
-    })
 }
 
 const handleCancel = () => {
@@ -190,26 +190,6 @@ const handleCancel = () => {
 const handleClick = () => {
   console.log("下拉列表切换事件")
   store.commit("flytoHome")
-}
-
-
-const getMessage = () => {
-  if (getData.value) {
-    getThree()
-      .then(function (response) {
-        // 处理成功情况
-        AreaList.value = response.data.data
-        console.log("AreaList", AreaList.value)
-      })
-      .catch(function (error) {
-        // 处理错误情况
-        console.log(error)
-      })
-      .finally(function () {
-        // 总是会执行
-        getData.value = false
-      })
-  }
 }
 
 const handleArea = (area) => {
@@ -243,7 +223,7 @@ const handleDel = () => {
     <a-space class="space" style="position: static; margin-top: 10px; margin-left: 20px">
       <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
-        @change="handleSelectAreaChange" @click="getMessage" v-model:value="selectedArea">
+        @change="handleSelectAreaChange" v-model:value="selectedArea">
         <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" @click="handleArea(area)">
           {{ area.name }}
         </a-select-option>
