@@ -62,4 +62,6 @@ export function getThree() {
   return instance.get("/xay/v1/sys/district/find-second-level-tree")
 }
 
-
+export function getDetail(secondLevelDistrictId, currentDistrictId){
+  return instance.get("/xay/v1/sys/district/find-tree-info/" + secondLevelDistrictId + "/" + currentDistrictId)
+}

@@ -19,10 +19,12 @@ export interface Location {
 
 export class ModelData {
   parentCode: string
-  // code: string
+
+  code?: string
   name: string
   // multiple positions for polygon(0~4type), single position for point(5~8type)
-  // path: number[][]
+  path?: number[][]
+
   position: {
     xAxis: number
     yAxis: number
@@ -57,7 +59,7 @@ export class ModelData {
     depth: number
   }
 
-  constructor(parentCode: string, name: string,  position: Cesium.Cartesian3, type: number, floorNumber?: number) {
+  constructor(parentCode: string, name: string, position: Cesium.Cartesian3, type: number, floorNumber?: number) {
     this.parentCode = parentCode
     this.name = name
     this.position = {

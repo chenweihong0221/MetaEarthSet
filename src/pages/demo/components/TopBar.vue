@@ -3,7 +3,7 @@ import { EditOutlined, SelectOutlined } from "@ant-design/icons-vue"
 // import "ant-design-vue/dist/antd.css"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import MarsIcon from "@mars/components/mars-ui/mars-icon/index.vue"
-import { addModel, getThree, deleteModel, getModel } from "@mars/pages/demo/api/api"
+import { addModel, getThree, deleteModel, getModel, getDetail } from "@mars/pages/demo/api/api"
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 import { loadJSON } from "@mars/pages/demo/module/tool/persistence"
@@ -202,6 +202,17 @@ const handleArea = (area) => {
     name: area.name
   }
   getModel(params)
+    .then(function (response) {
+      // 处理成功情况
+      console.log("AreaList", response)
+    }).catch(function (error) {
+      // 处理错误情况
+      console.log(error)
+    })
+    
+  const secondLevelDistrictId = ""
+  const currentDistrictId = ""
+  getDetail(secondLevelDistrictId, currentDistrictId)
     .then(function (response) {
       // 处理成功情况
       console.log("AreaList", response)
