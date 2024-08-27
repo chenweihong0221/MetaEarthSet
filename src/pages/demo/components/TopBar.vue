@@ -73,7 +73,7 @@ onMounted(() => {
       // 处理成功情况
       AreaList.value = response.data.data
       console.log("AreaList", AreaList.value)
-      selectedArea.value = response.data.data[0].code
+      selectedArea.value = response.data.data[0].districtId
     })
     .catch(function (error) {
       // 处理错误情况
