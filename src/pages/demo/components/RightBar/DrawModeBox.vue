@@ -173,8 +173,7 @@ const createBuilding = (layer: mars3d.layer.GraphicLayer,
   positions: Cesium.Cartesian3[],
   name: string,
   floorNumber: number): Building => {
-  const api = true
-  const building = new Building(layer, positions, name, floorNumber, null, null, null, null, true)
+  const building = new Building(layer, positions, name, floorNumber, null, null, null, null, api)
   store.commit("addBuilding", building)
   return building
 }
