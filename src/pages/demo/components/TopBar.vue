@@ -146,19 +146,24 @@ const handleSelectAreaChange = (value: string) => {
     Area.getFromLocalStorage(value)
     console.log("selectedArea", selectedArea.value)
   }
-
   stateStore.commit("updateLeftBarNeedUpdate", true)
-
 }
 
 const handleOk = () => {
   const newArea = new Area(inputAreaName.value)
   inputAreaName.value = ""
   showModal.value = false
-  selectedArea.value = newArea.name
-  // store.commit("clearMap")
-  // stateStore.commit("updateLeftBarNeedUpdate", true)
   AreaList.value.push(newArea)
+  const AreaAdd = ref(
+    {
+      districtType: 2,
+      name: selectedArea.value,
+      parentCode: ""
+    }
+  )
+  AreaAdd.value.name = newArea.name
+  console.log("AreaAdd", AreaAdd.value)
+  addModel(AreaAdd.value)
   getThree()
     .then(function (response) {
       // 处理成功情况
@@ -209,8 +214,11 @@ const getMessage = () => {
 
 const handleArea = (area) => {
   districtId.value = area.districtId
+  store.commit("setDistrictCode", districtId.value)
   console.log("districtId", districtId)
   console.log("selectedArea", selectedArea.value)
+  const id = store.getters.getDistrictCode()
+  console.log("id", id)
 }
 
 const handleDel = () => {

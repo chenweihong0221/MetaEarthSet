@@ -23,7 +23,8 @@ export const mapStore = createStore({
       openAirMap: new Map<string, OpenAir>(), // openAirId => OpenAir
       graphicLayer: null, // graphicLayer
       graphicLayer2d: null, // graphicLayer2d
-      outlineEffect: null // 高亮效果
+      outlineEffect: null, // 高亮效果
+      districtCode: null // 区域编码
     }
   },
   mutations: {
@@ -50,6 +51,9 @@ export const mapStore = createStore({
     },
     addCamera(state, camera: Camera) {
       state.cameraMap.set(camera.id.toString(), camera)
+    },
+    setDistrictCode(state, districtCode) {
+      state.districtCode = districtCode
     },
     removeBuilding(state, id: string) {
       const building = state.buildingMap.get(id)
@@ -232,6 +236,9 @@ export const mapStore = createStore({
         }
       }
       return false
+    },
+    getDistrictCode: state => () => {
+      return state.districtCode
     }
   }
 })
