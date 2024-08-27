@@ -201,6 +201,8 @@ const handleArea = (area) => {
     childrenParentCode: "",
     name: area.name
   }
+  store.commit("updateSelectedAreaId", selectedArea.value)
+  console.log("store.state", stateStore.state.selectedAreaId)
   getModel(params)
     .then(function (response) {
       // 处理成功情况
@@ -209,7 +211,7 @@ const handleArea = (area) => {
       // 处理错误情况
       console.log(error)
     })
-    
+
   const secondLevelDistrictId = ""
   const currentDistrictId = ""
   getDetail(secondLevelDistrictId, currentDistrictId)

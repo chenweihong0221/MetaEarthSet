@@ -1,7 +1,6 @@
 // axios配置
-import axios from "axios"
-import message from "ant-design-vue"
 import { ModelData } from "@mars/pages/demo/api/adopter"
+import axios from "axios"
 
 export const instance = axios.create({
   baseURL: "http://api.test01.platform.ahjtest.top",
@@ -50,8 +49,8 @@ export function updateModel(modelData: ModelData) {
   return instance.post("/xay/v1/sys/district/update", modelData)
 }
 
-export function deleteModel(id: string) {
-  return instance.delete("/xay/v1/sys/district/del?id=" + id)
+export function deleteModel(id) {
+  return instance.delete("/xay/v1/sys/district/del", { data: id })
 }
 
 export function getModel(param) {
@@ -62,6 +61,6 @@ export function getThree() {
   return instance.get("/xay/v1/sys/district/find-second-level-tree")
 }
 
-export function getDetail(secondLevelDistrictId, currentDistrictId){
+export function getDetail(secondLevelDistrictId, currentDistrictId) {
   return instance.get("/xay/v1/sys/district/find-tree-info/" + secondLevelDistrictId + "/" + currentDistrictId)
 }

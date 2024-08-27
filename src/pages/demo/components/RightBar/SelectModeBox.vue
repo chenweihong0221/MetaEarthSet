@@ -148,8 +148,8 @@ const deleteStore = () => {
   type.value = ""
   stateStore.commit("updateLeftBarNeedUpdate", true)
   stateStore.commit("updateSelectedGraphicId", "")
-  // const code = stateStore.getters.getDistrictCode()
-  // deleteModel(code)
+  console.log("id", id)
+  deleteModel(id)
 }
 
 const handleShowChange = (param) => {
