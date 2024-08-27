@@ -148,7 +148,7 @@ const deleteStore = () => {
   type.value = ""
   stateStore.commit("updateLeftBarNeedUpdate", true)
   console.log("id", id)
-  deleteModel(id)
+  deleteModel({ id: id })
 }
 
 const handleShowChange = (param) => {

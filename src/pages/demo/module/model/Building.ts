@@ -1,12 +1,14 @@
 import * as mars3d from "mars3d"
 import { Cesium, EventType } from "mars3d"
 import { mapStore, stateStore } from "@mars/pages/demo/module/store/store"
+import { useStore } from "vuex"
 import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
 import { ModelData } from "@mars/pages/demo/api/adopter"
 import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
 import * as uuid from "uuid"
 import { addModel } from "@mars/pages/demo/api/api"
 import { message } from "ant-design-vue"
+
 
 function getHeight(positions: Cesium.Cartesian3[] | Cesium.Cartesian3): number {
   const position = positions instanceof Array ? positions[0] : positions
@@ -73,8 +75,9 @@ export class Building implements GraphicInterface {
       addModel(model).then((res) => {
         // eslint-disable-next-line 
         console.log(res)
+        this.id = res.data.data
         if (res.data.code === 200) {
-          this.id = res.data.data
+          console.log("building.id", this.id)
           while (i < this.floorNumber) {
             const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
               this.positions,
@@ -83,6 +86,8 @@ export class Building implements GraphicInterface {
             this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1)
             i++
           }
+          mapStore.commit("addBuilding", this)
+          stateStore.commit("updateLeftBarNeedUpdate", true)
         } else {
           message.error(res.data.msg)
         }
