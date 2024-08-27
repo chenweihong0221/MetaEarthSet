@@ -72,8 +72,9 @@ export class Building implements GraphicInterface {
     if (api === true) {
       addModel(model).then((res) => {
         // eslint-disable-next-line 
-        if (res.data.code == 200) {
-          this.id = res.data.data.id
+        console.log(res)
+        if (res.data.code === 200) {
+          this.id = res.data.data
           while (i < this.floorNumber) {
             const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
               this.positions,

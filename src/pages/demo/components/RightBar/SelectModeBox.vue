@@ -147,7 +147,6 @@ const deleteStore = () => {
   selectedGraphicId.value = ""
   type.value = ""
   stateStore.commit("updateLeftBarNeedUpdate", true)
-  stateStore.commit("updateSelectedGraphicId", "")
   console.log("id", id)
   deleteModel(id)
 }

@@ -143,6 +143,7 @@ const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
   selectedGraphicId = selectedKeys[0].toString()
   selectedGraphicType = info.node.dataRef.type
   graphic.highLight()
+  console.log("updateSelectedGraphicId", selectedKeys[0])
   stateStore.commit("updateSelectedGraphicId", selectedKeys[0])
   stateStore.commit("updateSelectedGraphicType", info.node.type)
 }

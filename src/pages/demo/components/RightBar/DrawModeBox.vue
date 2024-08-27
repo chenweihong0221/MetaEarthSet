@@ -200,12 +200,12 @@ const drawFence = () => {
 const createOpenAir = (layer: mars3d.layer.GraphicLayer,
   positions: Cesium.Cartesian3[],
   name: string): OpenAir => {
-  const openAir = new OpenAir(layer, positions, name)
+  const openAir = new OpenAir(layer, positions, name, null, true)
   store.commit("addOpenAir", openAir)
   return openAir
 }
 
-const drawOpenAir = () => {
+const drawOpenAir = (name:string) => {
   startDraw.value = true
   store.state.map.onlyPickTerrainPosition = true
   store.state.graphicLayer.startDraw({
@@ -217,7 +217,7 @@ const drawOpenAir = () => {
   }).then(e => {
     startDraw.value = false
     store.state.map.onlyPickTerrainPosition = false
-    const openAir = createOpenAir(store.state.graphicLayer, e.positionsShow, buildingName.value)
+    const openAir = createOpenAir(store.state.graphicLayer, e.positionsShow, openAirName.value)
     if (openAirName.value) {
       openAir.name = openAirName.value
     }

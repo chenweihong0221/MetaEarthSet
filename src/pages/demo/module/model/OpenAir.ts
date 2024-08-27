@@ -97,6 +97,6 @@ export class OpenAir implements GraphicInterface {
 
   toModelData(areaId: string): ModelData {
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
-    return new ModelData(areaId, this.name, position, 3, 0)
+    return new ModelData(areaId, this.name, position, 3, 1)
   }
 }
