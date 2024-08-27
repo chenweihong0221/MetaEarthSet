@@ -211,17 +211,6 @@ const handleArea = (area) => {
       // 处理错误情况
       console.log(error)
     })
-
-  const secondLevelDistrictId = ""
-  const currentDistrictId = ""
-  getDetail(secondLevelDistrictId, currentDistrictId)
-    .then(function (response) {
-      // 处理成功情况
-      console.log("AreaList", response)
-    }).catch(function (error) {
-      // 处理错误情况
-      console.log(error)
-    })
 }
 
 const handleDel = () => {
