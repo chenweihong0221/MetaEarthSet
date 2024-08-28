@@ -201,7 +201,6 @@ const createOpenAir = (layer: mars3d.layer.GraphicLayer,
   positions: Cesium.Cartesian3[],
   name: string): OpenAir => {
   const openAir = new OpenAir(layer, positions, name, null, null, true)
-  store.commit("addOpenAir", openAir)
   return openAir
 }
 

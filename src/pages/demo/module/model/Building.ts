@@ -89,11 +89,12 @@ export class Building implements GraphicInterface {
             i++
           }
         } else {
-          message.error(res.data.msg)
+          // message.error(res.data.msg)
         }
         console.log(this)
-        mapStore.commit("addOpenAir", this)
+        mapStore.commit("addBuilding", this)
         stateStore.commit("updateLeftBarNeedUpdate", true)
+        message.success(res.data.msg)
       })
     }
 

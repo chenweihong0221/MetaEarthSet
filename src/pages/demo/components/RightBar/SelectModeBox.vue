@@ -5,6 +5,7 @@ import * as mars3d from "mars3d"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 import { deleteModel } from "@mars/pages/demo/api/api"
+import { message } from "ant-design-vue"
 
 const stateStore = useStore(stateKey)
 const mapStore = useStore(mapKey)
@@ -147,7 +148,11 @@ const deleteStore = () => {
   selectedGraphicId.value = ""
   type.value = ""
   console.log("id", id)
-  deleteModel(id)
+  deleteModel(id).then((res) => {
+    if(res.data.code === 0){
+      message.success(res.data.msg)
+    }
+  })
   stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 

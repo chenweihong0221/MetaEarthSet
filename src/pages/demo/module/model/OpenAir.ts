@@ -58,10 +58,10 @@ export class OpenAir implements GraphicInterface {
         })
         this.layer.addGraphic(this.polygon)
         this.layer.addGraphic(this.wall)
-        mapStore.commit("addBuilding", this)
+        mapStore.commit("addOpenAir", this)
         stateStore.commit("updateLeftBarNeedUpdate", true)
-      }
-      )
+        message.success(res.data.msg)
+      })
     }
   }
 
