@@ -50,13 +50,15 @@ export class Building implements GraphicInterface {
     api?: boolean
   ) {
     this.id = id || uuid.v4()
-    const firstPositionItem = positions[0]
-    if (firstPositionItem instanceof mars3d.Cesium.Cartesian3) {
-      this.positions = positions as Cesium.Cartesian3[]
-    } else {
-      this.positions = (positions as { x: number; y: number; z: number }[]).map((item) => {
-        return Cesium.Cartesian3.fromDegrees(item.x, item.y, item.z)
-      })
+    if (positions !== undefined && positions !== null) {
+      const firstPositionItem = positions[0]
+      if (firstPositionItem instanceof mars3d.Cesium.Cartesian3) {
+        this.positions = positions as Cesium.Cartesian3[]
+      } else {
+        this.positions = (positions as { x: number; y: number; z: number }[]).map((item) => {
+          return Cesium.Cartesian3.fromDegrees(item.x, item.y, item.z)
+        })
+      }
     }
     this.name = name || "建筑物"
     this.floorNumber = floorNumber || 3
@@ -69,9 +71,9 @@ export class Building implements GraphicInterface {
     if (!autoCreateFloor) {
       return
     }
-    // 先发送请求，再创建楼层
-    const model = this.toModelData(stateStore.state.selectedAreaId)
     if (api === true) {
+      // 先发送请求，再创建楼层
+    const model = this.toModelData(stateStore.state.selectedAreaId)
       addModel(model).then((res) => {
         // eslint-disable-next-line 
         console.log(res)
