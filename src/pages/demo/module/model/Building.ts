@@ -86,11 +86,11 @@ export class Building implements GraphicInterface {
             this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1)
             i++
           }
-          mapStore.commit("addBuilding", this)
-          stateStore.commit("updateLeftBarNeedUpdate", true)
         } else {
           message.error(res.data.msg)
         }
+        mapStore.commit("addBuilding", this)
+          stateStore.commit("updateLeftBarNeedUpdate", true)
       })
     }
 
