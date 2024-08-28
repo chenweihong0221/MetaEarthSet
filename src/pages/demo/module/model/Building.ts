@@ -73,7 +73,7 @@ export class Building implements GraphicInterface {
     }
     if (api === true) {
       // 先发送请求，再创建楼层
-    const model = this.toModelData(stateStore.state.selectedAreaId)
+      const model = this.toModelData(stateStore.state.selectedAreaId)
       addModel(model).then((res) => {
         // eslint-disable-next-line 
         console.log(res)
