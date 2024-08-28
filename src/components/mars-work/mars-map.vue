@@ -1,7 +1,7 @@
 <template>
   <div :id="withKeyId"  class="mars3d-container"></div>
   <div class="mars3d-btn-wrapper">
-    <a-space style="position: absolute; bottom: 7%; right: 25%;z-index: 999">
+    <a-space style="position: absolute; bottom: 7%; right: 20%;z-index: 999">
 <!--      <mars-button @click="openLink1" style="background-color: white;margin-right: 20px;font-size: 15px;color: #2e333a">-->
 <!--        效果演示-->
 <!--      </mars-button>-->
