@@ -99,7 +99,6 @@ const drawBuilding = () => {
     startDraw.value = false
     store.state.map.onlyPickTerrainPosition = false
     const building = createBuilding(store.state.graphicLayer, e.positionsShow, buildingName.value, floorNum.value)
-    console.log("building", building)
     if (buildingName.value) {
       building.name = buildingName.value
     }
