@@ -1,5 +1,6 @@
 // axios配置
 import { ModelData } from "@mars/pages/demo/api/adopter"
+import { ref } from "vue"
 import axios from "axios"
 
 export const instance = axios.create({
@@ -49,8 +50,12 @@ export function updateModel(modelData: ModelData) {
   return instance.post("/xay/v1/sys/district/update", modelData)
 }
 
+const deleteData = ref({
+  id: ""
+})
 export function deleteModel(id) {
-  return instance.delete("/xay/v1/sys/district/del", { data: id })
+  deleteData.value.id = id
+  return instance.delete("/xay/v1/sys/district/del", { data: deleteData.value })
 }
 
 export function getModel(param) {

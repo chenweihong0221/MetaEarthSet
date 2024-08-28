@@ -106,8 +106,12 @@ export const mapStore = createStore({
     removeOpenAir(state, id: string) {
       const openAir = state.openAirMap.get(id)
       state.openAirMap.delete(id)
-      openAir.polygon.destroy()
-      openAir.wall.destroy()
+      if (openAir.polygon) {
+        openAir.polygon.destroy()
+      }
+      if (openAir.wall) {
+        openAir.wall.destroy()
+      }
     },
     removeGraphicDraw(state, id: string) {
       const graphicDraw = state.graphicDrawMap.get(id)
