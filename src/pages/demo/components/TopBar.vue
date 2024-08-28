@@ -1,17 +1,12 @@
 <script setup lang="ts">
-import { EditOutlined, SelectOutlined } from "@ant-design/icons-vue"
 // import "ant-design-vue/dist/antd.css"
-import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
-import MarsIcon from "@mars/components/mars-ui/mars-icon/index.vue"
-import { addModel, getThree, deleteModel, getModel, getDetail } from "@mars/pages/demo/api/api"
+import { addModel, deleteModel, getModel, getThree } from "@mars/pages/demo/api/api"
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 import { loadJSON } from "@mars/pages/demo/module/tool/persistence"
 import type { Dayjs } from "dayjs"
 import { onMounted, reactive, ref } from "vue"
 import { useStore } from "vuex"
-import { Building } from "../module/model/Building"
-import { OpenAir } from "../module/model/OpenAir"
 
 interface FormState {
   url: string
@@ -82,8 +77,8 @@ onMounted(() => {
     getModel(params)
       .then(function (response) {
         // 处理成功情况
-        AreaList.value = response.data.data
-        selectedArea.value = response.data.data[0].code
+        AreaList.value = response.data.data[0].children
+        selectedArea.value = response.data.data[0].children[0].name
         stateStore.commit("updateSelectedAreaId", selectedArea.value)
       })
       .catch(function (error) {
@@ -215,28 +210,20 @@ const handleArea = (area) => {
     .then(function (response) {
       // 处理成功情况
       console.log("AreaList", response)
-      newBuilding(response.data.data[0].children)
+      newBuilding(response.data.data[0].children, area.code)
     }).catch(function (error) {
       // 处理错误情况
       console.log(error)
     })
 }
 
-function newBuilding(children) {
+function newBuilding(children, code) {
   // store.commit("addBuilding", new OpenAir(null, null))
   // stateStore.commit("updateLeftBarNeedUpdate", true)
   for (let i = 0; i < children.length; i++) {
-    store.commit("addBuilding", new Building(
-      null,
-      null,
-      children[i].name,
-      5,
-      5,
-      5,
-      true,
-      children[i].children[0].coed, 
-      false))
-    stateStore.commit("updateLeftBarNeedUpdate", true)
+    if (children.code === code) {
+      console.log("children", children)
+    }
   }
 }
 
