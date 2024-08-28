@@ -7,6 +7,8 @@ import { loadJSON } from "@mars/pages/demo/module/tool/persistence"
 import type { Dayjs } from "dayjs"
 import { onMounted, reactive, ref } from "vue"
 import { useStore } from "vuex"
+import { Building } from "../module/model/Building"
+import { OpenAir } from "../module/model/OpenAir"
 
 interface FormState {
   url: string
@@ -221,8 +223,19 @@ function newBuilding(children, code) {
   // store.commit("addBuilding", new OpenAir(null, null))
   // stateStore.commit("updateLeftBarNeedUpdate", true)
   for (let i = 0; i < children.length; i++) {
-    if (children.code === code) {
-      console.log("children", children)
+    if (children[i].code === code) {
+      console.log("children", children[i])
+      for (let j = 0; j < children[i].children.length; j++) {
+        const child = children[i].children[j]
+        if (child.districtType === 3) {
+          store.commit("addBuilding", new Building(null, null, child.name, null, null, null, true, child.code, false))
+          stateStore.commit("updateLeftBarNeedUpdate", true)
+        }
+        if (child.districtType === 7) {
+          store.commit("addOpenAir", new OpenAir(null, null, child.name, 5, false))
+          stateStore.commit("updateLeftBarNeedUpdate", true)
+        }
+      }
     }
   }
 }
