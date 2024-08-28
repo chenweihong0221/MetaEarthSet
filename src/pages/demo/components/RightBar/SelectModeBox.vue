@@ -149,7 +149,7 @@ const deleteStore = () => {
   type.value = ""
   console.log("id", id)
   deleteModel(id).then((res) => {
-    if (res.data.code === 0) {
+    if (res.data.code === "0") {
       message.success(res.data.msg)
     }
   })

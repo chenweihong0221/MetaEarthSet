@@ -80,6 +80,7 @@ onMounted(() => {
         AreaList.value = response.data.data[0].children
         selectedArea.value = response.data.data[0].children[0].name
         stateStore.commit("updateSelectedAreaId", selectedArea.value)
+        newBuilding(response.data.data[0].children, response.data.data[0].children[0].code)
       })
       .catch(function (error) {
         // 处理错误情况
@@ -185,6 +186,9 @@ const handleOk = () => {
   AreaAdd.value.name = newArea.name
   console.log("AreaAdd", AreaAdd.value)
   addModel(AreaAdd.value)
+  AreaList.value = null
+  selectedArea.value = newArea.name
+  stateStore.commit("updateSelectedAreaId", selectedArea.value)
 }
 
 const handleCancel = () => {
@@ -247,7 +251,11 @@ function getBuilding(children) {
 }
 
 const handleDel = () => {
-  deleteModel(districtId.value)
+  deleteModel(districtId.value).then(response => {
+    AreaList.value = response.data.data[0].children
+    selectedArea.value = response.data.data[0].children[0].name
+    stateStore.commit("updateSelectedAreaId", selectedArea.value)
+  })
   getThree()
     .then(function (response) {
       // 处理成功情况
