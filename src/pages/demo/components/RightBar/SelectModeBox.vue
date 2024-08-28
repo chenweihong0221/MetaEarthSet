@@ -67,7 +67,7 @@ watch(() => stateStore.state.selectedGraphicId, val => {
     const openAir = mapStore.getters.getOpenAirByOpenAirId(val)
     name.value = openAir.name
     type.value = "露天场所"
-    show.value = openAir.polygon.show
+    show.value = openAir.show
     position = mars3d.PolyUtil.centerOfMass(openAir.positions)
   } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
     const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(val)
@@ -146,9 +146,9 @@ const deleteStore = () => {
   name.value = ""
   selectedGraphicId.value = ""
   type.value = ""
-  stateStore.commit("updateLeftBarNeedUpdate", true)
   console.log("id", id)
   deleteModel({ id: id })
+  stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
 const handleShowChange = (param) => {

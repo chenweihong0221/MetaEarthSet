@@ -34,33 +34,33 @@ export class OpenAir implements GraphicInterface {
     if (api === true) {
       const model = this.toModelData(stateStore.state.selectedAreaId)
       addModel(model).then((res) => {
-          this.id = res.data.data
-          this.polygon = new mars3d.graphic.PolygonEntity({
-            positions,
-            name: name || "露天场所",
-            style: {
-              // color: "#be3aea",
-              color: "#CECECE",
-              opacity: 1
-            }
-          })
-          this.wall = new mars3d.graphic.ThickWall({
-            positions,
-            name: name || "露天场所",
-            style: {
-              // color: "#be3aea",
-              color: "#A9A9A9", // modify by cwh 202408081127
-              opacity: 1,
-              diffHeight: this.height,
-              width: 0.1,
-              closure: true
-            }
-          })
-          this.layer.addGraphic(this.polygon)
-          this.layer.addGraphic(this.wall)
-          mapStore.commit("addBuilding", this)
-          stateStore.commit("updateLeftBarNeedUpdate", true)
-        }
+        this.id = res.data.data
+        this.polygon = new mars3d.graphic.PolygonEntity({
+          positions,
+          name: name || "露天场所",
+          style: {
+            // color: "#be3aea",
+            color: "#CECECE",
+            opacity: 1
+          }
+        })
+        this.wall = new mars3d.graphic.ThickWall({
+          positions,
+          name: name || "露天场所",
+          style: {
+            // color: "#be3aea",
+            color: "#A9A9A9", // modify by cwh 202408081127
+            opacity: 1,
+            diffHeight: this.height,
+            width: 0.1,
+            closure: true
+          }
+        })
+        this.layer.addGraphic(this.polygon)
+        this.layer.addGraphic(this.wall)
+        mapStore.commit("addBuilding", this)
+        stateStore.commit("updateLeftBarNeedUpdate", true)
+      }
       )
     }
   }
@@ -72,7 +72,9 @@ export class OpenAir implements GraphicInterface {
   }
 
   highLight(): void {
-    mapStore.state.outlineEffect.selected = [this.wall]
+    if (this.wall) {
+      mapStore.state.outlineEffect.selected = [this.wall]
+    }
   }
 
   removeHighLight(): void {

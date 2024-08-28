@@ -1,13 +1,13 @@
-import { createStore } from "vuex"
 import { Building, Floor, Space } from "@mars/pages/demo/module/model/Building"
+import { Camera } from "@mars/pages/demo/module/model/Camera"
 import { Fence } from "@mars/pages/demo/module/model/Fence"
-import { OpenAir } from "@mars/pages/demo/module/model/OpenAir"
 import { GraphicDraw } from "@mars/pages/demo/module/model/GraphicDraw"
+import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
+import { Human } from "@mars/pages/demo/module/model/Human"
+import { OpenAir } from "@mars/pages/demo/module/model/OpenAir"
 import * as mars3d from "mars3d"
 import { Cesium } from "mars3d"
-import { Human } from "@mars/pages/demo/module/model/Human"
-import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
-import { Camera } from "@mars/pages/demo/module/model/Camera"
+import { createStore } from "vuex"
 
 export const mapStore = createStore({
   state() {
@@ -91,8 +91,12 @@ export const mapStore = createStore({
       const floor = state.buildingMap.get(state.floorBuildingMap.get(state.spaceFloorMap.get(id))).floors.get(state.spaceFloorMap.get(id))
       floor.spaces.delete(id)
       state.spaceFloorMap.delete(id)
-      space.polygon.destroy()
-      space.wall.destroy()
+      if (space.polygon) {
+        space.polygon.destroy()
+      }
+      if (space.wall) {
+        space.wall.destroy()
+      }
     },
     removeFence(state, id: string) {
       const fence = state.fenceMap.get(id)
@@ -171,7 +175,7 @@ export const mapStore = createStore({
           console.log("floor exist", state.buildingMap.get(state.floorBuildingMap.get(id)).floors.has(id))
           return state.buildingMap.get(state.floorBuildingMap.get(id)).floors.get(id)
         }
-        case 2:{
+        case 2: {
           console.log("id", id)
           console.log("building exist", state.floorBuildingMap.get(state.spaceFloorMap.get(id)))
 
@@ -215,7 +219,7 @@ export const mapStore = createStore({
     getOpenAirByOpenAirId: state => (id: string): OpenAir => {
       return state.openAirMap.get(id)
     },
-    getGraphicDrawByGraphicDrawId: state => (id: string):GraphicDraw => {
+    getGraphicDrawByGraphicDrawId: state => (id: string): GraphicDraw => {
       return state.graphicDrawMap.get(id)
     },
     getFencePositions: state => () => {

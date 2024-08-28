@@ -232,12 +232,12 @@ function getBuilding(children) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
       if (child.districtType === 3) {
-        const building = new Building(null, null, child.name, null, null, null, true, child.districtId, false)
+        const building = new Building(store.state.graphicLayer, null, child.name, null, null, null, true, child.districtId, false)
         store.commit("addBuilding", building)
         stateStore.commit("updateLeftBarNeedUpdate", true)
       }
       if (child.districtType === 7) {
-        const openAir = new OpenAir(child.id, null, child.name, null, child.districtId, false)
+        const openAir = new OpenAir(store.state.graphicLayer, null, child.name, null, child.districtId, false)
         store.commit("addOpenAir", openAir)
         stateStore.commit("updateLeftBarNeedUpdate", true)
       }
