@@ -225,18 +225,26 @@ function newBuilding(children, code) {
   for (let i = 0; i < children.length; i++) {
     if (children[i].code === code) {
       console.log("children", children[i])
-      for (let j = 0; j < children[i].children.length; j++) {
-        const child = children[i].children[j]
-        if (child.districtType === 3) {
-          store.commit("addBuilding", new Building(child.id, null, child.name, null, null, null, true, child.code, false))
-          stateStore.commit("updateLeftBarNeedUpdate", true)
-        }
-        if (child.districtType === 7) {
-          store.commit("addOpenAir", new OpenAir(child.id, null, child.name, 5, false))
-          stateStore.commit("updateLeftBarNeedUpdate", true)
-        }
+      getBuilding(children[i].children)
+      break
+    }
+  }
+}
+
+function getBuilding(children) {
+  if (children) {
+    for (let i = 0; i < children.length; j++) {
+      const child = children[i]
+      if (child.districtType === 3) {
+        store.commit("addBuilding", new Building(child.id, null, child.name, null, null, null, true, child.code, false))
+        stateStore.commit("updateLeftBarNeedUpdate", true)
+      }
+      if (child.districtType === 7) {
+        store.commit("addOpenAir", new OpenAir(child.id, null, child.name, 5, false))
+        stateStore.commit("updateLeftBarNeedUpdate", true)
       }
     }
+    getBuilding(children.children)
   }
 }
 
