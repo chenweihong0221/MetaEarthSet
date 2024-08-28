@@ -46,7 +46,7 @@ const stateStore = useStore(stateKey)
   position: absolute;
   top: 4em;
   right: 0;
-  width: 25em;
+  width: 18%;
   height: 100%;
   background: #555555;
   overflow-y: scroll;

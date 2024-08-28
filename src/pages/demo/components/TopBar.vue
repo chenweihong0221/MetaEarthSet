@@ -289,7 +289,7 @@ const handleDel = () => {
       <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
         @change="handleSelectAreaChange" v-model:value="selectedArea">
-        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" 
+        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code"
         @click="handleArea(area)">
           {{ area.name }}
         </a-select-option>
@@ -328,14 +328,18 @@ const handleDel = () => {
     </a-space>
 
 
-    <a-space style="position: absolute; top: 80px; right: 390px">
+    <a-space style="position: absolute; top: 80px; right: 20%">
       <a-button class="tools-button" @click="handleClick">
         <template #icon><mars-icon icon="home-two" class="icon-vertical-a" width="20" /></template>
       </a-button>
     </a-space>
-    <a-modal v-model:open="showModal" @ok="handleOk" @cancel="handleCancel">
+    <a-modal v-model:open="showModal">
       <template #title>
         <div>添加区域</div>
+      </template>
+      <template #footer>
+        <a-button key="cancel" @click="handleCancel">取消</a-button>
+        <a-button key="ok" type="primary" @click="handleOk">确定</a-button>
       </template>
       <div>
         <div>区域名称：</div>
