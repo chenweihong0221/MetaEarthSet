@@ -228,11 +228,11 @@ function newBuilding(children, code) {
       for (let j = 0; j < children[i].children.length; j++) {
         const child = children[i].children[j]
         if (child.districtType === 3) {
-          store.commit("addBuilding", new Building(null, null, child.name, null, null, null, true, child.code, false))
+          store.commit("addBuilding", new Building(child.id, null, child.name, null, null, null, true, child.code, false))
           stateStore.commit("updateLeftBarNeedUpdate", true)
         }
         if (child.districtType === 7) {
-          store.commit("addOpenAir", new OpenAir(null, null, child.name, 5, false))
+          store.commit("addOpenAir", new OpenAir(child.id, null, child.name, 5, false))
           stateStore.commit("updateLeftBarNeedUpdate", true)
         }
       }
