@@ -186,9 +186,14 @@ const handleOk = () => {
   )
   AreaAdd.value.name = newArea.name
   console.log("AreaAdd", AreaAdd.value)
-  addModel(AreaAdd.value)
-  selectedArea.value = newArea.name
-  stateStore.commit("updateSelectedAreaId", selectedArea.value)
+  addModel(AreaAdd.value).then(res => {
+    if (res.data.code === "0") {
+      districtId.value = res.data.data
+      selectedArea.value = newArea.name
+      stateStore.commit("updateSelectedAreaId", selectedArea.value)
+      message.success("新增区域成功")
+    }
+  })
 }
 
 const handleCancel = () => {
@@ -253,7 +258,7 @@ function getBuilding(children) {
 const handleDel = () => {
   deleteModel(districtId.value).then(response => {
     if (response.data.code === "0") {
-      message.success(response.data.msg)
+      message.success("删除区域成功")
       getThree()
         .then(function (response) {
           // 处理成功情况
