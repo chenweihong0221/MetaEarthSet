@@ -9,6 +9,7 @@ import {
 import { nextTick, ref, watch, watchEffect } from "vue"
 import { TreeProps } from "ant-design-vue"
 import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
+import { Building } from "../module/model/Building"
 
 const store = useStore(mapKey)
 const stateStore = useStore(stateKey)
@@ -30,27 +31,27 @@ watchEffect(() => {
   }
   const treeData = []
   Array.from(store.state.buildingMap.values()).map(building => {
-    graphicIdTypeMap.set(building.id.toString(), 0)
+    graphicIdTypeMap.set(building.id, 0)
     return {
       title: building.name,
-      key: building.id.toString(),
-      type: 0,
-      children: Array.from(building.floors.values()).map(floor => {
-        graphicIdTypeMap.set(floor.id.toString(), 1)
-        return {
-          title: floor.name,
-          key: floor.id.toString(),
-          type: 1,
-          children: Array.from(floor.spaces.values()).map(space => {
-            graphicIdTypeMap.set(space.id.toString(), 2)
-            return {
-              title: space.name,
-              key: space.id.toString(),
-              type: 2
-            }
-          })
-        }
-      })
+      key: building.id,
+      type: 0
+      // children: Array.from(building.floors.values()).map(floor => {
+      //   graphicIdTypeMap.set(floor.id.toString(), 1)
+      //   return {
+      //     title: floor.name,
+      //     key: floor.id.toString(),
+      //     type: 1,
+      //     children: Array.from(floor.spaces.values()).map(space => {
+      //       graphicIdTypeMap.set(space.id.toString(), 2)
+      //       return {
+      //         title: space.name,
+      //         key: space.id.toString(),
+      //         type: 2
+      //       }
+      //     })
+      //   }
+      // })
     }
   }).forEach((building) => treeData.push(building))
 

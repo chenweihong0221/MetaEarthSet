@@ -90,7 +90,7 @@ export class Building implements GraphicInterface {
           message.error(res.data.msg)
         }
         mapStore.commit("addBuilding", this)
-          stateStore.commit("updateLeftBarNeedUpdate", true)
+        stateStore.commit("updateLeftBarNeedUpdate", true)
       })
     }
 

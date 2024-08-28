@@ -10,6 +10,8 @@ import { loadJSON } from "@mars/pages/demo/module/tool/persistence"
 import type { Dayjs } from "dayjs"
 import { onMounted, reactive, ref } from "vue"
 import { useStore } from "vuex"
+import { Building } from "../module/model/Building"
+import { OpenAir } from "../module/model/OpenAir"
 
 interface FormState {
   url: string
@@ -70,14 +72,18 @@ const AreaList = ref([
 const firstApi = ref(true)
 
 onMounted(() => {
+  // store.commit("addBuilding", new OpenAir(null, null))
+  // stateStore.commit("updateLeftBarNeedUpdate", true)
   if (firstApi.value) {
-    getThree()
+    const params = {
+      childrenParentCode: "",
+      name: ""
+    }
+    getModel(params)
       .then(function (response) {
         // 处理成功情况
         AreaList.value = response.data.data
-        console.log("AreaList", AreaList.value)
         selectedArea.value = response.data.data[0].code
-        console.log("selectedArea.value", selectedArea.value)
         stateStore.commit("updateSelectedAreaId", selectedArea.value)
       })
       .catch(function (error) {
@@ -199,23 +205,39 @@ const handleClick = () => {
 const handleArea = (area) => {
   districtId.value = area.districtId
   store.commit("setDistrictCode", districtId.value)
-  console.log("districtId", districtId)
-  console.log("selectedArea", selectedArea.value)
+  stateStore.commit("updateSelectedAreaId", selectedArea.value)
   const params = {
     childrenParentCode: "",
     name: area.name
   }
-  stateStore.commit("updateSelectedAreaId", selectedArea.value)
   console.log("store.state", stateStore.state.selectedAreaId)
   getModel(params)
     .then(function (response) {
       // 处理成功情况
       console.log("AreaList", response)
+      newBuilding(response.data.data[0].children)
     }).catch(function (error) {
       // 处理错误情况
       console.log(error)
     })
+}
 
+function newBuilding(children) {
+  // store.commit("addBuilding", new OpenAir(null, null))
+  // stateStore.commit("updateLeftBarNeedUpdate", true)
+  for (let i = 0; i < children.length; i++) {
+    store.commit("addBuilding", new Building(
+      null,
+      null,
+      children[i].name,
+      5,
+      5,
+      5,
+      true,
+      children[i].children[0].coed, 
+      false))
+    stateStore.commit("updateLeftBarNeedUpdate", true)
+  }
 }
 
 const handleDel = () => {
