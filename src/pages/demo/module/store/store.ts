@@ -41,7 +41,7 @@ export const mapStore = createStore({
       state.fenceMap.set(fence.id.toString(), fence)
     },
     addOpenAir(state, openAir: OpenAir) {
-      state.openAirMap.set(openAir.id.toString(), openAir)
+      state.openAirMap.set(openAir.id, openAir)
     },
     addHuman(state, human: Human) {
       state.humanMap.set(human.id.toString(), human)
