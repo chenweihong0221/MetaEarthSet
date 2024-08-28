@@ -105,7 +105,7 @@ export class Camera implements GraphicInterface {
 
   toModelData(areaId: string): ModelData {
     const pos = castTo2DArr(this.position)
-    return new ModelData(areaId, this.id, this.id, pos, 2)
+    return new ModelData(areaId, this.id, this.id, pos, this.position, 2)
   }
 
 

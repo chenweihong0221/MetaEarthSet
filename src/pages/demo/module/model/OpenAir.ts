@@ -5,6 +5,7 @@ import { mapStore, stateStore } from "@mars/pages/demo/module/store/store"
 import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
 import { ModelData } from "@mars/pages/demo/api/adopter"
 import { addModel } from "@mars/pages/demo/api/api"
+import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
 import { message } from "ant-design-vue"
 
 export class OpenAir implements GraphicInterface {
@@ -98,7 +99,8 @@ export class OpenAir implements GraphicInterface {
   }
 
   toModelData(areaId: string): ModelData {
+    const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
-    return new ModelData(areaId, this.name, position, 7, 1)
+    return new ModelData(areaId, this.id, this.name, pos, position, 7, 1)
   }
 }

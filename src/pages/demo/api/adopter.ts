@@ -59,7 +59,7 @@ export class ModelData {
     depth: number
   }
 
-  constructor(parentCode: string, name: string, position: Cesium.Cartesian3, type: number, floorNumber?: number) {
+  constructor(parentCode: string, code: string, name: string, path: number[][], position: Cesium.Cartesian3, type: number, floorNumber?: number) {
     this.parentCode = parentCode
     this.name = name
     this.position = {

@@ -188,8 +188,8 @@ const handleOk = () => {
   addModel(AreaAdd.value).then(res => {
     if (res.data.code === "0") {
       districtId.value = res.data.data
-      selectedArea.value = res.data.data
-      stateStore.commit("updateSelectedAreaId", selectedArea.value)
+      selectedArea.value = newArea.name
+      stateStore.commit("updateSelectedAreaId", res.data.data)
       newArea.id = res.data.data
       AreaList.value.push(newArea)
       message.success("新增区域成功")

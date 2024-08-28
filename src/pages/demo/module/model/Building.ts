@@ -78,7 +78,7 @@ export class Building implements GraphicInterface {
         // eslint-disable-next-line 
         console.log(res)
         this.id = res.data.data
-        if (res.data.code === 200) {
+        if (res.data.code === "") {
           console.log("building.id", this.id)
           while (i < this.floorNumber) {
             const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
@@ -212,7 +212,7 @@ export class Building implements GraphicInterface {
     }
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
-    return new ModelData(areaId, this.name, position, 3, this.floorNumber)
+    return new ModelData(areaId, this.id, this.name, pos, position, 3, this.floorNumber)
   }
 }
 
@@ -341,7 +341,8 @@ export class Floor implements GraphicInterface {
 
   toModelData(): ModelData {
     const pos = castTo2DArr(this.positions)
-    return new ModelData(this.parent.id, this.id, this.name, pos, 1, this.floorNo, null)
+    const position = mars3d.PolyUtil.centerOfMass(this.positions)
+    return new ModelData(this.parent.id, this.id, this.name, pos, position, 4, this.floorNo)
   }
 }
 
@@ -420,6 +421,7 @@ export class Space implements GraphicInterface {
 
   toModelData(): ModelData {
     const pos = castTo2DArr(this.positions)
-    return new ModelData(this.parent.id, this.id, this.name, pos, 2, this.parent.floorNo, null)
+    const position = mars3d.PolyUtil.centerOfMass(this.positions)
+    return new ModelData(this.parent.id, this.id, this.name, pos, position, 3, this.parent.floorNo)
   }
 }

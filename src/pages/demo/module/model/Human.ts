@@ -57,7 +57,7 @@ export class Human implements GraphicInterface {
   }
 
   toModelData(areaId: string): ModelData {
-    return new ModelData(areaId, this.id, this.model.name, castTo2DArr(this.positions), 1)
+    return new ModelData(areaId, this.id, this.model.name, castTo2DArr(this.positions), this.positions, 1)
   }
 
   name: string
