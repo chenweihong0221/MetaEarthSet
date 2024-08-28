@@ -4,6 +4,7 @@ import { addModel, deleteModel, getModel, getThree } from "@mars/pages/demo/api/
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 import { loadJSON } from "@mars/pages/demo/module/tool/persistence"
+import { message } from "ant-design-vue"
 import type { Dayjs } from "dayjs"
 import { onMounted, reactive, ref } from "vue"
 import { useStore } from "vuex"
@@ -186,7 +187,6 @@ const handleOk = () => {
   AreaAdd.value.name = newArea.name
   console.log("AreaAdd", AreaAdd.value)
   addModel(AreaAdd.value)
-  AreaList.value = null
   selectedArea.value = newArea.name
   stateStore.commit("updateSelectedAreaId", selectedArea.value)
 }
@@ -252,20 +252,22 @@ function getBuilding(children) {
 
 const handleDel = () => {
   deleteModel(districtId.value).then(response => {
-    AreaList.value = response.data.data[0].children
-    selectedArea.value = response.data.data[0].children[0].name
-    stateStore.commit("updateSelectedAreaId", selectedArea.value)
+    if (response.data.code === "0") {
+      message.success(response.data.msg)
+      getThree()
+        .then(function (response) {
+          // 处理成功情况
+          AreaList.value = response.data.data[0].children
+          selectedArea.value = response.data.data[0].children[0].name
+          stateStore.commit("updateSelectedAreaId", selectedArea.value)
+          console.log("AreaList", AreaList.value)
+        })
+        .catch(function (error) {
+          // 处理错误情况
+          console.log(error)
+        })
+    }
   })
-  getThree()
-    .then(function (response) {
-      // 处理成功情况
-      AreaList.value = response.data.data
-      console.log("AreaList", AreaList.value)
-    })
-    .catch(function (error) {
-      // 处理错误情况
-      console.log(error)
-    })
 }
 
 </script>
