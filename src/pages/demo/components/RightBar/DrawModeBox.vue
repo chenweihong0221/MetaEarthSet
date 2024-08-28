@@ -69,6 +69,7 @@ watch(selectedBuildingId, val => {
   }
 })
 
+// 更新左侧栏世界大纲信息显示
 function drawCallback() {
   stateStore.commit("updateLeftBarNeedUpdate", true)
   console.log("drawCallback")
@@ -288,6 +289,8 @@ const handleGraphicDraw = () => {
     store.state.graphicLayer.addGraphic(graphicImg)
     const graphicDraw = new GraphicDraw(selectedGraphicDrawContent.value, cartesian)
     store.state.graphicDrawMap.set(graphicDraw.id, graphicDraw)
+
+    drawCallback()
   }
 
   // 监听绘制完成
