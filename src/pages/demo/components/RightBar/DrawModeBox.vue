@@ -175,7 +175,6 @@ const createBuilding = (layer: mars3d.layer.GraphicLayer,
   floorNumber: number): Building => {
   const building = new Building(layer, positions, name, floorNumber, null, null, true, null, true)
   console.log(building)
-  store.commit("addBuilding", building)
   return building
 }
 
