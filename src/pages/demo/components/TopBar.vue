@@ -176,7 +176,6 @@ const handleOk = () => {
   const newArea = new Area(inputAreaName.value)
   inputAreaName.value = ""
   showModal.value = false
-  AreaList.value.push(newArea)
   const AreaAdd = ref(
     {
       districtType: 2,
@@ -186,9 +185,16 @@ const handleOk = () => {
   )
   AreaAdd.value.name = newArea.name
   console.log("AreaAdd", AreaAdd.value)
-  addModel(AreaAdd.value)
-  selectedArea.value = newArea.name
-  stateStore.commit("updateSelectedAreaId", selectedArea.value)
+  addModel(AreaAdd.value).then(res => {
+    if (res.data.code === "0") {
+      districtId.value = res.data.data
+      selectedArea.value = res.data.data
+      stateStore.commit("updateSelectedAreaId", selectedArea.value)
+      newArea.id = res.data.data
+      AreaList.value.push(newArea)
+      message.success("新增区域成功")
+    }
+  })
 }
 
 const handleCancel = () => {
@@ -253,8 +259,11 @@ function getBuilding(children) {
 const handleDel = () => {
   deleteModel(districtId.value).then(response => {
     if (response.data.code === "0") {
-      message.success(response.data.msg)
-      getThree()
+      const params = {
+        childrenParentCode: "",
+        name: ""
+      }
+      getModel(params)
         .then(function (response) {
           // 处理成功情况
           AreaList.value = response.data.data[0].children
@@ -266,6 +275,7 @@ const handleDel = () => {
           // 处理错误情况
           console.log(error)
         })
+        message.success("删除区域成功")
     }
   })
 }
@@ -279,7 +289,8 @@ const handleDel = () => {
       <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
         @change="handleSelectAreaChange" v-model:value="selectedArea">
-        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" @click="handleArea(area)">
+        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" 
+        @click="handleArea(area)">
           {{ area.name }}
         </a-select-option>
         <a-select-option key="0">
