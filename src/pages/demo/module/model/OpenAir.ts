@@ -23,9 +23,10 @@ export class OpenAir implements GraphicInterface {
     positions: Cesium.Cartesian3[],
     name?: string,
     height?: number,
+    id?: string,
     api?: boolean) {
 
-    this.id = uuid.v4()
+    this.id = id || uuid.v4()
     this.positions = positions
     this.name = name || "露天场所"
     this.height = height || 5

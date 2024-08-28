@@ -69,8 +69,6 @@ const AreaList = ref([
 const firstApi = ref(true)
 
 onMounted(() => {
-  // store.commit("addBuilding", new OpenAir(null, null))
-  // stateStore.commit("updateLeftBarNeedUpdate", true)
   if (firstApi.value) {
     const params = {
       childrenParentCode: "",
@@ -220,8 +218,6 @@ const handleArea = (area) => {
 }
 
 function newBuilding(children, code) {
-  // store.commit("addBuilding", new OpenAir(null, null))
-  // stateStore.commit("updateLeftBarNeedUpdate", true)
   for (let i = 0; i < children.length; i++) {
     if (children[i].code === code) {
       console.log("children", children[i])
@@ -233,14 +229,16 @@ function newBuilding(children, code) {
 
 function getBuilding(children) {
   if (children) {
-    for (let i = 0; i < children.length; j++) {
+    for (let i = 0; i < children.length; i++) {
       const child = children[i]
       if (child.districtType === 3) {
-        store.commit("addBuilding", new Building(child.id, null, child.name, null, null, null, true, child.code, false))
+        const building = new Building(null, null, child.name, null, null, null, true, child.districtId, false)
+        store.commit("addBuilding", building)
         stateStore.commit("updateLeftBarNeedUpdate", true)
       }
       if (child.districtType === 7) {
-        store.commit("addOpenAir", new OpenAir(child.id, null, child.name, 5, false))
+        const openAir = new OpenAir(child.id, null, child.name, null, child.districtId, false)
+        store.commit("addOpenAir", openAir)
         stateStore.commit("updateLeftBarNeedUpdate", true)
       }
     }

@@ -69,10 +69,10 @@ watchEffect(() => {
   // 处理露天场所
 
   Array.from(store.state.openAirMap.values()).map(openAir => {
-    graphicIdTypeMap.set(openAir.id.toString(), 4)
+    graphicIdTypeMap.set(openAir.id, 4)
     return {
       title: openAir.name,
-      key: openAir.id.toString(),
+      key: openAir.id,
       type: 4
     }
   }).forEach((openAir) => treeData.push(openAir))
