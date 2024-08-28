@@ -322,9 +322,13 @@ const handleDel = () => {
         <template #icon><mars-icon icon="home-two" class="icon-vertical-a" width="20" /></template>
       </a-button>
     </a-space>
-    <a-modal v-model:open="showModal" @ok="handleOk" @cancel="handleCancel">
+    <a-modal v-model:open="showModal">
       <template #title>
         <div>添加区域</div>
+      </template>
+      <template #footer>
+        <a-button key="cancel" @click="handleCancel">取消</a-button>
+        <a-button key="ok" type="primary" @click="handleOk">确定</a-button>
       </template>
       <div>
         <div>区域名称：</div>
