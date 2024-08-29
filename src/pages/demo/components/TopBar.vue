@@ -188,7 +188,7 @@ const handleOk = () => {
     if (res.data.code === "0") {
       newArea.id = res.data.data
       message.success("新增区域成功")
-      //重新获取区域下拉列表
+      // 重新获取区域下拉列表
       const params = {
         childrenParentCode: "",
         name: ""
@@ -197,14 +197,13 @@ const handleOk = () => {
         .then(function (response) {
           // 处理成功情况
           AreaList.value = response.data.data[0].children
+          selectedArea.value = response.data.data[0].children[0].name
+          stateStore.commit("updateSelectedAreaId", selectedArea.value)
+          newBuilding(response.data.data[0].children, response.data.data[0].children[0].code)
         })
         .catch(function (error) {
           // 处理错误情况
           console.log(error)
-        })
-        .finally(function () {
-          // 总是会执行
-          firstApi.value = false
         })
     }
   })
