@@ -184,15 +184,28 @@ const handleOk = () => {
     }
   )
   AreaAdd.value.name = newArea.name
-  console.log("AreaAdd", AreaAdd.value)
   addModel(AreaAdd.value).then(res => {
     if (res.data.code === "0") {
-      districtId.value = res.data.data
-      selectedArea.value = res.data.data
-      stateStore.commit("updateSelectedAreaId", res.data.data)
       newArea.id = res.data.data
-      AreaList.value.push(newArea)
       message.success("新增区域成功")
+      //重新获取区域下拉列表
+      const params = {
+        childrenParentCode: "",
+        name: ""
+      }
+      getModel(params)
+        .then(function (response) {
+          // 处理成功情况
+          AreaList.value = response.data.data[0].children
+        })
+        .catch(function (error) {
+          // 处理错误情况
+          console.log(error)
+        })
+        .finally(function () {
+          // 总是会执行
+          firstApi.value = false
+        })
     }
   })
 }
@@ -267,7 +280,7 @@ const handleDel = () => {
         .then(function (response) {
           // 处理成功情况
           AreaList.value = response.data.data[0].children
-          selectedArea.value = response.data.data[0].children[0].name
+          selectedArea.value = response.data.data[0].children[0].code
           stateStore.commit("updateSelectedAreaId", selectedArea.value)
           console.log("AreaList", AreaList.value)
         })
@@ -275,7 +288,7 @@ const handleDel = () => {
           // 处理错误情况
           console.log(error)
         })
-        message.success("删除区域成功")
+      message.success("删除区域成功")
     }
   })
 }
@@ -289,8 +302,7 @@ const handleDel = () => {
       <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
         @change="handleSelectAreaChange" v-model:value="selectedArea">
-        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code"
-        @click="handleArea(area)">
+        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" @click="handleArea(area)">
           {{ area.name }}
         </a-select-option>
         <a-select-option key="0">

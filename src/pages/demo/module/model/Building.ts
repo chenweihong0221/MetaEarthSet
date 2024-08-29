@@ -78,7 +78,7 @@ export class Building implements GraphicInterface {
         // eslint-disable-next-line 
         console.log(res)
         this.id = res.data.data
-        if (res.data.code === "") {
+        if (res.data.code === "0") {
           console.log("building.id", this.id)
           while (i < this.floorNumber) {
             const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
@@ -103,6 +103,7 @@ export class Building implements GraphicInterface {
   addFloor(positions: Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string): Floor {
     const newFloor = new Floor(positions, this, name, floorNo, height, id)
     this.floors.set(newFloor.id.toString(), newFloor)
+    
     return newFloor
   }
 
