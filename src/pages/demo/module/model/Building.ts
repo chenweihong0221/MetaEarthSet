@@ -103,7 +103,6 @@ export class Building implements GraphicInterface {
   addFloor(positions: Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string): Floor {
     const newFloor = new Floor(positions, this, name, floorNo, height, id)
     this.floors.set(newFloor.id.toString(), newFloor)
-    
     return newFloor
   }
 
