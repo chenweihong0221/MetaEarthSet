@@ -84,9 +84,7 @@ export class Building implements GraphicInterface {
               this.positions,
               i * (this.floorHeight + this.floorInterval)
             ) as Cesium.Cartesian3[]
-            this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1, null, null, res.data.data.code)
             i++
-            setTimeout("", 50)
           }
           console.log(this)
           mapStore.commit("addBuilding", this)
@@ -422,3 +420,4 @@ export class Space implements GraphicInterface {
     return new ModelData(this.parent.id, this.id, this.name, pos, position, 3, this.parent.floorNo)
   }
 }
+
