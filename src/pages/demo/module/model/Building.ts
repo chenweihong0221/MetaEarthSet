@@ -102,12 +102,11 @@ export class Building implements GraphicInterface {
         ) as Cesium.Cartesian3[]
         count.value++
         this.addFloor(newPosition, `第 ${count.value + 1} 层`, count.value + 1, null, null, code) // 调用接口的方法
+        if(count.value < this.floorNumber){
+          this.addFloors(code)
+        }
       }
     }, 1000)
-    if(count.value <= this.floorNumber){
-      this.addFloors(code)
-      clearTimeout(timer.value)
-    }
     clearTimeout(timer.value)
   }
 
