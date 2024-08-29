@@ -288,7 +288,7 @@ const handleGraphicDraw = () => {
     // })
     // store.state.graphicLayer.addGraphic(graphicImg)
 
-    const graphicDraw = new GraphicDraw(selectedGraphicDrawContent.value, cartesian)
+    const graphicDraw = new GraphicDraw(selectedGraphicDrawContent.value, cartesian, selectedGraphicDrawStyle.value)
     store.state.graphicDrawMap.set(graphicDraw.id, graphicDraw)
 
     drawCallback()
