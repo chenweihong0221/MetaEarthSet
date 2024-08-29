@@ -78,6 +78,7 @@ export class Building implements GraphicInterface {
         // eslint-disable-next-line 
         console.log(res)
         this.id = res.data.data.districtId
+        let timer;
         if (res.data.code === "0") {
           while (i < this.floorNumber) {
             const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
@@ -85,7 +86,11 @@ export class Building implements GraphicInterface {
               i * (this.floorHeight + this.floorInterval)
             ) as Cesium.Cartesian3[]
             i++
+            timer = setInterval(() => {
+              this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1, null, null, res.data.data.code) // 调用接口的方法
+            }, 1000)
           }
+          clearInterval(timer);
           console.log(this)
           mapStore.commit("addBuilding", this)
           stateStore.commit("updateLeftBarNeedUpdate", true)
