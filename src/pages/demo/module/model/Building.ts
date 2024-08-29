@@ -79,7 +79,6 @@ export class Building implements GraphicInterface {
         console.log(res)
         this.id = res.data.data.districtId
         if (res.data.code === "0") {
-          console.log("building.id", this.id)
           while (i < this.floorNumber) {
             const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
               this.positions,
@@ -87,6 +86,7 @@ export class Building implements GraphicInterface {
             ) as Cesium.Cartesian3[]
             this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1, null, null, res.data.data.code)
             i++
+            setTimeout("", 50)
           }
           console.log(this)
           mapStore.commit("addBuilding", this)
@@ -339,7 +339,7 @@ export class Floor implements GraphicInterface {
   toModelData(): ModelData {
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
-    return new ModelData(this.parent.id, this.id, this.name, pos, position, 4, this.floorNo)
+    return new ModelData(null, null, this.name, pos, position, 4, this.floorNo)
   }
 }
 
