@@ -88,13 +88,13 @@ export class Building implements GraphicInterface {
             this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1, null, null, res.data.data.code)
             i++
           }
+          console.log(this)
+          mapStore.commit("addBuilding", this)
+          stateStore.commit("updateLeftBarNeedUpdate", true)
+          message.success("新建楼栋成功")
         } else {
           // message.error(res.data.msg)
         }
-        console.log(this)
-        mapStore.commit("addBuilding", this)
-        stateStore.commit("updateLeftBarNeedUpdate", true)
-        message.success(res.data.msg)
       })
     }
 
@@ -267,7 +267,7 @@ export class Floor implements GraphicInterface {
     const model = this.toModelData()
     model.parentCode = parentCode
     addModel(model).then((res) => {
-      if (res.data.code === 200) {
+      if (res.data.code === "0") {
         // 创建底面和墙体
         this.polygon = new mars3d.graphic.PolygonEntity({
           positions: this.positions,
@@ -368,7 +368,7 @@ export class Space implements GraphicInterface {
     }
     const model = this.toModelData()
     addModel(model).then((res) => {
-      if (res.data.code === 200) {
+      if (res.data.code === "0") {
         this.polygon = new mars3d.graphic.PolygonEntity({
           positions,
           name: name || "空间",
