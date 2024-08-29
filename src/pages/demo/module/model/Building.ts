@@ -26,7 +26,7 @@ export function setHeight(positions: Cesium.Cartesian3[], height: number): Cesiu
 }
 
 const timer = ref(null)
-
+const count = ref(0)
 export class Building implements GraphicInterface {
   id: string
   name: string
@@ -70,7 +70,6 @@ export class Building implements GraphicInterface {
     this.floorInterval = 0.1
     this.layer = layer
     this.floors = new Map()
-    const count = ref(0)
     if (!autoCreateFloor) {
       return
     }
@@ -82,20 +81,8 @@ export class Building implements GraphicInterface {
         console.log(res)
         this.id = res.data.data.districtId
         if (res.data.code === "0") {
-          timer.value = setTimeout(() => {
-            {
-              const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
-                this.positions,
-                count.value * (this.floorHeight + this.floorInterval)
-              ) as Cesium.Cartesian3[]
-              count.value++
-              this.addFloor(newPosition, `第 ${count.value + 1} 层`, count.value + 1, null, null, res.data.data.code) // 调用接口的方法
-            }
-            if (count.value === this.floorNumber) {
-              clearInterval(timer.value)
-            }
-          }, 1000)
           console.log(this)
+          this.addFloors(res.data.data.code)
           mapStore.commit("addBuilding", this)
           stateStore.commit("updateLeftBarNeedUpdate", true)
           message.success("新建楼栋成功")
@@ -104,7 +91,24 @@ export class Building implements GraphicInterface {
         }
       })
     }
+  }
 
+  addFloors(code){
+    timer.value = setTimeout(() => {
+      {
+        const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+          this.positions,
+          count.value * (this.floorHeight + this.floorInterval)
+        ) as Cesium.Cartesian3[]
+        count.value++
+        this.addFloor(newPosition, `第 ${count.value + 1} 层`, count.value + 1, null, null, code) // 调用接口的方法
+      }
+    }, 1000)
+    if(count.value <= this.floorNumber){
+      this.addFloors(code)
+      clearTimeout(timer.value)
+    }
+    clearTimeout(timer.value)
   }
 
   addFloor(positions: Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string, code?: string): Floor {
