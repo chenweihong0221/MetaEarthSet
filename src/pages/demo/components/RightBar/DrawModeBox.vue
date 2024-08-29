@@ -264,28 +264,30 @@ const handleGraphicDraw = () => {
 
   function handleClick(event) {
     const cartesian = new Cesium.Cartesian3(event.cartesian.x, event.cartesian.y, event.cartesian.z)
-    const graphicImg = new mars3d.graphic.DivGraphic({
-      position: cartesian,
-      style: {
-        html: `     <div class="mars3d-graphicDraw-content">
-                      <img class="mars3d-graphicDraw-img"
-                        src="/img/icon/textPnl.png"
-                        alt="样式一"
-                      >
-                    </div>
-                    <div class="mars3d-draw-content-wrapper">
-                      <div class="draw-style-content"
-                            style="font-size: 23px;display: flex;align-items: center;justify-content: center;"
-                            >
-                        ${selectedGraphicDrawContent.value}
-                      </div>
-                    </div>
-                  `,
-        offsetX: -16,
-        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
-      }
-    })
-    store.state.graphicLayer.addGraphic(graphicImg)
+
+    // const graphicImg = new mars3d.graphic.DivGraphic({
+    //   position: cartesian,
+    //   style: {
+    //     html: `     <div class="mars3d-graphicDraw-content">
+    //                   <img class="mars3d-graphicDraw-img"
+    //                     src="/img/icon/textPnl.png"
+    //                     alt="样式一"
+    //                   >
+    //                 </div>
+    //                 <div class="mars3d-draw-content-wrapper">
+    //                   <div class="draw-style-content"
+    //                         style="font-size: 23px;display: flex;align-items: center;justify-content: center;"
+    //                         >
+    //                     ${selectedGraphicDrawContent.value}
+    //                   </div>
+    //                 </div>
+    //               `,
+    //     offsetX: -16,
+    //     distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
+    //   }
+    // })
+    // store.state.graphicLayer.addGraphic(graphicImg)
+
     const graphicDraw = new GraphicDraw(selectedGraphicDrawContent.value, cartesian)
     store.state.graphicDrawMap.set(graphicDraw.id, graphicDraw)
 
