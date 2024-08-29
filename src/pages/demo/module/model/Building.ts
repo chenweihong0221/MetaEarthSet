@@ -274,9 +274,9 @@ export class Floor implements GraphicInterface {
     this.spaces = new Map()
     this.floorNo = floorNo
     // 先发送请求，成功后再创建楼层
-    const model = this.toModelData()
-    model.parentCode = parentCode
-    if(api === true){
+    if (api === true) {
+      const model = this.toModelData()
+      model.parentCode = parentCode
       addModel(model).then((res) => {
         if (res.data.code === "0") {
           // 创建底面和墙体
