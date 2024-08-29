@@ -82,7 +82,7 @@ export class Building implements GraphicInterface {
         this.id = res.data.data.districtId
         if (res.data.code === "0") {
           console.log(this)
-          // this.addFloors(res.data.data.code) 后端以及默认新增5个楼层
+          this.addFloors(res.data.data.code) // 后端以及默认新增5个楼层
           mapStore.commit("addBuilding", this)
           stateStore.commit("updateLeftBarNeedUpdate", true)
           message.success("新建楼栋成功")
