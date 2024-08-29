@@ -8,7 +8,7 @@ import { message } from "ant-design-vue"
 import type { Dayjs } from "dayjs"
 import { onMounted, reactive, ref } from "vue"
 import { useStore } from "vuex"
-import { Building } from "../module/model/Building"
+import { Building, Floor } from "../module/model/Building"
 import { OpenAir } from "../module/model/OpenAir"
 
 interface FormState {
@@ -243,20 +243,20 @@ function newBuilding(children, code) {
   for (let i = 0; i < children.length; i++) {
     if (children[i].code === code) {
       console.log("children", children[i])
-      getBuilding(children[i].children)
+      getBuilding(children[i])
       break
     }
   }
 }
 
-function getBuilding(children) {
+function getBuilding(parent) {
+  const children = parent.children
   if (children) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
       if (child.districtType === 3) {
-        const building = new Building(store.state.graphicLayer, null, child.name, null, null, null, true, child.districtId, false)
-        store.commit("addBuilding", building)
-        stateStore.commit("updateLeftBarNeedUpdate", true)
+        const building = new Building(store.state.graphicLayer, null, child.name, 0, null, null, true, child.districtId, false)
+        getFloor(children, building)
       }
       if (child.districtType === 7) {
         const openAir = new OpenAir(store.state.graphicLayer, null, child.name, null, child.districtId, false)
@@ -264,8 +264,25 @@ function getBuilding(children) {
         stateStore.commit("updateLeftBarNeedUpdate", true)
       }
     }
-    getBuilding(children.children)
+    getBuilding(children)
   }
+}
+
+function getFloor(parent, building) {
+  const children = parent.children
+  let floorNo = 0;
+  if (children) {
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i]
+      if (child.districtType === 4) {
+        floorNo += 1;
+        const floor = new Floor(null, building, child.name, floorNo, 5, child.districtId)
+        building.floors.set(child.districtId, floor)
+      }
+    }
+  }
+  store.commit("addBuilding", building)
+  stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
 const handleDel = () => {
