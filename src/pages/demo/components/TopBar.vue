@@ -268,15 +268,15 @@ function getBuilding(parent) {
   }
 }
 
-function getFloor(parent, building) {
+function getFloor(parent: any, building: Building) {
   const children = parent.children
-  let floorNo = 0;
+  let floorNo = 0
   if (children) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
       if (child.districtType === 4) {
-        floorNo += 1;
-        const floor = new Floor(null, building, child.name, floorNo, 5, child.districtId)
+        floorNo += 1
+        const floor = new Floor(building.positions, building, child.name, floorNo, 5, child.districtId)
         building.floors.set(child.districtId, floor)
       }
     }
