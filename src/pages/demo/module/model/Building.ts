@@ -106,8 +106,7 @@ export class Building implements GraphicInterface {
           this.addFloors(code)
         }
       }
-    }, 1000)
-    clearTimeout(timer.value)
+    }, 100)
   }
 
   addFloor(positions: Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string, code?: string): Floor {
