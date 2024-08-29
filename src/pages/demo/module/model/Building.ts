@@ -8,6 +8,7 @@ import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
 import * as uuid from "uuid"
 import { addModel } from "@mars/pages/demo/api/api"
 import { message } from "ant-design-vue"
+import { ref } from "vue"
 
 
 function getHeight(positions: Cesium.Cartesian3[] | Cesium.Cartesian3): number {
@@ -23,6 +24,8 @@ export function setHeight(positions: Cesium.Cartesian3[], height: number): Cesiu
     return Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
   })
 }
+
+const timer = ref(null);
 
 export class Building implements GraphicInterface {
   id: string
@@ -67,7 +70,7 @@ export class Building implements GraphicInterface {
     this.floorInterval = 0.1
     this.layer = layer
     this.floors = new Map()
-    let i = 0
+    const count = ref(0);
     if (!autoCreateFloor) {
       return
     }
@@ -78,19 +81,20 @@ export class Building implements GraphicInterface {
         // eslint-disable-next-line 
         console.log(res)
         this.id = res.data.data.districtId
-        let timer
         if (res.data.code === "0") {
-          while (i < this.floorNumber) {
-            const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
-              this.positions,
-              i * (this.floorHeight + this.floorInterval)
-            ) as Cesium.Cartesian3[]
-            i++
-            timer = setInterval(() => {
-              this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1, null, null, res.data.data.code) // 调用接口的方法
-            }, 1000)
-          }
-          clearInterval(timer)
+          timer.value = setTimeout(() => {
+            {
+              const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+                this.positions,
+                count.value * (this.floorHeight + this.floorInterval)
+              ) as Cesium.Cartesian3[]
+              count.value++
+              this.addFloor(newPosition, `第 ${count.value + 1} 层`, count.value + 1, null, null, res.data.data.code) // 调用接口的方法
+            }
+            if (count.value === this.floorNumber) {
+              clearInterval(timer.value);
+            }
+          }, 1000)
           console.log(this)
           mapStore.commit("addBuilding", this)
           stateStore.commit("updateLeftBarNeedUpdate", true)
