@@ -82,7 +82,7 @@ export class Building implements GraphicInterface {
         this.id = res.data.data.districtId
         if (res.data.code === "0") {
           console.log(this)
-          this.addFloors(res.data.data.code)
+          // this.addFloors(res.data.data.code) 后端以及默认新增5个楼层
           mapStore.commit("addBuilding", this)
           stateStore.commit("updateLeftBarNeedUpdate", true)
           message.success("新建楼栋成功")
@@ -100,15 +100,15 @@ export class Building implements GraphicInterface {
         count.value * (this.floorHeight + this.floorInterval)
       ) as Cesium.Cartesian3[]
       count.value++
-      this.addFloor(newPosition, `第 ${count.value + 1} 层`, count.value + 1, null, null, code) // 调用接口的方法
+      this.addFloor(newPosition, `第 ${count.value} 层`, count.value, null, null, code) // 调用接口的方法
       if (count.value < this.floorNumber) {
         this.addFloors(code)
       }
-    }, 100)
+    }, 500)
   }
 
   addFloor(positions: Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string, code?: string): Floor {
-    const newFloor = new Floor(positions, this, name, floorNo, height, id, code)
+    const newFloor = new Floor(positions, this, name, floorNo, height, id, code, true)
     this.floors.set(newFloor.id.toString(), newFloor)
     return newFloor
   }
@@ -253,56 +253,61 @@ export class Floor implements GraphicInterface {
     floorNo: number,
     height?: number,
     id?: string,
-    parentCode?: string
+    parentCode?: string,
+    api?: boolean
   ) {
     this.id = id || uuid.v4()
     this.name = name
-    if (positions[0] instanceof mars3d.Cesium.Cartesian3) {
-      this.positions = positions as Cesium.Cartesian3[]
-    } else {
-      this.positions = (positions as { x: number; y: number; z: number }[]).map((item) => {
-        return new Cesium.Cartesian3(item.x, item.y, item.z)
-      })
+    if (positions !== undefined && positions !== null) {
+      this.alt = getHeight(this.positions)
+      if (positions[0] instanceof mars3d.Cesium.Cartesian3) {
+        this.positions = positions as Cesium.Cartesian3[]
+      } else {
+        this.positions = (positions as { x: number; y: number; z: number }[]).map((item) => {
+          return new Cesium.Cartesian3(item.x, item.y, item.z)
+        })
+      }
     }
     this.layer = parent.layer
     this.height = height || parent.spaceHeight
     this.spaceNumber = 0
     this.spaces = new Map()
     this.floorNo = floorNo
-    this.alt = getHeight(this.positions)
     // 先发送请求，成功后再创建楼层
     const model = this.toModelData()
     model.parentCode = parentCode
-    addModel(model).then((res) => {
-      if (res.data.code === "0") {
-        // 创建底面和墙体
-        this.polygon = new mars3d.graphic.PolygonEntity({
-          positions: this.positions,
-          name,
-          style: {
-            // color: "#5ec2e1",
-            color: "#647BB1", // modify by cwh 202408081127
-            opacity: 1
-          }
-        })
-        this.wall = new mars3d.graphic.ThickWall({
-          positions: this.positions,
-          name,
-          style: {
-            // color: "#5ec2e1",
-            color: "#647BB1", // modify by cwh 202408081127
-            opacity: 1,
-            diffHeight: this.height,
-            width: 0.2,
-            closure: true
-          }
-        })
-        this.layer.addGraphic(this.polygon)
-        this.layer.addGraphic(this.wall)
-      } else {
-        message.error(res.data.msg)
-      }
-    })
+    if(api === true){
+      addModel(model).then((res) => {
+        if (res.data.code === "0") {
+          // 创建底面和墙体
+          this.polygon = new mars3d.graphic.PolygonEntity({
+            positions: this.positions,
+            name,
+            style: {
+              // color: "#5ec2e1",
+              color: "#647BB1", // modify by cwh 202408081127
+              opacity: 1
+            }
+          })
+          this.wall = new mars3d.graphic.ThickWall({
+            positions: this.positions,
+            name,
+            style: {
+              // color: "#5ec2e1",
+              color: "#647BB1", // modify by cwh 202408081127
+              opacity: 1,
+              diffHeight: this.height,
+              width: 0.2,
+              closure: true
+            }
+          })
+          this.layer.addGraphic(this.polygon)
+          this.layer.addGraphic(this.wall)
+        } else {
+          message.error(res.data.msg)
+        }
+      })
+    }
   }
 
   /**

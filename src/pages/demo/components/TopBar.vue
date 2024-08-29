@@ -256,7 +256,7 @@ function getBuilding(parent) {
       const child = children[i]
       if (child.districtType === 3) {
         const building = new Building(store.state.graphicLayer, null, child.name, 0, null, null, true, child.districtId, false)
-        getFloor(children, building)
+        getFloor(children[i], building)
       }
       if (child.districtType === 7) {
         const openAir = new OpenAir(store.state.graphicLayer, null, child.name, null, child.districtId, false)
@@ -276,7 +276,7 @@ function getFloor(parent: any, building: Building) {
       const child = children[i]
       if (child.districtType === 4) {
         floorNo += 1
-        const floor = new Floor(building.positions, building, child.name, floorNo, 5, child.districtId)
+        const floor = new Floor(building.positions, building, child.name, floorNo, 5, child.districtId, parent.id, false)
         building.floors.set(child.districtId, floor)
       }
     }
