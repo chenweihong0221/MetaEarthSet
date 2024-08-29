@@ -93,18 +93,16 @@ export class Building implements GraphicInterface {
     }
   }
 
-  addFloors(code){
+  addFloors(code) {
     timer.value = setTimeout(() => {
-      {
-        const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
-          this.positions,
-          count.value * (this.floorHeight + this.floorInterval)
-        ) as Cesium.Cartesian3[]
-        count.value++
-        this.addFloor(newPosition, `第 ${count.value + 1} 层`, count.value + 1, null, null, code) // 调用接口的方法
-        if(count.value < this.floorNumber){
-          this.addFloors(code)
-        }
+      const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+        this.positions,
+        count.value * (this.floorHeight + this.floorInterval)
+      ) as Cesium.Cartesian3[]
+      count.value++
+      this.addFloor(newPosition, `第 ${count.value + 1} 层`, count.value + 1, null, null, code) // 调用接口的方法
+      if (count.value < this.floorNumber) {
+        this.addFloors(code)
       }
     }, 100)
   }
