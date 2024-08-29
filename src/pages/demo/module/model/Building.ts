@@ -77,7 +77,7 @@ export class Building implements GraphicInterface {
       // 先发送请求，再创建楼层
       const model = this.toModelData(stateStore.state.selectedAreaId)
       addModel(model).then((res) => {
-        // eslint-disable-next-line 
+        // eslint-disable-next-line
         console.log(res)
         this.id = res.data.data.districtId
         if (res.data.code === "0") {
@@ -87,7 +87,7 @@ export class Building implements GraphicInterface {
           stateStore.commit("updateLeftBarNeedUpdate", true)
           message.success("新建楼栋成功")
         } else {
-          // message.error(res.data.msg)
+          message.error(res.data.msg)
         }
       })
     }
@@ -103,6 +103,9 @@ export class Building implements GraphicInterface {
       this.addFloor(newPosition, `第 ${count.value} 层`, count.value, null, null, code) // 调用接口的方法
       if (count.value < this.floorNumber) {
         this.addFloors(code)
+      } else {
+        clearInterval(timer.value)
+        count.value = 0
       }
     }, 500)
   }
@@ -237,6 +240,7 @@ export class Floor implements GraphicInterface {
   spaceNumber: number // 空间数量
   floorNo: number // 楼层号
   alt: number // 楼层所在高度
+  api: boolean
 
   show: boolean = true // 是否显示
 
@@ -258,10 +262,13 @@ export class Floor implements GraphicInterface {
   ) {
     this.id = id || uuid.v4()
     this.name = name
+    this.api = api
     if (positions !== undefined && positions !== null) {
-      this.alt = getHeight(this.positions)
+      console.log(positions)
+      // this.alt = getHeight(this.positions)
       if (positions[0] instanceof mars3d.Cesium.Cartesian3) {
         this.positions = positions as Cesium.Cartesian3[]
+        console.log(this.positions)
       } else {
         this.positions = (positions as { x: number; y: number; z: number }[]).map((item) => {
           return new Cesium.Cartesian3(item.x, item.y, item.z)
