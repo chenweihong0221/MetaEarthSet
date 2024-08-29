@@ -4,12 +4,14 @@ import { ref } from "vue"
 import axios from "axios"
 
 export const instance = axios.create({
-  baseURL: "http://api.test01.platform.ahjtest.top",
-  timeout: 1000,
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: "Bearer 678881b5-5031-428e-96fc-6c1de2053e98"
-  }
+    // baseURL: "https://api.test01.platform.ahjtest.top",// 测试环境
+    baseURL: "https://api.dev3.platform.ahjdev.top", // dev 环境
+    timeout: 1000,
+    headers: {
+      "Content-Type": "application/json",
+      // Authorization: "Bearer ea8c0470-7f2f-473d-b3c0-be2add35a42c" // 测试环境
+      Authorization: "Bearer 1d3f6313-ce17-4883-8698-38a710de79eb" // dev环境
+    }
 })
 
 instance.interceptors.request.use(

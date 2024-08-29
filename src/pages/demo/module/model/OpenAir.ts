@@ -35,7 +35,7 @@ export class OpenAir implements GraphicInterface {
     if (api === true) {
       const model = this.toModelData(stateStore.state.selectedAreaId)
       addModel(model).then((res) => {
-        this.id = res.data.data
+        this.id = res.data.data.districtId
         this.polygon = new mars3d.graphic.PolygonEntity({
           positions,
           name: name || "露天场所",

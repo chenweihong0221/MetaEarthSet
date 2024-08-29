@@ -77,7 +77,7 @@ export class Building implements GraphicInterface {
       addModel(model).then((res) => {
         // eslint-disable-next-line 
         console.log(res)
-        this.id = res.data.data
+        this.id = res.data.data.districtId
         if (res.data.code === "0") {
           console.log("building.id", this.id)
           while (i < this.floorNumber) {
@@ -85,7 +85,7 @@ export class Building implements GraphicInterface {
               this.positions,
               i * (this.floorHeight + this.floorInterval)
             ) as Cesium.Cartesian3[]
-            this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1)
+            this.addFloor(newPosition, `第 ${i + 1} 层`, i + 1, null, null, res.data.data.code)
             i++
           }
         } else {
@@ -100,8 +100,8 @@ export class Building implements GraphicInterface {
 
   }
 
-  addFloor(positions: Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string): Floor {
-    const newFloor = new Floor(positions, this, name, floorNo, height, id)
+  addFloor(positions: Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string, code?: string): Floor {
+    const newFloor = new Floor(positions, this, name, floorNo, height, id, code)
     this.floors.set(newFloor.id.toString(), newFloor)
     return newFloor
   }
@@ -245,7 +245,8 @@ export class Floor implements GraphicInterface {
     name: string,
     floorNo: number,
     height?: number,
-    id?: string
+    id?: string,
+    parentCode?: string
   ) {
     this.id = id || uuid.v4()
     this.name = name
@@ -263,37 +264,38 @@ export class Floor implements GraphicInterface {
     this.floorNo = floorNo
     this.alt = getHeight(this.positions)
     // 先发送请求，成功后再创建楼层
-    // const model = this.toModelData()
-    // addModel(model).then((res) => {
-    //   if (res.data.code === 200) {
-    //     // 创建底面和墙体
-    //   } else {
-    //     message.error(res.data.msg)
-    //   }
-    // })
-    this.polygon = new mars3d.graphic.PolygonEntity({
-      positions: this.positions,
-      name,
-      style: {
-        // color: "#5ec2e1",
-        color: "#647BB1", // modify by cwh 202408081127
-        opacity: 1
+    const model = this.toModelData()
+    model.parentCode = parentCode
+    addModel(model).then((res) => {
+      if (res.data.code === 200) {
+        // 创建底面和墙体
+        this.polygon = new mars3d.graphic.PolygonEntity({
+          positions: this.positions,
+          name,
+          style: {
+            // color: "#5ec2e1",
+            color: "#647BB1", // modify by cwh 202408081127
+            opacity: 1
+          }
+        })
+        this.wall = new mars3d.graphic.ThickWall({
+          positions: this.positions,
+          name,
+          style: {
+            // color: "#5ec2e1",
+            color: "#647BB1", // modify by cwh 202408081127
+            opacity: 1,
+            diffHeight: this.height,
+            width: 0.2,
+            closure: true
+          }
+        })
+        this.layer.addGraphic(this.polygon)
+        this.layer.addGraphic(this.wall)
+      } else {
+        message.error(res.data.msg)
       }
     })
-    this.wall = new mars3d.graphic.ThickWall({
-      positions: this.positions,
-      name,
-      style: {
-        // color: "#5ec2e1",
-        color: "#647BB1", // modify by cwh 202408081127
-        opacity: 1,
-        diffHeight: this.height,
-        width: 0.2,
-        closure: true
-      }
-    })
-    this.layer.addGraphic(this.polygon)
-    this.layer.addGraphic(this.wall)
   }
 
   /**

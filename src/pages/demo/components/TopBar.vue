@@ -186,7 +186,7 @@ const handleOk = () => {
   AreaAdd.value.name = newArea.name
   addModel(AreaAdd.value).then(res => {
     if (res.data.code === "0") {
-      newArea.id = res.data.data
+      newArea.id = res.data.data.districtId
       message.success("新增区域成功")
       // 重新获取区域下拉列表
       const params = {
