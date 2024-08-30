@@ -229,7 +229,7 @@ const handleArea = (area) => {
   }
   console.log("store.state", stateStore.state.selectedAreaId)
   getDetail(area.districtId, 982).then(function (response) {
-    getBuilding(response.data.detailsInfoAndChildren)
+    getBuilding(response.data.data.detailsInfoAndChildren)
   })
 }
 
@@ -238,14 +238,13 @@ function getBuilding(parent) {
   if (children) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
+      const positions = JSON.parse(child.path)
       if (child.districtType === 3) {
-        const building = new Building(store.state.graphicLayer, null, child.name, 0, null, null, true, child.districtId, false)
+        const building = new Building(store.state.graphicLayer, positions, child.name, 0, null, null, true, child.districtId, false)
         getFloor(children[i], building)
       }
       if (child.districtType === 7) {
-        const positions = JSON.parse(child.path)
-        console.log("positions", positions)
-        const openAir = new OpenAir(store.state.graphicLayer, null, child.name, null, child.districtId, false)
+        const openAir = new OpenAir(store.state.graphicLayer, positions, child.name, null, child.districtId, false)
         store.commit("addOpenAir", openAir)
         stateStore.commit("updateLeftBarNeedUpdate", true)
       }

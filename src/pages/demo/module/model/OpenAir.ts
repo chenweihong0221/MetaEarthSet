@@ -36,34 +36,34 @@ export class OpenAir implements GraphicInterface {
       const model = this.toModelData(stateStore.state.selectedAreaId)
       addModel(model).then((res) => {
         this.id = res.data.data.districtId
-        this.polygon = new mars3d.graphic.PolygonEntity({
-          positions,
-          name: name || "露天场所",
-          style: {
-            // color: "#be3aea",
-            color: "#CECECE",
-            opacity: 1
-          }
-        })
-        this.wall = new mars3d.graphic.ThickWall({
-          positions,
-          name: name || "露天场所",
-          style: {
-            // color: "#be3aea",
-            color: "#A9A9A9", // modify by cwh 202408081127
-            opacity: 1,
-            diffHeight: this.height,
-            width: 0.1,
-            closure: true
-          }
-        })
-        this.layer.addGraphic(this.polygon)
-        this.layer.addGraphic(this.wall)
         mapStore.commit("addOpenAir", this)
         stateStore.commit("updateLeftBarNeedUpdate", true)
         message.success(res.data.msg)
       })
     }
+    this.polygon = new mars3d.graphic.PolygonEntity({
+      positions,
+      name: name || "露天场所",
+      style: {
+        // color: "#be3aea",
+        color: "#CECECE",
+        opacity: 1
+      }
+    })
+    this.wall = new mars3d.graphic.ThickWall({
+      positions,
+      name: name || "露天场所",
+      style: {
+        // color: "#be3aea",
+        color: "#A9A9A9", // modify by cwh 202408081127
+        opacity: 1,
+        diffHeight: this.height,
+        width: 0.1,
+        closure: true
+      }
+    })
+    this.layer.addGraphic(this.polygon)
+    this.layer.addGraphic(this.wall)
   }
 
   setShow(show: boolean): void {
@@ -108,9 +108,9 @@ export class OpenAir implements GraphicInterface {
   convertToJSON(path: number[][]) {
     // 创建一个对象数组来存储路径点信息
     const pathObjects = path.map((point, index) => ({
-      x: index,
-      y: point[0],
-      z: point[1]
+      x: point[0],
+      y: point[1],
+      z: point[2]
     }))
     // 将对象数组转换为 JSON 字符串
     const jsonString = JSON.stringify(pathObjects)

@@ -231,7 +231,20 @@ export class Building implements GraphicInterface {
     }
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
-    return new ModelData(areaId, this.id, this.name, pos, position, 3, this.floorNumber)
+    const path = this.convertToJSON(pos)
+    return new ModelData(areaId, this.id, this.name, path, position, 3, this.floorNumber)
+  }
+
+  convertToJSON(path: number[][]) {
+    // 创建一个对象数组来存储路径点信息
+    const pathObjects = path.map((point, index) => ({
+      x: point[0],
+      y: point[1],
+      z: point[2]
+    }))
+    // 将对象数组转换为 JSON 字符串
+    const jsonString = JSON.stringify(pathObjects)
+    return jsonString
   }
 }
 
@@ -390,7 +403,20 @@ export class Floor implements GraphicInterface {
   toModelData(): ModelData {
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
-    return new ModelData(null, null, this.name, pos, position, 4, this.floorNo)
+    const path = this.convertToJSON(pos)
+    return new ModelData(null, null, this.name, path, position, 4, this.floorNo)
+  }
+
+  convertToJSON(path: number[][]) {
+    // 创建一个对象数组来存储路径点信息
+    const pathObjects = path.map((point, index) => ({
+      x: point[0],
+      y: point[1],
+      z: point[2]
+    }))
+    // 将对象数组转换为 JSON 字符串
+    const jsonString = JSON.stringify(pathObjects)
+    return jsonString
   }
 }
 
