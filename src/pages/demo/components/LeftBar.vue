@@ -37,16 +37,16 @@ watchEffect(() => {
       key: building.id,
       type: 0,
       children: Array.from(building.floors.values()).map(floor => {
-        graphicIdTypeMap.set(floor.id.toString(), 1)
+        graphicIdTypeMap.set(floor.id, 1)
         return {
           title: floor.name,
-          key: floor.id.toString(),
+          key: floor.id,
           type: 1,
           children: Array.from(floor.spaces.values()).map(space => {
-            graphicIdTypeMap.set(space.id.toString(), 2)
+            graphicIdTypeMap.set(space.id, 2)
             return {
               title: space.name,
-              key: space.id.toString(),
+              key: space.id,
               type: 2
             }
           })

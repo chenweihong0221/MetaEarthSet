@@ -71,17 +71,13 @@ const firstApi = ref(true)
 
 onMounted(() => {
   if (firstApi.value) {
-    const params = {
-      childrenParentCode: "",
-      name: ""
-    }
-    getModel(params)
+    getDetail("", "")
       .then(function (response) {
         // 处理成功情况
         AreaList.value = response.data.data[0].children
         selectedArea.value = response.data.data[0].children[0].code
         stateStore.commit("updateSelectedAreaId", selectedArea.value)
-        newBuilding(response.data.data[0].children, response.data.data[0].children[0].code)
+        getBuilding(response.data.data[0].children)
       })
       .catch(function (error) {
         // 处理错误情况
@@ -199,7 +195,7 @@ const handleOk = () => {
           AreaList.value = response.data.data[0].children
           selectedArea.value = response.data.data[0].children[0].name
           stateStore.commit("updateSelectedAreaId", response.data.data[0].children[0].code)
-          newBuilding(response.data.data[0].children, response.data.data[0].children[0].code)
+          getBuilding(response.data.data[0].children)
         })
         .catch(function (error) {
           // 处理错误情况
@@ -223,12 +219,8 @@ const handleArea = (area) => {
   districtId.value = area.districtId
   store.commit("setDistrictCode", districtId.value)
   stateStore.commit("updateSelectedAreaId", selectedArea.value)
-  const params = {
-    childrenParentCode: "",
-    name: area.name
-  }
   console.log("store.state", stateStore.state.selectedAreaId)
-  getDetail(area.districtId, 982).then(function (response) {
+  getDetail(area.districtId, "").then(function (response) {
     getBuilding(response.data.data.detailsInfoAndChildren)
   })
 }
@@ -242,6 +234,7 @@ function getBuilding(parent) {
       if (child.districtType === 3) {
         const building = new Building(store.state.graphicLayer, positions, child.name, 0, null, null, true, child.districtId, false)
         getFloor(children[i], building)
+
       }
       if (child.districtType === 7) {
         const openAir = new OpenAir(store.state.graphicLayer, positions, child.name, null, child.districtId, false)
@@ -259,9 +252,10 @@ function getFloor(parent: any, building: Building) {
   if (children) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
+      const positions = JSON.parse(child.path)
       if (child.districtType === 4) {
         floorNo += 1
-        const floor = new Floor(building.positions, building, child.name, floorNo, 5, child.districtId, parent.id, false)
+        const floor = new Floor(positions, building, child.name, floorNo, 5, child.districtId, parent.id, false)
         building.floors.set(child.districtId, floor)
       }
     }
