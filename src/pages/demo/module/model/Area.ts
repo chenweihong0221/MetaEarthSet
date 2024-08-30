@@ -27,7 +27,7 @@ export class AreaData {
 
 export class Area {
   name: string
-  id: string
+  districtId: string
   data: AreaData
   code: string
   areaOptions: string
@@ -41,10 +41,10 @@ export class Area {
 
   constructor(name: string, addLocalStorage: boolean = true) {
     this.name = name
-    this.id = uuid.v4()
+    this.districtId = uuid.v4()
     this.data = new AreaData([], [], [], [], [], [])
     if (addLocalStorage) {
-      localStorage.setItem(`#area_${this.id}`, JSON.stringify(new AreaLocalStorage(this.id, this.name, JSON.stringify(this.data))))
+      localStorage.setItem(`#area_${this.districtId}`, JSON.stringify(new AreaLocalStorage(this.id, this.name, JSON.stringify(this.data))))
     }
   }
 

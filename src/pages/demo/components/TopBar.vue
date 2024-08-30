@@ -177,20 +177,25 @@ const handleSelectAreaChange = (value: string) => {
 }
 
 const handleOk = () => {
-  const newArea = new Area(inputAreaName.value)
-  inputAreaName.value = ""
+  // 关闭窗口
   showModal.value = false
+  // 创建新增区域参数
   const AreaAdd = ref(
     {
       districtType: 2,
-      name: selectedArea.value,
+      name: inputAreaName.value,
       parentCode: ""
     }
   )
+  // 新增区域弹窗里的输入清空
+  inputAreaName.value = ""
+  // 获取下拉与左侧大纲
+  const newArea = new Area(inputAreaName.value)
   AreaAdd.value.name = newArea.name
   addModel(AreaAdd.value).then(res => {
     if (res.data.code === "0") {
-      newArea.id = res.data.data.districtId
+      newArea.districtId = res.data.data.districtId
+      newArea.code = res.data.data.code
       message.success("新增区域成功")
       // 重新获取区域下拉列表
       const params = {
@@ -200,12 +205,11 @@ const handleOk = () => {
       getModel(params)
         .then(function (response) {
           // 处理成功情况
-          districtId.value = response.data.data[0].children[0].districtId
-          AreaList.value = response.data.data[0].children
-          selectedArea.value = response.data.data[0].children[0].name
-          stateStore.commit("updateSelectedAreaCode", response.data.data[0].children[0].code)
+          districtId.value = newArea.districtId
+          selectedArea.value = newArea.code
+          AreaList.value.push(newArea)
+          stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           stateStore.commit("updateSelectedAreaId", districtId.value)
-          getBuilding(response.data.data[0].children)
         })
         .catch(function (error) {
           // 处理错误情况
