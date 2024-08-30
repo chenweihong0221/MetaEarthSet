@@ -82,7 +82,16 @@ export class Building implements GraphicInterface {
         this.id = res.data.data.districtId
         if (res.data.code === "0") {
           console.log(this)
-          this.addFloors(res.data.data.code) // 后端以及默认新增5个楼层
+          // this.addFloors(res.data.data.code) // 后端以及默认新增5个楼层
+          let i = 0
+          while (i < this.floorNumber) {
+            const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+              this.positions,
+              i * (this.floorHeight + this.floorInterval)
+            ) as Cesium.Cartesian3[]
+            this.addFloor(newPosition, `${i + 1} 层`, i + 1, null, null, res.data.data.code)
+            i++
+          }
           mapStore.commit("addBuilding", this)
           stateStore.commit("updateLeftBarNeedUpdate", true)
           message.success("新建楼栋成功")
@@ -284,36 +293,59 @@ export class Floor implements GraphicInterface {
     if (api === true) {
       const model = this.toModelData()
       model.parentCode = parentCode
-      addModel(model).then((res) => {
-        if (res.data.code === "0") {
-          // 创建底面和墙体
-          this.polygon = new mars3d.graphic.PolygonEntity({
-            positions: this.positions,
-            name,
-            style: {
-              // color: "#5ec2e1",
-              color: "#647BB1", // modify by cwh 202408081127
-              opacity: 1
-            }
-          })
-          this.wall = new mars3d.graphic.ThickWall({
-            positions: this.positions,
-            name,
-            style: {
-              // color: "#5ec2e1",
-              color: "#647BB1", // modify by cwh 202408081127
-              opacity: 1,
-              diffHeight: this.height,
-              width: 0.2,
-              closure: true
-            }
-          })
-          this.layer.addGraphic(this.polygon)
-          this.layer.addGraphic(this.wall)
-        } else {
-          message.error(res.data.msg)
+      this.polygon = new mars3d.graphic.PolygonEntity({
+        positions: this.positions,
+        name,
+        style: {
+          // color: "#5ec2e1",
+          color: "#647BB1", // modify by cwh 202408081127
+          opacity: 1
         }
       })
+      this.wall = new mars3d.graphic.ThickWall({
+        positions: this.positions,
+        name,
+        style: {
+          // color: "#5ec2e1",
+          color: "#647BB1", // modify by cwh 202408081127
+          opacity: 1,
+          diffHeight: this.height,
+          width: 0.2,
+          closure: true
+        }
+      })
+      this.layer.addGraphic(this.polygon)
+      this.layer.addGraphic(this.wall)
+      // addModel(model).then((res) => {
+      //   if (res.data.code === "0") {
+      //     // 创建底面和墙体
+      //     this.polygon = new mars3d.graphic.PolygonEntity({
+      //       positions: this.positions,
+      //       name,
+      //       style: {
+      //         // color: "#5ec2e1",
+      //         color: "#647BB1", // modify by cwh 202408081127
+      //         opacity: 1
+      //       }
+      //     })
+      //     this.wall = new mars3d.graphic.ThickWall({
+      //       positions: this.positions,
+      //       name,
+      //       style: {
+      //         // color: "#5ec2e1",
+      //         color: "#647BB1", // modify by cwh 202408081127
+      //         opacity: 1,
+      //         diffHeight: this.height,
+      //         width: 0.2,
+      //         closure: true
+      //       }
+      //     })
+      //     this.layer.addGraphic(this.polygon)
+      //     this.layer.addGraphic(this.wall)
+      //   } else {
+      //     message.error(res.data.msg)
+      //   }
+      // })
     }
   }
 
