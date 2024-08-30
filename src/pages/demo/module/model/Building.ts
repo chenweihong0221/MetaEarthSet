@@ -82,16 +82,16 @@ export class Building implements GraphicInterface {
         if (res.data.code === "0") {
           this.id = res.data.data.districtId
           console.log(this)
-          // this.addFloors(res.data.data.code) // 后端以及默认新增5个楼层
-          let i = 0
-          while (i < this.floorNumber) {
-            const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
-              this.positions,
-              i * (this.floorHeight + this.floorInterval)
-            ) as Cesium.Cartesian3[]
-            this.addFloor(newPosition, `${i + 1} 层`, i + 1, null, null, res.data.data.code)
-            i++
-          }
+          this.addFloors(res.data.data.code) // 后端以及默认新增5个楼层
+          // let i = 0
+          // while (i < this.floorNumber) {
+          //   const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+          //     this.positions,
+          //     i * (this.floorHeight + this.floorInterval)
+          //   ) as Cesium.Cartesian3[]
+          //   this.addFloor(newPosition, `${i + 1} 层`, i + 1, null, null, res.data.data.code)
+          //   i++
+          // }
           mapStore.commit("addBuilding", this)
           stateStore.commit("updateLeftBarNeedUpdate", true)
           message.success("新建楼栋成功")
@@ -263,6 +263,7 @@ export class Floor implements GraphicInterface {
   floorNo: number // 楼层号
   alt: number // 楼层所在高度
   api: boolean
+
   show: boolean = true // 是否显示
 
   constructor(

@@ -266,10 +266,6 @@ function getFloor(parent: any, building: Building) {
       const child = children[i]
       const positions = JSON.parse(child.path)
       if (child.districtType === 4) {
-        const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
-          parent.positions,
-          floorNo * (5 + 0.1)
-        ) as Cesium.Cartesian3[]
         floorNo += 1
         const floor = new Floor(positions, building, child.name, floorNo, 5, child.districtId, parent.id, false)
         building.floors.set(child.districtId, floor)
@@ -303,6 +299,7 @@ const handleDel = () => {
     }
   })
 }
+
 
 </script>
 
