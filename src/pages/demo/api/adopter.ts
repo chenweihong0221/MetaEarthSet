@@ -23,7 +23,7 @@ export class ModelData {
   code?: string
   name: string
   // multiple positions for polygon(0~4type), single position for point(5~8type)
-  path?: number[][]
+  path?: string
 
   position: {
     xAxis: number
@@ -76,6 +76,7 @@ export class ModelData {
     this.type = type
     this.districtType = type
     this.floorNumber = floorNumber
+    this.path = path.toString()
   }
 
   toGraphicInterface(parentId: string): GraphicInterface {
