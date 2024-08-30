@@ -115,6 +115,7 @@ export class Building implements GraphicInterface {
       } else {
         clearInterval(timer.value)
         count.value = 0
+        stateStore.commit("updateLeftBarNeedUpdate", true)
       }
     }, 200)
   }
