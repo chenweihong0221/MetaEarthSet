@@ -126,7 +126,6 @@ const deleteStore = () => {
     return
   }
   const selectedType = stateStore.state.selectedGraphicType
-  console.log("selectedType", stateStore.state.selectedGraphicType)
   if (selectedType === 0) {
     mapStore.commit("removeBuilding", id)
   } else if (selectedType === 1) { // type为1， 选中的图形为楼层

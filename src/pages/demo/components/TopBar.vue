@@ -71,12 +71,17 @@ const firstApi = ref(true)
 
 onMounted(() => {
   if (firstApi.value) {
-    getDetail("", "")
+    const params = {
+      childrenParentCode: "",
+      name: ""
+    }
+    getModel(params)
       .then(function (response) {
         // 处理成功情况
         AreaList.value = response.data.data[0].children
         selectedArea.value = response.data.data[0].children[0].code
-        stateStore.commit("updateSelectedAreaId", selectedArea.value)
+        stateStore.commit("updateSelectedAreaCode", selectedArea.value)
+        stateStore.commit("updateSelectedAreaId", response.data.data[0].children[0].districtId)
         getBuilding(response.data.data[0].children)
       })
       .catch(function (error) {
@@ -194,7 +199,8 @@ const handleOk = () => {
           // 处理成功情况
           AreaList.value = response.data.data[0].children
           selectedArea.value = response.data.data[0].children[0].name
-          stateStore.commit("updateSelectedAreaId", response.data.data[0].children[0].code)
+          stateStore.commit("updateSelectedAreaCode", response.data.data[0].children[0].code)
+          stateStore.commit("updateSelectedAreaId", response.data.data[0].children[0].districtId)
           getBuilding(response.data.data[0].children)
         })
         .catch(function (error) {
@@ -217,12 +223,12 @@ const handleClick = () => {
 
 const handleArea = (area) => {
   districtId.value = area.districtId
-  store.commit("setDistrictCode", districtId.value)
-  stateStore.commit("updateSelectedAreaId", selectedArea.value)
-  console.log("store.state", stateStore.state.selectedAreaId)
-  getDetail(area.districtId, "").then(function (response) {
+  stateStore.commit("updateSelectedAreaCode", area.code)
+  stateStore.commit("updateSelectedAreaId", area.districtId)
+  getDetail(area.districtId, area.districtId).then(function (response) {
     getBuilding(response.data.data.detailsInfoAndChildren)
   })
+  console.log(stateStore.state.selectedAreaCode)
 }
 
 function getBuilding(parent) {
@@ -276,7 +282,7 @@ const handleDel = () => {
           // 处理成功情况
           AreaList.value = response.data.data[0].children
           selectedArea.value = response.data.data[0].children[0].code
-          stateStore.commit("updateSelectedAreaId", selectedArea.value)
+          stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           console.log("AreaList", AreaList.value)
         })
         .catch(function (error) {

@@ -52,9 +52,6 @@ export const mapStore = createStore({
     addCamera(state, camera: Camera) {
       state.cameraMap.set(camera.id.toString(), camera)
     },
-    setDistrictCode(state, districtCode) {
-      state.districtCode = districtCode
-    },
     removeBuilding(state, id: string) {
       const building = state.buildingMap.get(id)
       state.buildingMap.delete(id)
@@ -244,9 +241,6 @@ export const mapStore = createStore({
         }
       }
       return false
-    },
-    getDistrictCode: state => () => {
-      return state.districtCode
     }
   }
 })
@@ -259,6 +253,7 @@ export const stateStore = createStore({
       selectedGraphicId: "",
       selectedGraphicType: 0, // 0未选中，1楼层，2空间，3围栏，4露天场所
       leftBarNeedUpdate: false,
+      selectedAreaCode: "",
       selectedAreaId: ""
     }
   },
@@ -274,6 +269,9 @@ export const stateStore = createStore({
     },
     updateLeftBarNeedUpdate(state, leftBarNeedUpdate: boolean) {
       state.leftBarNeedUpdate = leftBarNeedUpdate
+    },
+    updateSelectedAreaCode(state, data: string) {
+      state.selectedAreaCode = data
     },
     updateSelectedAreaId(state, data: string) {
       state.selectedAreaId = data

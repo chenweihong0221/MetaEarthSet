@@ -162,7 +162,7 @@ const marsOnload = (map: any) => {
     selectedGraphicId.value = event.graphic.id
     console.log("selectedGraphicId", selectedGraphicId.value)
   })
-  Area.getFromLocalStorage(stateStore.state.selectedAreaId)
+  Area.getFromLocalStorage(stateStore.state.selectedAreaCode)
 }
 
 </script>
