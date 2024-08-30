@@ -1,6 +1,8 @@
 <script setup lang="ts">
 // import "ant-design-vue/dist/antd.css"
 import { addModel, deleteModel, getModel, getThree, getDetail } from "@mars/pages/demo/api/api"
+import { Cesium } from "mars3d"
+import * as mars3d from "mars3d"
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 import { loadJSON } from "@mars/pages/demo/module/tool/persistence"
@@ -177,20 +179,16 @@ const handleSelectAreaChange = (value: string) => {
 }
 
 const handleOk = () => {
-  // 关闭窗口
+  const newArea = new Area(inputAreaName.value)
+  inputAreaName.value = ""
   showModal.value = false
-  // 创建新增区域参数
   const AreaAdd = ref(
     {
       districtType: 2,
-      name: inputAreaName.value,
+      name: selectedArea.value,
       parentCode: ""
     }
   )
-  // 新增区域弹窗里的输入清空
-  inputAreaName.value = ""
-  // 获取下拉与左侧大纲
-  const newArea = new Area(inputAreaName.value)
   AreaAdd.value.name = newArea.name
   addModel(AreaAdd.value).then(res => {
     if (res.data.code === "0") {
@@ -203,13 +201,14 @@ const handleOk = () => {
         name: ""
       }
       getModel(params)
-        .then(function (response) {
+        .then(function () {
           // 处理成功情况
           districtId.value = newArea.districtId
           selectedArea.value = newArea.code
           AreaList.value.push(newArea)
           stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           stateStore.commit("updateSelectedAreaId", districtId.value)
+          stateStore.commit("updateLeftBarNeedUpdate", true)
         })
         .catch(function (error) {
           // 处理错误情况
@@ -245,15 +244,15 @@ function getBuilding(parent) {
       const child = children[i]
       const positions = JSON.parse(child.path)
       if (child.districtType === 3) {
-        const building = new Building(store.state.graphicLayer, positions, child.name, 0, null, null, true, child.districtId, false)
+        const building = new Building(store.state.graphicLayer, positions, child.name, 0, 5, null, true, child.districtId, false)
         getFloor(children[i], building)
 
       }
       if (child.districtType === 7) {
         const openAir = new OpenAir(store.state.graphicLayer, positions, child.name, null, child.districtId, false)
         store.commit("addOpenAir", openAir)
-        stateStore.commit("updateLeftBarNeedUpdate", true)
       }
+      stateStore.commit("updateLeftBarNeedUpdate", true)
       getBuilding(children)
     }
   }
@@ -267,6 +266,10 @@ function getFloor(parent: any, building: Building) {
       const child = children[i]
       const positions = JSON.parse(child.path)
       if (child.districtType === 4) {
+        const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+          parent.positions,
+          floorNo * (5 + 0.1)
+        ) as Cesium.Cartesian3[]
         floorNo += 1
         const floor = new Floor(positions, building, child.name, floorNo, 5, child.districtId, parent.id, false)
         building.floors.set(child.districtId, floor)
