@@ -101,6 +101,19 @@ export class OpenAir implements GraphicInterface {
   toModelData(areaId: string): ModelData {
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
-    return new ModelData(areaId, this.id, this.name, pos, position, 7, 1)
+    const path = this.convertToJSON(pos)
+    return new ModelData(areaId, this.id, this.name, path, position, 7, 1)
+  }
+
+  convertToJSON(path: number[][]) {
+    // 创建一个对象数组来存储路径点信息
+    const pathObjects = path.map((point, index) => ({
+      x: index,
+      y: point[0],
+      z: point[1]
+    }))
+    // 将对象数组转换为 JSON 字符串
+    const jsonString = JSON.stringify(pathObjects)
+    return jsonString
   }
 }

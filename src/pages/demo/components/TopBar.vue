@@ -259,6 +259,8 @@ function getBuilding(parent) {
         getFloor(children[i], building)
       }
       if (child.districtType === 7) {
+        const positions = JSON.parse(child.path)
+        console.log("positions", positions)
         const openAir = new OpenAir(store.state.graphicLayer, null, child.name, null, child.districtId, false)
         store.commit("addOpenAir", openAir)
         stateStore.commit("updateLeftBarNeedUpdate", true)
