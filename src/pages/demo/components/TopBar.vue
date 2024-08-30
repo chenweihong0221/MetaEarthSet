@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // import "ant-design-vue/dist/antd.css"
-import { addModel, deleteModel, getModel, getThree } from "@mars/pages/demo/api/api"
+import { addModel, deleteModel, getModel, getThree, getDetail } from "@mars/pages/demo/api/api"
 import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 import { loadJSON } from "@mars/pages/demo/module/tool/persistence"
@@ -228,25 +228,9 @@ const handleArea = (area) => {
     name: area.name
   }
   console.log("store.state", stateStore.state.selectedAreaId)
-  getModel(params)
-    .then(function (response) {
-      // 处理成功情况
-      console.log("AreaList", response)
-      newBuilding(response.data.data[0].children, area.code)
-    }).catch(function (error) {
-      // 处理错误情况
-      console.log(error)
-    })
-}
-
-function newBuilding(children, code) {
-  for (let i = 0; i < children.length; i++) {
-    if (children[i].code === code) {
-      console.log("children", children[i])
-      getBuilding(children[i])
-      break
-    }
-  }
+  getDetail(area.districtId, 982).then(function (response) {
+    getBuilding(response.data.detailsInfoAndChildren)
+  })
 }
 
 function getBuilding(parent) {
@@ -265,8 +249,8 @@ function getBuilding(parent) {
         store.commit("addOpenAir", openAir)
         stateStore.commit("updateLeftBarNeedUpdate", true)
       }
+      getBuilding(children)
     }
-    getBuilding(children)
   }
 }
 
