@@ -78,11 +78,14 @@ onMounted(() => {
     getModel(params)
       .then(function (response) {
         // 处理成功情况
+        districtId.value = response.data.data[0].children[0].districtId
         AreaList.value = response.data.data[0].children
         selectedArea.value = response.data.data[0].children[0].code
         stateStore.commit("updateSelectedAreaCode", selectedArea.value)
-        stateStore.commit("updateSelectedAreaId", response.data.data[0].children[0].districtId)
-        getBuilding(response.data.data[0].children)
+        stateStore.commit("updateSelectedAreaId", districtId.value)
+        getDetail(districtId.value, districtId.value).then(function (response) {
+          getBuilding(response.data.data.detailsInfoAndChildren)
+        })
       })
       .catch(function (error) {
         // 处理错误情况
@@ -197,10 +200,11 @@ const handleOk = () => {
       getModel(params)
         .then(function (response) {
           // 处理成功情况
+          districtId.value = response.data.data[0].children[0].districtId
           AreaList.value = response.data.data[0].children
           selectedArea.value = response.data.data[0].children[0].name
           stateStore.commit("updateSelectedAreaCode", response.data.data[0].children[0].code)
-          stateStore.commit("updateSelectedAreaId", response.data.data[0].children[0].districtId)
+          stateStore.commit("updateSelectedAreaId", districtId.value)
           getBuilding(response.data.data[0].children)
         })
         .catch(function (error) {
@@ -228,7 +232,6 @@ const handleArea = (area) => {
   getDetail(area.districtId, area.districtId).then(function (response) {
     getBuilding(response.data.data.detailsInfoAndChildren)
   })
-  console.log(stateStore.state.selectedAreaCode)
 }
 
 function getBuilding(parent) {
