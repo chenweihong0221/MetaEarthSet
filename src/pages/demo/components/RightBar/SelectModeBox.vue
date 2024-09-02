@@ -4,7 +4,7 @@ import { useStore } from "vuex"
 import * as mars3d from "mars3d"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
-import { deleteModel } from "@mars/pages/demo/api/api"
+import { deleteModel, updateModel } from "@mars/pages/demo/api/api"
 import { message } from "ant-design-vue"
 
 const stateStore = useStore(stateKey)
@@ -154,6 +154,43 @@ const deleteStore = () => {
   })
   stateStore.commit("updateLeftBarNeedUpdate", true)
 }
+const updateStore = () => {
+  const id = stateStore.state.selectedGraphicId
+  if (id === "") {
+    return
+  }
+  const selectedType = stateStore.state.selectedGraphicType
+  if (selectedType === 0) {
+    mapStore.commit("removeBuilding", id)
+  } else if (selectedType === 1) { // type为1， 选中的图形为楼层
+    mapStore.commit("removeFloor", id)
+  } else if (selectedType === 2) { // type为2， 选中的图形为空间
+    mapStore.commit("removeSpace", id)
+  } else if (selectedType === 3) { // type为3， 选中的图形为围栏
+    mapStore.commit("removeFence", id)
+  } else if (selectedType === 4) { // type为4， 选中的图形为露天场所
+    mapStore.commit("removeOpenAir", id)
+  } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
+    mapStore.commit("removeGraphicDraw", id)
+  } else if (selectedType === 6) {
+    mapStore.commit("removeHuman", id)
+  } else if (selectedType === 7) {
+    mapStore.commit("removeCamera", id)
+  }
+  const params = ref({
+    id: id,
+    name: name.value
+  })
+  name.value = ""
+  selectedGraphicId.value = ""
+  type.value = ""
+  updateModel(params.value).then((res) => {
+    if (res.data.code === "0") {
+      message.success(res.data.msg)
+    }
+  })
+  stateStore.commit("updateLeftBarNeedUpdate", true)
+}
 
 const handleShowChange = (param) => {
   const value = param.target.checked
@@ -240,7 +277,8 @@ const handleShowChange = (param) => {
               <div><a-checkbox v-model:checked="show" @change="handleShowChange" /></div>
             </div>
             <div class="msg-row">
-              <mars-button class="my-button" @click="deleteStore">删除</mars-button>
+              <mars-button class="my-button-interaction" @click="deleteStore">删除</mars-button>
+              <mars-button class="my-button-interaction" @click="updateStore">修改</mars-button>
             </div>
           </div>
 
@@ -458,5 +496,9 @@ input {
 
 .ant-slider-track {
   background-color: rgb(255, 255, 255);
+}
+
+.my-button-interaction {
+  margin: auto 2em;
 }
 </style>

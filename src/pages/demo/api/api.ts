@@ -48,7 +48,7 @@ export function addModel(modelData) {
   return instance.post("/xay/v1/sys/district/save", modelData)
 }
 
-export function updateModel(modelData: ModelData) {
+export function updateModel(modelData) {
   return instance.post("/xay/v1/sys/district/update", modelData)
 }
 

@@ -89,7 +89,7 @@ export class Building implements GraphicInterface {
               this.positions,
               i * (this.floorHeight + this.floorInterval)
             ) as Cesium.Cartesian3[]
-            const newFloor = new Floor(newPosition, this, name, this.floorNumber, null, id, res.data.data.code, false)
+            const newFloor = new Floor(newPosition, this, `${i + 1} 层`, this.floorNumber, null, id, res.data.data.code, false)
             this.floors.set(newFloor.id.toString(), newFloor)
             i++
           }
