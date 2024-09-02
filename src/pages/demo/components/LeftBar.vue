@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useStore } from "vuex"
-import { mapKey, stateKey } from "@mars/pages/demo/module/store/store
+import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
 
 import { nextTick, ref, watch, watchEffect } from "vue"
 import { TreeProps } from "ant-design-vue"
