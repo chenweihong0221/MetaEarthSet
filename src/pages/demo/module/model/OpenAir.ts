@@ -14,7 +14,6 @@ export class OpenAir implements GraphicInterface {
   positions: Cesium.Cartesian3[]
   height: number
   layer: mars3d.layer.GraphicLayer
-  basePolygon: mars3d.graphic.BasePolyEntity
   polygon: mars3d.graphic.PolygonEntity
   wall: mars3d.graphic.ThickWall
 
