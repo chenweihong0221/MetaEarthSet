@@ -237,9 +237,12 @@ const handleShowChange = (param) => {
 const beginStore = (param) => {
   const id = stateStore.state.selectedGraphicId
   const selectedType = stateStore.state.selectedGraphicType
-  if (selectedType === 4) {
+  if (selectedType === 0) {
+    const building = mapStore.state.buildingMap.get(id)
+    building.layer.startEditing(building.polygon)
+  } else if (selectedType === 4) {
     const openAir = mapStore.state.openAirMap.get(id)
-    openAir.layer.startEditing(openAir.layer)
+    openAir.layer.startEditing(openAir.polygon)
   }
 }
 </script>
