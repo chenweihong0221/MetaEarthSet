@@ -186,9 +186,7 @@ const updateStore = () => {
   updateModel(params).then((res) => {
     if (res.data.code === "0") {
       if (selectedType === 0) {
-        console.log("before changed building: ", mapStore.state.buildingMap.get(id))
         mapStore.state.buildingMap.get(id).name = name.value
-        console.log("after changed building: ", mapStore.state.buildingMap.get(id))
       } else if (selectedType === 4) {
         mapStore.state.openAirMap.get(id).name = name.value
       }
@@ -233,6 +231,15 @@ const handleShowChange = (param) => {
     // type为6， 选中的图形为模型
     const human = mapStore.getters.getHumanByHumanId(id)
     human.setShow(value)
+  }
+}
+
+const beginStore = (param) => {
+  const id = stateStore.state.selectedGraphicId
+  const selectedType = stateStore.state.selectedGraphicType
+  if (selectedType === 4) {
+    const openAir = mapStore.state.openAirMap.get(id)
+    openAir.layer.startEditing(openAir.layer)
   }
 }
 </script>
@@ -298,6 +305,7 @@ const handleShowChange = (param) => {
             <div class="msg-row">
               <mars-button class="my-button-interaction" @click="deleteStore">删除</mars-button>
               <mars-button class="my-button-interaction" @click="updateStore">修改</mars-button>
+              <mars-button class="my-button-interaction" @click="beginStore">开始编辑</mars-button>
             </div>
           </div>
         </a-collapse-panel>
@@ -315,12 +323,9 @@ const handleShowChange = (param) => {
             </div>
             <div class="material-row">
               <div>材质流：</div>
-              <a-select
-                v-model:value="graphicDrawOptions"
-                style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;"
-                class="c_mars-select"
-                popupClassName="mars-select-dropdown"
-              >
+              <a-select v-model:value="graphicDrawOptions"
+                style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;" class="c_mars-select"
+                popupClassName="mars-select-dropdown">
                 <a-select-option key="1"> 材质1 </a-select-option>
                 <a-select-option key="2"> 材质2 </a-select-option>
                 <a-select-option key="3"> 材质3 </a-select-option>

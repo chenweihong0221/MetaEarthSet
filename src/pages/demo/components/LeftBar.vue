@@ -125,7 +125,6 @@ watch(leftBarTreeData, () => {
 
 const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
 
-
   if (selectedKeys.length === 0) {
     stateStore.commit("updateSelectedGraphicId", "")
     selectedGraphicId = ""
