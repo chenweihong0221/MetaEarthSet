@@ -165,6 +165,52 @@ const marsOnload = (map: any) => {
   Area.getFromLocalStorage(stateStore.state.selectedAreaCode)
 }
 
+const expandModelShader = new Cesium.CustomShader({
+    uniforms: {
+      u_drag: {
+        type: Cesium.UniformType.VEC2,
+        value: new Cesium.Cartesian2(1.0, 1.0) // 从最新拖动中心到鼠标的向量
+      }
+    },
+    vertexShaderText: `
+      // 如果鼠标向右拖动，模型就会增长 ， 如果鼠标向左拖动，则模型收缩
+      void vertexMain(VertexInput vsInput, inout czm_modelVertexOutput vsOutput)
+      {
+          vsOutput.positionMC += 0.1 * u_drag.x * vsInput.attributes.normalMC;
+      } `
+  })
+  
+  bindUpdateModelShader(expandModelShader)
+
+// 鼠标拖动模型,模型散开效果
+function bindUpdateModelShader(expandModelShader) {
+  let dragActive = false
+  const dragCenter = new Cesium.Cartesian3()
+  const scratchDrag = new Cesium.Cartesian3()
+  MarsMap.on(mars3d.EventType.leftDown, function (event) {
+    if (!Cesium.defined(event.graphic)) {
+      return
+    }
+
+    MarsMap.scene.screenSpaceCameraController.enableInputs = false
+
+    dragActive = true
+    event.position.clone(dragCenter)
+  })
+
+  MarsMap.on(mars3d.EventType.mouseMove, function (event) {
+    if (!dragActive) {
+      return
+    }
+    const drag = Cesium.Cartesian3.subtract(event.endPosition, dragCenter, scratchDrag)
+    expandModelShader.setUniform("u_drag", drag)
+  })
+
+  MarsMap.on(mars3d.EventType.leftUp, function (event) {
+    MarsMap.scene.screenSpaceCameraController.enableInputs = true
+    dragActive = false
+  })
+}
 </script>
 
 <style>

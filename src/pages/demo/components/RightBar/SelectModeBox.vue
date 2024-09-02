@@ -234,7 +234,7 @@ const handleShowChange = (param) => {
   }
 }
 
-const beginStore = (param) => {
+const beginStore = () => {
   const id = stateStore.state.selectedGraphicId
   const selectedType = stateStore.state.selectedGraphicType
   if (selectedType === 0) {
@@ -243,7 +243,10 @@ const beginStore = (param) => {
   } else if (selectedType === 4) {
     const openAir = mapStore.state.openAirMap.get(id)
     openAir.layer.startEditing(openAir.polygon)
+    console.log("openAir", openAir.layer)
   }
+
+
 }
 </script>
 
