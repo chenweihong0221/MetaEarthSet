@@ -33,7 +33,7 @@ export class OpenAir implements GraphicInterface {
     this.height = height || 5
     this.layer = layer
     if (api === true) {
-      const model = this.toModelData(stateStore.state.selectedAreaId)
+      const model = this.toModelData(stateStore.state.selectedAreaCode)
       addModel(model).then((res) => {
         this.id = res.data.data.districtId
         mapStore.commit("addOpenAir", this)

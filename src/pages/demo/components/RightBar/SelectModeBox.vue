@@ -158,26 +158,9 @@ const deleteStore = () => {
 }
 const updateStore = () => {
   const id = stateStore.state.selectedGraphicId
+  const selectedType = stateStore.state.selectedGraphicType
   if (id === "") {
     return
-  }
-  const selectedType = stateStore.state.selectedGraphicType
-  if (selectedType === 0) {
-    mapStore.commit("removeBuilding", id)
-  } else if (selectedType === 1) { // type为1， 选中的图形为楼层
-    mapStore.commit("removeFloor", id)
-  } else if (selectedType === 2) { // type为2， 选中的图形为空间
-    mapStore.commit("removeSpace", id)
-  } else if (selectedType === 3) { // type为3， 选中的图形为围栏
-    mapStore.commit("removeFence", id)
-  } else if (selectedType === 4) { // type为4， 选中的图形为露天场所
-    mapStore.commit("removeOpenAir", id)
-  } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
-    mapStore.commit("removeGraphicDraw", id)
-  } else if (selectedType === 6) {
-    mapStore.commit("removeHuman", id)
-  } else if (selectedType === 7) {
-    mapStore.commit("removeCamera", id)
   }
   const params = ref({
     districtId: id,
@@ -188,57 +171,20 @@ const updateStore = () => {
   type.value = ""
   updateModel(params.value).then((res) => {
     if (res.data.code === "0") {
+      if (selectedType === 0) {
+        const building = mapStore.state.BuildingMap.get(id)
+        building.name = name.value
+        mapStore.state.BuildingMap.set(id, building)
+      } else if (selectedType === 4) {
+        const openAir = mapStore.state.OpenAirMap.get(id)
+        openAir.name = name.value
+        mapStore.state.OpenAirMap.set(id, openAir)
+      }
       message.success(res.data.msg)
     } else {
       message.error(res.data.msg)
     }
   })
-  getDetail(mapStore.state.districtId, mapStore.state.districtId).then(function (response) {
-    getBuilding(response.data.data.detailsInfoAndChildren)
-  })
-  stateStore.commit("updateLeftBarNeedUpdate", true)
-}
-
-function getBuilding(parent) {
-  const children = parent.children
-  if (children) {
-    for (let i = 0; i < children.length; i++) {
-      const child = children[i]
-      const positions = JSON.parse(child.path)
-      if (child.districtType === 3) {
-        const building = new Building(mapStore.state.graphicLayer, positions, child.name, 0, 5, null, true, child.districtId, false)
-        getFloor(children[i], building)
-
-      }
-      if (child.districtType === 7) {
-        const openAir = new OpenAir(mapStore.state.graphicLayer, positions, child.name, null, child.districtId, false)
-        mapStore.commit("addOpenAir", openAir)
-      }
-      stateStore.commit("updateLeftBarNeedUpdate", true)
-      getBuilding(children)
-    }
-  }
-}
-
-function getFloor(parent: any, building: Building) {
-  const children = parent.children
-  let floorNo = 0
-  if (children) {
-    for (let i = 0; i < children.length; i++) {
-      const child = children[i]
-      const positions = JSON.parse(child.path)
-      if (child.districtType === 4) {
-        const newPosition: mars3d.Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
-          positions,
-        i * (5 + 1)
-      ) as mars3d.Cesium.Cartesian3[]
-        floorNo += 1
-        const floor = new Floor(newPosition, building, child.name, floorNo, null, child.districtId, parent.id, false)
-        building.floors.set(child.districtId, floor)
-      }
-    }
-  }
-  mapStore.commit("addBuilding", building)
   stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
