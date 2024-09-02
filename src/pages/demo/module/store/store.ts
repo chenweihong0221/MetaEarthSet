@@ -179,7 +179,6 @@ export const mapStore = createStore({
         case 2: {
           console.log("id", id)
           console.log("building exist", state.floorBuildingMap.get(state.spaceFloorMap.get(id)))
-
           return state.buildingMap.get(state.floorBuildingMap.get(state.spaceFloorMap.get(id))).floors.get(state.spaceFloorMap.get(id)).spaces.get(id)
         }
 

@@ -214,7 +214,7 @@ const handleOk = () => {
           // 处理错误情况
           console.log(error)
         })
-        
+
     }
   })
 }
@@ -274,10 +274,11 @@ function getFloor(parent: any, building: Building) {
         floorNo += 1
         const floor = new Floor(newPosition, building, child.name, floorNo, null, child.districtId, parent.id, false)
         building.floors.set(child.districtId, floor)
+        store.state.floorBuildingMap.set(floor.id, building.id)
       }
     }
   }
-  store.commit("addBuilding", building)
+  store.state.buildingMap.set(building.id, building)
   stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
@@ -315,7 +316,7 @@ const handleDel = () => {
       <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
         @change="handleSelectAreaChange" v-model:value="selectedArea">
-        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" 
+        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code"
         @click="handleArea(area)">
           {{ area.name }}
         </a-select-option>

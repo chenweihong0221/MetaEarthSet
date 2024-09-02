@@ -14,7 +14,6 @@ const stateStore = useStore(stateKey)
 const mapStore = useStore(mapKey)
 const graphicDrawOptions = ref(["材质1", "材质2", "材质3", "材质4"])
 
-
 const selectedGraphicId = ref("")
 // 变换部分
 
@@ -30,93 +29,106 @@ const rotateX = ref()
 const rotateY = ref()
 const rotateZ = ref()
 
-
 // mars3d.PolyUtil.centerOfMass 获取多点坐标的中心点
 // mars3d.LngLatPoint.fromCartesian 将笛卡尔坐标系转换为经纬度
-watch(() => stateStore.state.selectedGraphicId, val => {
-  selectedGraphicId.value = val
-  if (val === "") {
-    name.value = ""
-    type.value = ""
-    show.value = true
-    return
+watch(
+  () => stateStore.state.selectedGraphicId,
+  (val) => {
+    selectedGraphicId.value = val
+    if (val === "") {
+      name.value = ""
+      type.value = ""
+      show.value = true
+      return
+    }
+    const selectedType = stateStore.state.selectedGraphicType
+    let position: mars3d.Cesium.Cartesian3
+    if (selectedType === 0) {
+      const building = mapStore.state.buildingMap.get(val)
+      name.value = building.name
+      type.value = "建筑"
+      show.value = building.show
+      position = mars3d.PolyUtil.centerOfMass(building.positions)
+    } else if (selectedType === 1) {
+      // type为1， 选中的图形为楼层
+      const floor = mapStore.getters.getFloorByFloorId(val)
+      name.value = floor.name
+      type.value = "楼层"
+      show.value = floor.polygon.show
+      position = mars3d.PolyUtil.centerOfMass(floor.positions)
+    } else if (selectedType === 2) {
+      // type为2， 选中的图形为空间
+      const space = mapStore.getters.getSpaceBySpaceId(val)
+      name.value = space.name
+      type.value = "空间"
+      show.value = space.polygon.show
+      position = mars3d.PolyUtil.centerOfMass(space.polygon.positions)
+    } else if (selectedType === 3) {
+      // type为3， 选中的图形为围栏
+      const fence = mapStore.getters.getFenceByFenceId(val)
+      name.value = fence.name
+      type.value = "围栏"
+      show.value = fence.polygon.show
+      position = mars3d.PolyUtil.centerOfMass(fence.polygon.positions)
+    } else if (selectedType === 4) {
+      // type为4， 选中的图形为露天场所
+      const openAir = mapStore.getters.getOpenAirByOpenAirId(val)
+      name.value = openAir.name
+      type.value = "露天场所"
+      show.value = openAir.show
+      position = mars3d.PolyUtil.centerOfMass(openAir.positions)
+    } else if (selectedType === 5) {
+      // type为5， 选中的图形为图上标绘
+      const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(val)
+      name.value = graphicDraw.name
+      type.value = "图上标绘"
+      show.value = graphicDraw.graphic.show
+      position = mars3d.PolyUtil.centerOfMass(graphicDraw.positions)
+    } else if (selectedType === 6) {
+      // type为6， 选中的图形为模型
+      const model = mapStore.getters.getHumanByHumanId(val)
+      name.value = model.id
+      type.value = "人员"
+      show.value = model.show
+    } else if (selectedType === 7) {
+      // type为7， 选中的图形为模型
+      const model = mapStore.getters.getCameraByCameraId(val)
+      name.value = model.id
+      type.value = "摄像头"
+      show.value = model.show
+    }
+    const point = mars3d.LngLatPoint.fromCartesian(position)
+    lat.value = point.lat
+    lng.value = point.lng
+    alt.value = point.alt
   }
-  const selectedType = stateStore.state.selectedGraphicType
-  let position: mars3d.Cesium.Cartesian3
-  if (selectedType === 0) {
-    const building = mapStore.state.buildingMap.get(val)
-    name.value = building.name
-    type.value = "建筑"
-    show.value = building.show
-    position = mars3d.PolyUtil.centerOfMass(building.positions)
-  } else if (selectedType === 1) { // type为1， 选中的图形为楼层
-    const floor = mapStore.getters.getFloorByFloorId(val)
-    name.value = floor.name
-    type.value = "楼层"
-    show.value = floor.polygon.show
-    position = mars3d.PolyUtil.centerOfMass(floor.positions)
-  } else if (selectedType === 2) { // type为2， 选中的图形为空间
-    const space = mapStore.getters.getSpaceBySpaceId(val)
-    name.value = space.name
-    type.value = "空间"
-    show.value = space.polygon.show
-    position = mars3d.PolyUtil.centerOfMass(space.polygon.positions)
-  } else if (selectedType === 3) { // type为3， 选中的图形为围栏
-    const fence = mapStore.getters.getFenceByFenceId(val)
-    name.value = fence.name
-    type.value = "围栏"
-    show.value = fence.polygon.show
-    position = mars3d.PolyUtil.centerOfMass(fence.polygon.positions)
-  } else if (selectedType === 4) { // type为4， 选中的图形为露天场所
-    const openAir = mapStore.getters.getOpenAirByOpenAirId(val)
-    name.value = openAir.name
-    type.value = "露天场所"
-    show.value = openAir.show
-    position = mars3d.PolyUtil.centerOfMass(openAir.positions)
-  } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
-    const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(val)
-    name.value = graphicDraw.name
-    type.value = "图上标绘"
-    show.value = graphicDraw.graphic.show
-    position = mars3d.PolyUtil.centerOfMass(graphicDraw.positions)
-  } else if (selectedType === 6) { // type为6， 选中的图形为模型
-    const model = mapStore.getters.getHumanByHumanId(val)
-    name.value = model.id
-    type.value = "人员"
-    show.value = model.show
-  } else if (selectedType === 7) { // type为7， 选中的图形为模型
-    const model = mapStore.getters.getCameraByCameraId(val)
-    name.value = model.id
-    type.value = "摄像头"
-    show.value = model.show
-  }
-  const point = mars3d.LngLatPoint.fromCartesian(position)
-  lat.value = point.lat
-  lng.value = point.lng
-  alt.value = point.alt
-})
-
-
+)
 
 const onMessageNameChange = () => {
   const val = stateStore.state.selectedGraphicId
   const selectedType = stateStore.state.selectedGraphicType
-  if (selectedType === 1) { // type为1， 选中的图形为楼层
+  if (selectedType === 1) {
+    // type为1， 选中的图形为楼层
     const floor = mapStore.getters.getFloorByFloorId(val)
     floor.name = name.value
-  } else if (selectedType === 2) { // type为2， 选中的图形为空间
+  } else if (selectedType === 2) {
+    // type为2， 选中的图形为空间
     const space = mapStore.getters.getSpaceBySpaceId(val)
     space.name = name.value
-  } else if (selectedType === 3) { // type为3， 选中的图形为围栏
+  } else if (selectedType === 3) {
+    // type为3， 选中的图形为围栏
     const fence = mapStore.getters.getFenceByFenceId(val)
     fence.name = name.value
-  } else if (selectedType === 4) { // type为4， 选中的图形为露天场所
+  } else if (selectedType === 4) {
+    // type为4， 选中的图形为露天场所
     const openAir = mapStore.getters.getOpenAirByOpenAirId(val)
     openAir.name = name.value
-  } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
+  } else if (selectedType === 5) {
+    // type为5， 选中的图形为图上标绘
     const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(val)
     graphicDraw.name = name.value
-  } else if (selectedType === 6) { // type为6， 选中的图形为模型
+  } else if (selectedType === 6) {
+    // type为6， 选中的图形为模型
     const human = mapStore.getters.getHumanByHumanId(val)
     human.id = name.value
   }
@@ -130,15 +142,20 @@ const deleteStore = () => {
   const selectedType = stateStore.state.selectedGraphicType
   if (selectedType === 0) {
     mapStore.commit("removeBuilding", id)
-  } else if (selectedType === 1) { // type为1， 选中的图形为楼层
+  } else if (selectedType === 1) {
+    // type为1， 选中的图形为楼层
     mapStore.commit("removeFloor", id)
-  } else if (selectedType === 2) { // type为2， 选中的图形为空间
+  } else if (selectedType === 2) {
+    // type为2， 选中的图形为空间
     mapStore.commit("removeSpace", id)
-  } else if (selectedType === 3) { // type为3， 选中的图形为围栏
+  } else if (selectedType === 3) {
+    // type为3， 选中的图形为围栏
     mapStore.commit("removeFence", id)
-  } else if (selectedType === 4) { // type为4， 选中的图形为露天场所
+  } else if (selectedType === 4) {
+    // type为4， 选中的图形为露天场所
     mapStore.commit("removeOpenAir", id)
-  } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
+  } else if (selectedType === 5) {
+    // type为5， 选中的图形为图上标绘
     mapStore.commit("removeGraphicDraw", id)
   } else if (selectedType === 6) {
     mapStore.commit("removeHuman", id)
@@ -162,30 +179,26 @@ const updateStore = () => {
   if (id === "") {
     return
   }
-  const params = ref({
+  const params = {
     districtId: id,
     name: name.value
-  })
-  name.value = ""
-  selectedGraphicId.value = ""
-  type.value = ""
-  updateModel(params.value).then((res) => {
+  }
+  updateModel(params).then((res) => {
     if (res.data.code === "0") {
       if (selectedType === 0) {
-        const building = mapStore.state.BuildingMap.get(id)
-        building.name = name.value
-        mapStore.state.BuildingMap.set(id, building)
+        console.log("before changed building: ", mapStore.state.buildingMap.get(id))
+        mapStore.state.buildingMap.get(id).name = name.value
+        console.log("after changed building: ", mapStore.state.buildingMap.get(id))
       } else if (selectedType === 4) {
-        const openAir = mapStore.state.OpenAirMap.get(id)
-        openAir.name = name.value
-        mapStore.state.OpenAirMap.set(id, openAir)
+        mapStore.state.openAirMap.get(id).name = name.value
       }
       message.success(res.data.msg)
     } else {
       message.error(res.data.msg)
     }
+    stateStore.commit("updateLeftBarNeedUpdate", true)
   })
-  stateStore.commit("updateLeftBarNeedUpdate", true)
+
 }
 
 const handleShowChange = (param) => {
@@ -196,27 +209,32 @@ const handleShowChange = (param) => {
   if (selectedType === 0) {
     const building = mapStore.state.buildingMap.get(id)
     building.setShow(value)
-  } else if (selectedType === 1) { // type为1， 选中的
+  } else if (selectedType === 1) {
+    // type为1， 选中的
     const floor = mapStore.getters.getFloorByFloorId(id)
     floor.setShow(value)
-  } else if (selectedType === 2) { // type为2， 选中的图形为空间
+  } else if (selectedType === 2) {
+    // type为2， 选中的图形为空间
     const space = mapStore.getters.getSpaceBySpaceId(id)
     space.setShow(value)
-  } else if (selectedType === 3) { // type为3， 选中的图形为围栏
+  } else if (selectedType === 3) {
+    // type为3， 选中的图形为围栏
     const fence = mapStore.getters.getFenceByFenceId(id)
     fence.setShow(value)
-  } else if (selectedType === 4) { // type为4， 选中的图形为露天场所
+  } else if (selectedType === 4) {
+    // type为4， 选中的图形为露天场所
     const openAir = mapStore.getters.getOpenAirByOpenAirId(id)
     openAir.setShow(value)
-  } else if (selectedType === 5) { // type为5， 选中的图形为图上标绘
+  } else if (selectedType === 5) {
+    // type为5， 选中的图形为图上标绘
     const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(id)
     graphicDraw.setShow(value)
-  } else if (selectedType === 6) { // type为6， 选中的图形为模型
+  } else if (selectedType === 6) {
+    // type为6， 选中的图形为模型
     const human = mapStore.getters.getHumanByHumanId(id)
     human.setShow(value)
   }
 }
-
 </script>
 
 <template>
@@ -226,25 +244,28 @@ const handleShowChange = (param) => {
         <a-collapse-panel header="变换" key="1">
           <div class="trans-box">
             <div class="trans-row">
-              <div>经度
-                <input v-model="lng">
+              <div>
+                经度
+                <input v-model="lng" />
               </div>
-              <div>维度
-                <input v-model="lat">
+              <div>
+                维度
+                <input v-model="lat" />
               </div>
-              <div>海拔
-                <input v-model="alt">
+              <div>
+                海拔
+                <input v-model="alt" />
               </div>
             </div>
             <div class="trans-row">
               旋转：
-              <div>x <input v-model="rotateX" disabled></div>
-              <div>y <input v-model="rotateY" disabled></div>
-              <div>z <input v-model="rotateZ" disabled></div>
+              <div>x <input v-model="rotateX" disabled /></div>
+              <div>y <input v-model="rotateY" disabled /></div>
+              <div>z <input v-model="rotateZ" disabled /></div>
             </div>
             <div class="trans-row">
               缩放：
-              <div><input v-model="scale" disabled>%</div>
+              <div><input v-model="scale" disabled />%</div>
             </div>
           </div>
         </a-collapse-panel>
@@ -258,11 +279,11 @@ const handleShowChange = (param) => {
           <div class="msg-box">
             <div class="msg-row">
               <div class="msg-name">名称：</div>
-              <input class="msg-name-input" v-model="name" @change="onMessageNameChange">
+              <input class="msg-name-input" v-model="name" @change="onMessageNameChange" />
             </div>
             <div class="msg-row">
               <div class="msg-name">id：&nbsp;&nbsp;&nbsp;&nbsp;</div>
-              <input class="msg-name-input" v-model="selectedGraphicId" disabled @change="onMessageNameChange">
+              <input class="msg-name-input" v-model="selectedGraphicId" disabled @change="onMessageNameChange" />
             </div>
             <div class="msg-row">
               <div class="msg-name">类型：</div>
@@ -270,14 +291,15 @@ const handleShowChange = (param) => {
             </div>
             <div class="msg-row">
               <div class="msg-name">显示：</div>
-              <div><a-checkbox v-model:checked="show" @change="handleShowChange" /></div>
+              <div>
+                <a-checkbox v-model:checked="show" @change="handleShowChange" />
+              </div>
             </div>
             <div class="msg-row">
               <mars-button class="my-button-interaction" @click="deleteStore">删除</mars-button>
               <mars-button class="my-button-interaction" @click="updateStore">修改</mars-button>
             </div>
           </div>
-
         </a-collapse-panel>
       </a-collapse>
     </div>
@@ -289,35 +311,29 @@ const handleShowChange = (param) => {
           <div class="material-box">
             <div class="material-row">
               <div>名称：&nbsp;&nbsp;</div>
-              <input class="material-input">
+              <input class="material-input" />
             </div>
             <div class="material-row">
               <div>材质流：</div>
-              <a-select v-model:value="graphicDrawOptions"
-                style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;" class="c_mars-select"
-                popupClassName="mars-select-dropdown">
-                <a-select-option key="1">
-                  材质1
-                </a-select-option>
-                <a-select-option key="2">
-                  材质2
-                </a-select-option>
-                <a-select-option key="3">
-                  材质3
-                </a-select-option>
-                <a-select-option key="4">
-                  材质4
-                </a-select-option>
-
+              <a-select
+                v-model:value="graphicDrawOptions"
+                style="left: 10px; color: white; rgba(35, 39, 47, 0.7);!important;"
+                class="c_mars-select"
+                popupClassName="mars-select-dropdown"
+              >
+                <a-select-option key="1"> 材质1 </a-select-option>
+                <a-select-option key="2"> 材质2 </a-select-option>
+                <a-select-option key="3"> 材质3 </a-select-option>
+                <a-select-option key="4"> 材质4 </a-select-option>
               </a-select>
             </div>
             <div class="material-row">
               <div>颜色：&nbsp;&nbsp;</div>
-              <input type="color" class="material-input-color" style="width: 2em; border: none; padding: 0">
+              <input type="color" class="material-input-color" style="width: 2em; border: none; padding: 0" />
             </div>
             <div class="material-row">
               <div>贴图：&nbsp;&nbsp;</div>
-              <input type="color" class="material-input-color" style="width: 2em; border: none; padding: 0">
+              <input type="color" class="material-input-color" style="width: 2em; border: none; padding: 0" />
             </div>
             <div class="material-row">
               <div>透明度：</div>
@@ -325,20 +341,17 @@ const handleShowChange = (param) => {
             </div>
             <div style="height: 2px"></div>
           </div>
-
         </a-collapse-panel>
       </a-collapse>
     </div>
-
   </div>
-
 </template>
 
 <style scoped lang="less">
 .wrapper {
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 
 .trans-panel,
@@ -354,7 +367,6 @@ const handleShowChange = (param) => {
 .material-box {
   color: white;
   background: #999999;
-
 }
 
 .trans-row,
@@ -407,7 +419,6 @@ input {
   width: 15em;
 }
 
-
 .ant-select-selector {
   background: #999999 !important;
   border: 1px solid #999999 !important;
@@ -415,12 +426,10 @@ input {
   color: white;
 }
 
-
 .c_mars-select {
   width: 15em;
   height: 32px;
   background-color: rgba(35, 39, 47, 0.7);
-  ;
   border-radius: 2px;
   box-shadow: none;
 
@@ -496,5 +505,10 @@ input {
 
 .my-button-interaction {
   margin: auto 1em;
+  width: 90px;
+  height: 32px;
+  background-color: #444444 !important;
+  border-color: #1DA57A !important;
+  color: white;
 }
 </style>

@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { useStore } from "vuex"
-import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
-import {
-  AlignCenterOutlined, PicCenterOutlined, PicLeftOutlined, ExpandOutlined, GatewayOutlined,
-  VideoCameraOutlined, UserOutlined, FormOutlined
-} from "@ant-design/icons-vue"
+import { mapKey, stateKey } from "@mars/pages/demo/module/store/store
 
 import { nextTick, ref, watch, watchEffect } from "vue"
 import { TreeProps } from "ant-design-vue"
@@ -137,7 +133,7 @@ const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
   }
   if (selectedGraphicId !== "") {
     const graphic = store.getters.getGraphicByIdAndType(selectedGraphicId, selectedGraphicType)
-    graphic.removeHighLight()
+    // graphic.removeHighLight()
   }
 
   const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
