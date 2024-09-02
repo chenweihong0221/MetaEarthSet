@@ -29,7 +29,7 @@ const startDraw = ref(false)
 const selectedGraphicId = ref("")
 provide("selectedGraphicId", selectedGraphicId)
 const router = useRouter()
-
+let map: mars3d.Map
 
 
 // 获取自定义的store， 存储全局变量
@@ -154,7 +154,7 @@ const marsOnload = (map: any) => {
   map.addLayer(graphicLayer2d)
 
   // 2.在layer上绑定监听事件
-  graphicLayer.on(mars3d.EventType.click, function(event: any) {
+  graphicLayer.on(mars3d.EventType.click, function (event: any) {
     console.log("监听layer，单击了矢量对象", event)
     if (startDraw.value) {
       return
@@ -163,9 +163,8 @@ const marsOnload = (map: any) => {
     console.log("selectedGraphicId", selectedGraphicId.value)
   })
   Area.getFromLocalStorage(stateStore.state.selectedAreaCode)
-}
 
-const expandModelShader = new Cesium.CustomShader({
+  const expandModelShader = new Cesium.CustomShader({
     uniforms: {
       u_drag: {
         type: Cesium.UniformType.VEC2,
@@ -179,37 +178,37 @@ const expandModelShader = new Cesium.CustomShader({
           vsOutput.positionMC += 0.1 * u_drag.x * vsInput.attributes.normalMC;
       } `
   })
-  
+
   bindUpdateModelShader(expandModelShader)
+  // 鼠标拖动模型,模型散开效果
+  function bindUpdateModelShader(expandModelShader) {
+    let dragActive = false
+    const dragCenter = new Cesium.Cartesian2()
+    const scratchDrag = new Cesium.Cartesian2()
+    map.on(mars3d.EventType.leftDown, function (event) {
+      if (!Cesium.defined(event.graphic)) {
+        return
+      }
 
-// 鼠标拖动模型,模型散开效果
-function bindUpdateModelShader(expandModelShader) {
-  let dragActive = false
-  const dragCenter = new Cesium.Cartesian3()
-  const scratchDrag = new Cesium.Cartesian3()
-  MarsMap.on(mars3d.EventType.leftDown, function (event) {
-    if (!Cesium.defined(event.graphic)) {
-      return
-    }
+      map.scene.screenSpaceCameraController.enableInputs = false
 
-    MarsMap.scene.screenSpaceCameraController.enableInputs = false
+      dragActive = true
+      event.position.clone(dragCenter)
+    })
 
-    dragActive = true
-    event.position.clone(dragCenter)
-  })
+    map.on(mars3d.EventType.mouseMove, function (event) {
+      if (!dragActive) {
+        return
+      }
+      const drag = Cesium.Cartesian3.subtract(event.endPosition, dragCenter, scratchDrag)
+      expandModelShader.setUniform("u_drag", drag)
+    })
 
-  MarsMap.on(mars3d.EventType.mouseMove, function (event) {
-    if (!dragActive) {
-      return
-    }
-    const drag = Cesium.Cartesian3.subtract(event.endPosition, dragCenter, scratchDrag)
-    expandModelShader.setUniform("u_drag", drag)
-  })
-
-  MarsMap.on(mars3d.EventType.leftUp, function (event) {
-    MarsMap.scene.screenSpaceCameraController.enableInputs = true
-    dragActive = false
-  })
+    map.on(mars3d.EventType.leftUp, function (event) {
+      map.scene.screenSpaceCameraController.enableInputs = true
+      dragActive = false
+    })
+  }
 }
 </script>
 
