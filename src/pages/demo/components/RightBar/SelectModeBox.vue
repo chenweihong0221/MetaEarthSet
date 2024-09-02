@@ -237,15 +237,18 @@ const handleShowChange = (param) => {
 const beginStore = () => {
   const id = stateStore.state.selectedGraphicId
   const selectedType = stateStore.state.selectedGraphicType
+  mars3d.DrawUtil.setAllEditPointStyle({
+    color: "#ff0000",
+    pixelSize: 20
+  });
   if (selectedType === 0) {
     const building = mapStore.state.buildingMap.get(id)
     building.layer.startEditing(building.polygon)
   } else if (selectedType === 4) {
     const openAir = mapStore.state.openAirMap.get(id)
     openAir.layer.startEditing(openAir.polygon)
-    console.log("openAir", openAir.layer)
+    console.log(openAir.basePolygon.haseMoveEdit)
   }
-
 
 }
 </script>
