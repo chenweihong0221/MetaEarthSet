@@ -300,7 +300,8 @@ const handleAddCamera = () => {
     store.state.map.setCursor("default")
     const cartesian = new Cesium.Cartesian3(event.cartesian.x, event.cartesian.y, event.cartesian.z)
 
-    const flvUrl = "ws://47.93.190.98:80/rtp/34020000001320000111_34020000001320000011.live.flv"
+    // const flvUrl = "ws://47.93.190.98:80/rtp/34020000001320000111_34020000001320000011.live.flv"
+    const flvUrl = "ws://47.93.190.98:80/rtp/34020000001310000002_34020000001310000001.live.flv"
 
     store.state.cameraMap.get(deviceId.value)?.graphic.destroy()
     const camera = new Camera(deviceId.value, flvUrl, cartesian, store.state.graphicLayer)
