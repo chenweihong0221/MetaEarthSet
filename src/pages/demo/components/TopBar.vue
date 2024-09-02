@@ -315,7 +315,8 @@ const handleDel = () => {
       <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
         @change="handleSelectAreaChange" v-model:value="selectedArea">
-        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" @click="handleArea(area)">
+        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" 
+        @click="handleArea(area)">
           {{ area.name }}
         </a-select-option>
         <a-select-option key="0">

@@ -4,8 +4,11 @@ import { useStore } from "vuex"
 import * as mars3d from "mars3d"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
-import { deleteModel, updateModel } from "@mars/pages/demo/api/api"
+import { deleteModel, updateModel, getDetail } from "@mars/pages/demo/api/api"
 import { message } from "ant-design-vue"
+import { Building, Floor } from "@mars/pages/demo/module/model/Building"
+import { OpenAir } from "@mars/pages/demo/module/model/OpenAir"
+import store from "../../widget-store"
 
 const stateStore = useStore(stateKey)
 const mapStore = useStore(mapKey)
@@ -117,7 +120,6 @@ const onMessageNameChange = () => {
     const human = mapStore.getters.getHumanByHumanId(val)
     human.id = name.value
   }
-  stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
 const deleteStore = () => {
@@ -178,7 +180,7 @@ const updateStore = () => {
     mapStore.commit("removeCamera", id)
   }
   const params = ref({
-    id: id,
+    districtId: id,
     name: name.value
   })
   name.value = ""
@@ -187,8 +189,56 @@ const updateStore = () => {
   updateModel(params.value).then((res) => {
     if (res.data.code === "0") {
       message.success(res.data.msg)
+    } else {
+      message.error(res.data.msg)
     }
   })
+  getDetail(mapStore.state.districtId, mapStore.state.districtId).then(function (response) {
+    getBuilding(response.data.data.detailsInfoAndChildren)
+  })
+  stateStore.commit("updateLeftBarNeedUpdate", true)
+}
+
+function getBuilding(parent) {
+  const children = parent.children
+  if (children) {
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i]
+      const positions = JSON.parse(child.path)
+      if (child.districtType === 3) {
+        const building = new Building(mapStore.state.graphicLayer, positions, child.name, 0, 5, null, true, child.districtId, false)
+        getFloor(children[i], building)
+
+      }
+      if (child.districtType === 7) {
+        const openAir = new OpenAir(mapStore.state.graphicLayer, positions, child.name, null, child.districtId, false)
+        mapStore.commit("addOpenAir", openAir)
+      }
+      stateStore.commit("updateLeftBarNeedUpdate", true)
+      getBuilding(children)
+    }
+  }
+}
+
+function getFloor(parent: any, building: Building) {
+  const children = parent.children
+  let floorNo = 0
+  if (children) {
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i]
+      const positions = JSON.parse(child.path)
+      if (child.districtType === 4) {
+        const newPosition: mars3d.Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+          positions,
+        i * (5 + 1)
+      ) as mars3d.Cesium.Cartesian3[]
+        floorNo += 1
+        const floor = new Floor(newPosition, building, child.name, floorNo, null, child.districtId, parent.id, false)
+        building.floors.set(child.districtId, floor)
+      }
+    }
+  }
+  mapStore.commit("addBuilding", building)
   stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
@@ -499,6 +549,6 @@ input {
 }
 
 .my-button-interaction {
-  margin: auto 2em;
+  margin: auto 1em;
 }
 </style>
