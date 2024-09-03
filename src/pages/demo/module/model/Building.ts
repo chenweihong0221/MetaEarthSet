@@ -355,35 +355,59 @@ export class Floor implements GraphicInterface {
         if (res.data.code === "0") {
           this.id = res.data.data.districtId
           this.code = res.data.data.districtCode
+          this.polygon = new mars3d.graphic.PolygonEntity({
+            positions: this.positions,
+            name,
+            style: {
+              // color: "#5ec2e1",
+              color: "#647BB1", // modify by cwh 202408081127
+              opacity: 1
+            }
+          })
+          this.wall = new mars3d.graphic.ThickWall({
+            positions: this.positions,
+            name,
+            style: {
+              // color: "#5ec2e1",
+              color: "#647BB1", // modify by cwh 202408081127
+              opacity: 1,
+              diffHeight: this.height,
+              width: 0.2,
+              closure: true
+            }
+          })
+          this.layer.addGraphic(this.polygon)
+          this.layer.addGraphic(this.wall)
         } else {
           message.error(res.data.msg)
         }
       })
+    } else {
+      this.polygon = new mars3d.graphic.PolygonEntity({
+        positions: this.positions,
+        name,
+        style: {
+          // color: "#5ec2e1",
+          color: "#647BB1", // modify by cwh 202408081127
+          opacity: 1
+        }
+      })
+      this.wall = new mars3d.graphic.ThickWall({
+        positions: this.positions,
+        name,
+        style: {
+          // color: "#5ec2e1",
+          color: "#647BB1", // modify by cwh 202408081127
+          opacity: 1,
+          diffHeight: this.height,
+          width: 0.2,
+          closure: true
+        }
+      })
+      this.layer.addGraphic(this.polygon)
+      this.layer.addGraphic(this.wall)
     }
 
-    this.polygon = new mars3d.graphic.PolygonEntity({
-      positions: this.positions,
-      name,
-      style: {
-        // color: "#5ec2e1",
-        color: "#647BB1", // modify by cwh 202408081127
-        opacity: 1
-      }
-    })
-    this.wall = new mars3d.graphic.ThickWall({
-      positions: this.positions,
-      name,
-      style: {
-        // color: "#5ec2e1",
-        color: "#647BB1", // modify by cwh 202408081127
-        opacity: 1,
-        diffHeight: this.height,
-        width: 0.2,
-        closure: true
-      }
-    })
-    this.layer.addGraphic(this.polygon)
-    this.layer.addGraphic(this.wall)
   }
 
   /**
