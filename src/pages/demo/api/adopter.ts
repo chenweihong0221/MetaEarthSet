@@ -77,7 +77,7 @@ export class ModelData {
     this.type = type
     this.districtType = type
     this.floorNumber = floorNumber
-    this.path = ""
+    this.path = path.toString()
   }
 
   toGraphicInterface(parentId: string): GraphicInterface {

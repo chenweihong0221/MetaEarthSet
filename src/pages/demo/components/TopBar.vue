@@ -244,10 +244,10 @@ function getBuilding(parent) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
       let positions = []
-      if (child.longitudeAndLatitudeJson === null || child.longitudeAndLatitudeJson === "") {
+      if (child.path === null || child.path === "") {
         positions = []
       } else {
-        positions = JSON.parse(child.longitudeAndLatitudeJson)
+        positions = JSON.parse(child.path)
       }
       if (child.districtType === 3) {
         const building = new Building(store.state.graphicLayer, positions, child.name, 0, 5, null, true, child.districtId, false)
@@ -271,10 +271,10 @@ function getFloor(parent: any, building: Building) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
       let positions = []
-      if (child.longitudeAndLatitudeJson === null || child.longitudeAndLatitudeJson === "") {
+      if (child.path === null || child.path === "") {
         positions = building.positions
       } else {
-        positions = JSON.parse(child.longitudeAndLatitudeJson)
+        positions = JSON.parse(child.path)
       }
       if (child.districtType === 4) {
         const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
