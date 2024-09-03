@@ -14,7 +14,6 @@ export class OpenAir implements GraphicInterface {
   positions: Cesium.Cartesian3[]
   height: number
   layer: mars3d.layer.GraphicLayer
-  baseLayer: mars3d.graphic.BaseGraphic
   polygon: mars3d.graphic.PolygonEntity
   wall: mars3d.graphic.ThickWall
 
@@ -42,14 +41,6 @@ export class OpenAir implements GraphicInterface {
         message.success(res.data.msg)
       })
     }
-
-    this.baseLayer = new mars3d.graphic.BaseGraphic({
-      name: name || "露天场所",
-      id: this.id,
-      position: mars3d.PolyUtil.centerOfMass(this.positions),
-      positions,
-      style: this.polygon
-    })
     this.polygon = new mars3d.graphic.PolygonEntity({
       positions,
       name: name || "露天场所",
