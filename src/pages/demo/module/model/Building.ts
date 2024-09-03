@@ -153,9 +153,22 @@ export class Building implements GraphicInterface {
     }
   }
 
-  onlyShowFloor(floorNo: string): void {
+  hideFloor() {
     this.floors.forEach((floor: Floor) => {
-      if (floor.id.toString() === floorNo) {
+      floor.polygon.show = false
+      floor.wall.show = false
+      if (floor.spaces) {
+        floor.spaces.forEach((space: Space) => {
+          space.polygon.show = false
+          space.wall.show = false
+        })
+      }
+    })
+  }
+
+  onlyShowFloor(id: string): void {
+    this.floors.forEach((floor: Floor) => {
+      if (floor.id.toString() === id) {
         floor.polygon.show = true
         floor.wall.show = true
         if (floor.spaces) {

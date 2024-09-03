@@ -126,7 +126,7 @@ const drawSpace = () => {
   const floor = store.getters.getFloorByFloorId(selectedFloorId.value)
   console.log("selectedFloorName", floor)
   const selectedBuilding = store.getters.getBuildingById(selectedBuildingId.value)
-  selectedBuilding.onlyShowFloor(selectedFloorId.value)
+  selectedBuilding.hideFloor(selectedFloorId.value)
   const groundFloor = setHeight(selectedBuilding.positions, 0)
   const groundPolygon = new mars3d.graphic.PolygonEntity({
     positions: groundFloor,
