@@ -125,9 +125,11 @@ const marsOnload = (map: any) => {
   map.addLayer(tiles3dLayer2)
   const graphicLayer = new mars3d.layer.GraphicLayer({
     drawEndEventType: mars3d.EventType.middleClick
+    allowDrillPick: false
   })
   const graphicLayer2d = new mars3d.layer.GraphicLayer({
     drawEndEventType: mars3d.EventType.middleClick
+    allowDrillPick: false
   })
   store.commit("setGraphicLayer", graphicLayer)
   store.commit("setGraphicLayer2d", graphicLayer2d)
@@ -162,7 +164,7 @@ const marsOnload = (map: any) => {
     selectedGraphicId.value = event.graphic.id
     console.log("selectedGraphicId", selectedGraphicId.value)
   })
-  Area.getFromLocalStorage(stateStore.state.selectedAreaCode)
+  // Area.getFromLocalStorage(stateStore.state.selectedAreaCode)
 }
 
 </script>
