@@ -78,10 +78,8 @@ export class Building implements GraphicInterface {
       const model = this.toModelData(stateStore.state.selectedAreaCode)
       addModel(model).then((res) => {
         // eslint-disable-next-line
-        console.log(res)
         if (res.data.code === "0") {
           this.id = res.data.data.districtId
-          console.log(this)
           // this.addFloors(res.data.data.code) // 后端以及默认新增5个楼层
           let i = 0
           while (i < this.floorNumber) {
@@ -288,11 +286,9 @@ export class Floor implements GraphicInterface {
     this.name = name
     this.api = api
     if (positions !== undefined && positions !== null) {
-      console.log(positions)
       // this.alt = getHeight(this.positions)
       if (positions[0] instanceof mars3d.Cesium.Cartesian3) {
         this.positions = positions as Cesium.Cartesian3[]
-        console.log(this.positions)
       } else {
         this.positions = (positions as { x: number; y: number; z: number }[]).map((item) => {
           return new Cesium.Cartesian3(item.x, item.y, item.z)

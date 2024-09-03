@@ -244,10 +244,10 @@ function getBuilding(parent) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
       let positions = []
-      if (child.path === null || child.path === "") {
+      if (child.longitudeAndLatitudeJson === null || child.longitudeAndLatitudeJson === "") {
         positions = []
       } else {
-        positions = JSON.parse(child.path)
+        positions = JSON.parse(child.longitudeAndLatitudeJson)
       }
       if (child.districtType === 3) {
         const building = new Building(store.state.graphicLayer, positions, child.name, 0, 5, null, true, child.districtId, false)
@@ -270,7 +270,12 @@ function getFloor(parent: any, building: Building) {
   if (children) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
-      const positions = JSON.parse(child.path)
+      let positions = []
+      if (child.longitudeAndLatitudeJson === null || child.longitudeAndLatitudeJson === "") {
+        positions = building.positions
+      } else {
+        positions = JSON.parse(child.longitudeAndLatitudeJson)
+      }
       if (child.districtType === 4) {
         const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
           positions,
@@ -278,6 +283,7 @@ function getFloor(parent: any, building: Building) {
         ) as Cesium.Cartesian3[]
         floorNo += 1
         const floor = new Floor(newPosition, building, child.name, floorNo, null, child.districtId, parent.id, false)
+        
         building.floors.set(child.districtId, floor)
         store.state.floorBuildingMap.set(floor.id, building.id)
       }
@@ -318,7 +324,6 @@ const handleDel = () => {
   <!-- <div class="borderstyle" style="position: absolute; top: 0;  width: 100%; height: 5em; background: gray"> -->
   <div class="border" style="position: absolute; top: 0;  width: 100%; height: 4em; background: #555555">
     <a-space class="space" style="position: static; margin-top: 10px; margin-left: 20px">
-      <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
         @change="handleSelectAreaChange" v-model:value="selectedArea">
         <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" @click="handleArea(area)">
@@ -386,7 +391,7 @@ const handleDel = () => {
   width: 100%;
   height: 32px;
 
-  //modify by cwh 20240809
+  // modify by cwh 20240809
   // background-color: var(--mars-control-bg);
   background-color: #444444 !important;
   border-radius: 2px;
