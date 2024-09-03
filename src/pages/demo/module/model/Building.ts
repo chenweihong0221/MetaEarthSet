@@ -155,20 +155,24 @@ export class Building implements GraphicInterface {
 
   onlyShowFloor(floorNo: string): void {
     this.floors.forEach((floor: Floor) => {
-      if (floor.floorNo.toString() === floorNo) {
+      if (floor.id.toString() === floorNo) {
         floor.polygon.show = true
         floor.wall.show = true
-        floor.spaces.forEach((space: Space) => {
-          space.polygon.show = true
-          space.wall.show = true
-        })
+        if (floor.spaces) {
+          floor.spaces.forEach((space: Space) => {
+            space.polygon.show = true
+            space.wall.show = true
+          })
+        }
       } else {
         floor.polygon.show = false
         floor.wall.show = false
-        floor.spaces.forEach((space: Space) => {
-          space.polygon.show = false
-          space.wall.show = false
-        })
+        if (floor.spaces) {
+          floor.spaces.forEach((space: Space) => {
+            space.polygon.show = false
+            space.wall.show = false
+          })
+        }
       }
     })
   }
@@ -177,10 +181,12 @@ export class Building implements GraphicInterface {
     this.floors.forEach((floor: Floor) => {
       floor.polygon.show = true
       floor.wall.show = true
-      floor.spaces.forEach((space: Space) => {
-        space.polygon.show = true
-        space.wall.show = true
-      })
+      if (floor.spaces) {
+        floor.spaces.forEach((space: Space) => {
+          space.polygon.show = true
+          space.wall.show = true
+        })
+      }
     })
   }
 
@@ -250,6 +256,7 @@ export class Building implements GraphicInterface {
 
 export class Floor implements GraphicInterface {
   id: string
+  code: string
   name: string // 楼层名称
   positions: Cesium.Cartesian3[]
   polygon: mars3d.graphic.PolygonEntity // 底面图形
@@ -263,7 +270,6 @@ export class Floor implements GraphicInterface {
   floorNo: number // 楼层号
   alt: number // 楼层所在高度
   api: boolean
-
   show: boolean = true // 是否显示
 
   constructor(
@@ -286,7 +292,6 @@ export class Floor implements GraphicInterface {
     this.name = name
     this.api = api
     if (positions !== undefined && positions !== null) {
-      // this.alt = getHeight(this.positions)
       if (positions[0] instanceof mars3d.Cesium.Cartesian3) {
         this.positions = positions as Cesium.Cartesian3[]
       } else {
@@ -294,6 +299,7 @@ export class Floor implements GraphicInterface {
           return new Cesium.Cartesian3(item.x, item.y, item.z)
         })
       }
+      this.alt = getHeight(this.positions)
     }
     this.layer = parent.layer
     this.height = height || parent.spaceHeight
@@ -307,6 +313,7 @@ export class Floor implements GraphicInterface {
       addModel(model).then((res) => {
         if (res.data.code === "0") {
           this.id = res.data.data.districtId
+          this.code = res.data.data.districtCode
         } else {
           message.error(res.data.msg)
         }
@@ -404,10 +411,10 @@ export class Space implements GraphicInterface {
   positions: Cesium.Cartesian3[]
   polygon: mars3d.graphic.PolygonEntity
   wall: mars3d.graphic.ThickWall
-
+  code: string
   show: boolean = true // 是否显示
 
-  constructor(positions: Cesium.Cartesian3[], parent: Floor, name?: string, height?: number, id?: string) {
+  constructor(positions: Cesium.Cartesian3[], parent: Floor, name?: string, height?: number, id?: string, api?: boolean) {
     this.id = id || uuid.v4()
     this.name = name || "空间"
     this.height = height || 1.5
@@ -419,36 +426,36 @@ export class Space implements GraphicInterface {
         return Cesium.Cartesian3.fromDegrees(item.x, item.y, item.z)
       })
     }
-    const model = this.toModelData()
-    addModel(model).then((res) => {
-      if (res.data.code === "0") {
-        this.polygon = new mars3d.graphic.PolygonEntity({
-          positions,
-          name: name || "空间",
-          style: {
-            // color: "#be3aea",
-            color: "#8D79C0", // modify by cwh 202408081127
-            opacity: 1
-          }
-        })
-        this.wall = new mars3d.graphic.ThickWall({
-          positions,
-          name: name || "空间",
-          style: {
-            // color: "#be3aea",
-            color: "#8D79C0", // modify by cwh 202408081127
-            opacity: 1,
-            diffHeight: this.height,
-            width: 0.1,
-            closure: true
-          }
-        })
-        this.parent.layer.addGraphic(this.polygon)
-        this.parent.layer.addGraphic(this.wall)
-      } else {
-        message.error(res.data.msg)
+    this.polygon = new mars3d.graphic.PolygonEntity({
+      positions,
+      name: name || "空间",
+      style: {
+        // color: "#be3aea",
+        color: "#8D79C0", // modify by cwh 202408081127
+        opacity: 1
       }
     })
+    this.wall = new mars3d.graphic.ThickWall({
+      positions,
+      name: name || "空间",
+      style: {
+        // color: "#be3aea",
+        color: "#8D79C0", // modify by cwh 202408081127
+        opacity: 1,
+        diffHeight: this.height,
+        width: 0.1,
+        closure: true
+      }
+    })
+    this.parent.layer.addGraphic(this.polygon)
+    this.parent.layer.addGraphic(this.wall)
+    // const model = this.toModelData()
+    // addModel(model).then((res) => {
+    //   if (res.data.code === "0") {
+    //   } else {
+    //     message.error(res.data.msg)
+    //   }
+    // })
   }
 
   setShow(show: boolean): void {

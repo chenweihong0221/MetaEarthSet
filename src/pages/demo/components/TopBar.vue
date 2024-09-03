@@ -10,7 +10,7 @@ import { message } from "ant-design-vue"
 import type { Dayjs } from "dayjs"
 import { onMounted, reactive, ref } from "vue"
 import { useStore } from "vuex"
-import { Building, Floor } from "../module/model/Building"
+import { Building, Floor, Space } from "../module/model/Building"
 import { OpenAir } from "../module/model/OpenAir"
 
 interface FormState {
@@ -283,15 +283,41 @@ function getFloor(parent: any, building: Building) {
         ) as Cesium.Cartesian3[]
         floorNo += 1
         const floor = new Floor(newPosition, building, child.name, floorNo, null, child.districtId, parent.id, false)
-        
+        floor.code = child.code
         building.floors.set(child.districtId, floor)
         store.state.floorBuildingMap.set(floor.id, building.id)
+        // getSpace(child, floor)
       }
     }
   }
   store.state.buildingMap.set(building.id, building)
   stateStore.commit("updateLeftBarNeedUpdate", true)
 }
+
+// function getSpace(parent: any, floor: Floor) {
+//   const children = parent.children
+//   if (children) {
+//     for (let i = 0; i < children.length; i++) {
+//       const child = children[i]
+//       let positions = []
+//       if (child.path === null || child.path === "") {
+//         positions = floor.positions
+//       } else {
+//         positions = JSON.parse(child.path)
+//       }
+//       if (child.districtType === 5) {
+//         const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+//           positions,
+//           i * (5 + 1)
+//         ) as Cesium.Cartesian3[]
+//         const space = new Space(newPosition, floor, child.name, null, child.districtId, false)
+//         floor.spaces.set(space.id, space)
+//         space.code = child.code
+//         store.state.spaceFloorMap.set(space.id, floor.id)
+//       }
+//     }
+//   }
+// }
 
 const handleDel = () => {
   deleteModel(districtId.value).then(response => {

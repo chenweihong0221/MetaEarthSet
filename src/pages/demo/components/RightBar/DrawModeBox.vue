@@ -119,13 +119,12 @@ const drawBuilding = () => {
 
 const drawSpace = () => {
   // 首先进行一些前置检查
-  console.log("selectedFloorId", selectedFloorId.value)
   if (!selectedFloorId.value) {
     alert("请先选择一个楼层")
     return
   }
   const floor = store.getters.getFloorByFloorId(selectedFloorId.value)
-  console.log("selectedFloorName", floor.name)
+  console.log("selectedFloorName", floor)
   const selectedBuilding = store.getters.getBuildingById(selectedBuildingId.value)
   selectedBuilding.onlyShowFloor(selectedFloorId.value)
   const groundFloor = setHeight(selectedBuilding.positions, 0)
