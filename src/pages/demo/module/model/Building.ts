@@ -166,7 +166,35 @@ export class Building implements GraphicInterface {
     })
   }
 
+  onlyShowFirstFloor(): void {
+    let isFirst = 0
+    this.floors.forEach((floor: Floor, index) => {
+      if (isFirst === 0) {
+        floor.polygon.show = true
+        floor.wall.show = true
+        if (floor.spaces) {
+          floor.spaces.forEach((space: Space) => {
+            space.polygon.show = true
+            space.wall.show = true
+          })
+        }
+      } else {
+        floor.polygon.show = false
+        floor.wall.show = false
+        if (floor.spaces) {
+          floor.spaces.forEach((space: Space) => {
+            space.polygon.show = false
+            space.wall.show = false
+          })
+        }
+      }
+    })
+    isFirst++
+  }
+
+
   onlyShowFloor(id: string): void {
+
     this.floors.forEach((floor: Floor) => {
       if (floor.id.toString() === id) {
         floor.polygon.show = true
@@ -368,7 +396,7 @@ export class Floor implements GraphicInterface {
   addSpace(positions?: Cesium.Cartesian3[], name?: string, height?: number, id?: string): Space {
     // 设置postions的高度和楼层高度一致
     const newPositions = setHeight(positions, this.alt + 1)
-    const space = new Space(newPositions, this, name, height, id)
+    const space = new Space(newPositions, this, name, height, id, true)
     this.spaces.set(space.id, space)
     return space
   }
@@ -462,13 +490,15 @@ export class Space implements GraphicInterface {
     })
     this.parent.layer.addGraphic(this.polygon)
     this.parent.layer.addGraphic(this.wall)
-    // const model = this.toModelData()
-    // addModel(model).then((res) => {
-    //   if (res.data.code === "0") {
-    //   } else {
-    //     message.error(res.data.msg)
-    //   }
-    // })
+    if (api) {
+      const model = this.toModelData()
+      addModel(model).then((res) => {
+        if (res.data.code === "0") {
+        } else {
+          message.error(res.data.msg)
+        }
+      })
+    }
   }
 
   setShow(show: boolean): void {
@@ -492,7 +522,20 @@ export class Space implements GraphicInterface {
   toModelData(): ModelData {
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
-    return new ModelData(this.parent.id, this.id, this.name, pos, position, 3, this.parent.floorNo)
+    const path = this.convertToJSON(pos)
+    return new ModelData(this.parent.code, this.id, this.name, path, position, 5, null)
+  }
+
+  convertToJSON(path: number[][]) {
+    // 创建一个对象数组来存储路径点信息
+    const pathObjects = path.map((point, index) => ({
+      x: point[0],
+      y: point[1],
+      z: point[2]
+    }))
+    // 将对象数组转换为 JSON 字符串
+    const jsonString = JSON.stringify(pathObjects)
+    return jsonString
   }
 }
 
