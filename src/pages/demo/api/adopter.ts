@@ -41,6 +41,7 @@ export class ModelData {
    * 6: human
    * 7: camera
    * 8: selfDefinedModel
+   * 10: 图上标绘
    */
   type: number
 
