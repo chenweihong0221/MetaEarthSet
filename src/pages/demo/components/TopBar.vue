@@ -243,7 +243,12 @@ function getBuilding(parent) {
   if (children) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
-      const positions = JSON.parse(child.path)
+      let positions = []
+      if (child.path === null || child.path === "") {
+        positions = []
+      } else {
+        positions = JSON.parse(child.path)
+      }
       if (child.districtType === 3) {
         const building = new Building(store.state.graphicLayer, positions, child.name, 0, 5, null, true, child.districtId, false)
         getFloor(children[i], building)
@@ -269,8 +274,8 @@ function getFloor(parent: any, building: Building) {
       if (child.districtType === 4) {
         const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
           positions,
-        i * (5 + 1)
-      ) as Cesium.Cartesian3[]
+          i * (5 + 1)
+        ) as Cesium.Cartesian3[]
         floorNo += 1
         const floor = new Floor(newPosition, building, child.name, floorNo, null, child.districtId, parent.id, false)
         building.floors.set(child.districtId, floor)
@@ -316,8 +321,7 @@ const handleDel = () => {
       <div style="color: white">选择区域：</div>
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
         @change="handleSelectAreaChange" v-model:value="selectedArea">
-        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code"
-        @click="handleArea(area)">
+        <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" @click="handleArea(area)">
           {{ area.name }}
         </a-select-option>
         <a-select-option key="0">

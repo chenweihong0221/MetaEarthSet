@@ -11,7 +11,7 @@ import { message } from "ant-design-vue"
 export class OpenAir implements GraphicInterface {
   id: string
   name: string
-  positions: Cesium.Cartesian3[]
+  positions: Cesium.Cartesian3[] | { x: number; y: number; z: number }[]
   height: number
   layer: mars3d.layer.GraphicLayer
   polygon: mars3d.graphic.PolygonEntity
