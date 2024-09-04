@@ -244,10 +244,10 @@ const handleArea = (area) => {
     } else {
       window.polygonWall.clear()
     }
-    if (window.polygonWall === undefined) {
-      window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
+    if (window.polygonEntity === undefined) {
+      window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
     } else {
-      window.polygonWall.clear()
+      window.polygonEntity.clear()
     }
     // 加载图层
     getBuilding(response.data.data.detailsInfoAndChildren)

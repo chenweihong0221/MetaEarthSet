@@ -6,6 +6,7 @@ import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
 import { mapKey, stateKey } from "@mars/pages/meta/module/store/store"
 import { deleteModel, updateModel, getDetail } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
+import { Cesium } from "mars3d"
 import { Building, Floor } from "@mars/pages/meta/module/model/Building"
 import { OpenAir } from "@mars/pages/meta/module/model/OpenAir"
 import store from "../../widget-store"
@@ -238,16 +239,16 @@ const beginStore = () => {
   const id = stateStore.state.selectedGraphicId
   const selectedType = stateStore.state.selectedGraphicType
   if (selectedType === 4) {
-    if (window.drawGraphicLayer.isEditing(window.polygonEntity.get(id))) {
-      window.polygonWall.get(id).positions = window.polygonEntity.get(id).positions
-      window.polygonWall.get(id).show = true
+    if (window.polygonEntity.get(id).isEditing) {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
+      window.polygonWall.get(id).positions = window.polygonEntity.get(id).editing.positions
+      window.polygonWall.get(id).show = true
     } else {
       window.polygonWall.get(id).show = false
       window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
     }
-
   }
+  
 }
 </script>
 
