@@ -473,6 +473,7 @@ export class Space implements GraphicInterface {
         if (res.data.code === "0") {
           this.id = res.data.data.districtId
           this.code = res.data.data.districtCode
+          message.success("新增区域成功")
         } else {
           message.error(res.data.msg)
         }
