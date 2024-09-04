@@ -23,7 +23,7 @@ export class GraphicDraw implements GraphicInterface {
   constructor(name:string, position: mars3d.Cesium.Cartesian3, p_type?: number, id?: string) {
 
     this.id = ""
-    this.name = name
+    this.name = name + "_标识"
     this.position = position
 
     const postData = this.toModelData(stateStore.state.selectedAreaCode)
