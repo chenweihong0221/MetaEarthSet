@@ -22,6 +22,7 @@ const selectedGraphicId = ref("")
 const name = ref("")
 const type = ref("")
 const show = ref(true)
+const startEdit = ref<boolean>(false)
 const lat = ref()
 const lng = ref()
 const alt = ref()
@@ -243,12 +244,14 @@ const beginStore = () => {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
       window.polygonWall.get(id).positions = window.polygonEntity.get(id).editing.positions
       window.polygonWall.get(id).show = true
+      startEdit.value = false
     } else {
       window.polygonWall.get(id).show = false
       window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
+      startEdit.value = true
     }
   }
-  
+
 }
 </script>
 
@@ -315,7 +318,8 @@ const beginStore = () => {
               <mars-button class="my-button-interaction" @click="updateStore">修改</mars-button>
             </div>
             <div class="msg-row">
-              <mars-button class="my-button-edit" @click="beginStore">切换编辑模式</mars-button>
+              <mars-button class="my-button-edit" @click="beginStore" v-show="!startEdit">开始编辑</mars-button>
+              <mars-button class="my-button-edit" @click="beginStore" v-show="startEdit">停止编辑</mars-button>
             </div>
           </div>
         </a-collapse-panel>
@@ -529,7 +533,7 @@ input {
 
 .my-button-edit {
   margin: auto 1em;
-  width: 120px;
+  width: 100px;
   height: 32px;
   background-color: #444444 !important;
   border-color: #1DA57A !important;
