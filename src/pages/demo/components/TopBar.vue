@@ -286,7 +286,7 @@ function getFloor(parent: any, building: Building) {
         floor.code = child.code
         building.floors.set(child.districtId, floor)
         store.state.floorBuildingMap.set(floor.id, building.id)
-        // getSpace(child, floor)
+        getSpace(child, floor)
       }
     }
   }
@@ -294,30 +294,30 @@ function getFloor(parent: any, building: Building) {
   stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
-// function getSpace(parent: any, floor: Floor) {
-//   const children = parent.children
-//   if (children) {
-//     for (let i = 0; i < children.length; i++) {
-//       const child = children[i]
-//       let positions = []
-//       if (child.path === null || child.path === "") {
-//         positions = floor.positions
-//       } else {
-//         positions = JSON.parse(child.path)
-//       }
-//       if (child.districtType === 5) {
-//         const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
-//           positions,
-//           i * (5 + 1)
-//         ) as Cesium.Cartesian3[]
-//         const space = new Space(newPosition, floor, child.name, null, child.districtId, false)
-//         floor.spaces.set(space.id, space)
-//         space.code = child.code
-//         store.state.spaceFloorMap.set(space.id, floor.id)
-//       }
-//     }
-//   }
-// }
+function getSpace(parent: any, floor: Floor) {
+  const children = parent.children
+  if (children) {
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i]
+      let positions = []
+      if (child.path === null || child.path === "") {
+        positions = floor.positions
+      } else {
+        positions = JSON.parse(child.path)
+      }
+      if (child.districtType === 5) {
+        const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+          positions,
+          i * (5 + 1)
+        ) as Cesium.Cartesian3[]
+        const space = new Space(newPosition, floor, child.name, null, child.districtId, false)
+        floor.spaces.set(space.id, space)
+        space.code = child.code
+        store.state.spaceFloorMap.set(space.id, floor.id)
+      }
+    }
+  }
+}
 
 const handleDel = () => {
   deleteModel(districtId.value).then(response => {

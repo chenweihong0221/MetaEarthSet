@@ -188,8 +188,8 @@ export class Building implements GraphicInterface {
           })
         }
       }
+      isFirst++
     })
-    isFirst++
   }
 
 
