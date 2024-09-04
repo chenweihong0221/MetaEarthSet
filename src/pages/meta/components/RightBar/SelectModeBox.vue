@@ -259,7 +259,8 @@ const beginStore = () => {
       const pos = castTo2DArr(newPositions)
       const params = {
         districtId: id,
-        path: pos
+        path: pos.toString(),
+        longitudeAndLatitudeJson: pos.toString()
       }
       // 调取修改接口
       updateModel(params).then((res) => {
