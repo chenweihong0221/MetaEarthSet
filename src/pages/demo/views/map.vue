@@ -129,6 +129,8 @@ const marsOnload = (map: any) => {
   const graphicLayer2d = new mars3d.layer.GraphicLayer({
     drawEndEventType: mars3d.EventType.middleClick
   })
+
+  window.drawGraphicLayer = graphicLayer
   store.commit("setGraphicLayer", graphicLayer)
   store.commit("setGraphicLayer2d", graphicLayer2d)
   // del by cwh 20240809

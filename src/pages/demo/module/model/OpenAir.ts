@@ -62,8 +62,11 @@ export class OpenAir implements GraphicInterface {
         closure: true
       }
     })
-    this.layer.addGraphic(this.polygon)
+    // this.layer.addGraphic(this.polygon)
+    window.drawGraphicLayer.addGraphic(this.polygon)
     this.layer.addGraphic(this.wall)
+
+    window.graphWallTest = this.polygon
   }
 
   setShow(show: boolean): void {

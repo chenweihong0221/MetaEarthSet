@@ -27,5 +27,6 @@
     }
   },
   "include": ["src/**/*.ts", "packages/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
-  "exclude": ["node_modules", "src/**/*.js", "dist"]
+  "exclude": ["node_modules", "src/**/*.js", "dist"],
+  "files": ["global.d.ts"]
 }

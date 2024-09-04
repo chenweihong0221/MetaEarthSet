@@ -242,7 +242,8 @@ const beginStore = () => {
     building.layer.startEditing(building.polygon)
   } else if (selectedType === 4) {
     const openAir = mapStore.state.openAirMap.get(id)
-    openAir.layer.startEditing(openAir.polygon)
+    // openAir.layer.startEditing(openAir.polygon)
+    window.drawGraphicLayer.startEditing(window.graphWallTest)
   }
 
 }
