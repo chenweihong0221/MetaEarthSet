@@ -237,14 +237,16 @@ const handleShowChange = (param) => {
 const beginStore = () => {
   const id = stateStore.state.selectedGraphicId
   const selectedType = stateStore.state.selectedGraphicType
-  if (selectedType === 0) {
-    const building = mapStore.state.buildingMap.get(id)
-    building.layer.startEditing(building.polygon)
-  } else if (selectedType === 4) {
-    const openAir = mapStore.state.openAirMap.get(id)
-    // openAir.layer.startEditing(openAir.polygon)
-    window.polygonWall.get(id).show = false
-    window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
+  if (selectedType === 4) {
+    if (window.drawGraphicLayer.isEditing(window.polygonEntity.get(id))) {
+      window.polygonWall.get(id).positions = window.polygonEntity.get(id).positions
+      window.polygonWall.get(id).show = true
+      window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
+    } else {
+      window.polygonWall.get(id).show = false
+      window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
+    }
+
   }
 }
 </script>
@@ -310,7 +312,9 @@ const beginStore = () => {
             <div class="msg-row">
               <mars-button class="my-button-interaction" @click="deleteStore">删除</mars-button>
               <mars-button class="my-button-interaction" @click="updateStore">修改</mars-button>
-              <mars-button class="my-button-interaction" @click="beginStore">开始编辑</mars-button>
+            </div>
+            <div class="msg-row">
+              <mars-button class="my-button-edit" @click="beginStore">切换编辑模式</mars-button>
             </div>
           </div>
         </a-collapse-panel>
@@ -516,6 +520,15 @@ input {
 .my-button-interaction {
   margin: auto 1em;
   width: 90px;
+  height: 32px;
+  background-color: #444444 !important;
+  border-color: #1DA57A !important;
+  color: white;
+}
+
+.my-button-edit {
+  margin: auto 1em;
+  width: 120px;
   height: 32px;
   background-color: #444444 !important;
   border-color: #1DA57A !important;

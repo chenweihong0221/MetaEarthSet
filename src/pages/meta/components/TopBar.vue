@@ -238,6 +238,10 @@ const handleArea = (area) => {
   stateStore.commit("updateSelectedAreaCode", area.code)
   stateStore.commit("updateSelectedAreaId", area.districtId)
   getDetail(area.districtId, area.districtId).then(function (response) {
+    // 初始化全局墙壁和矢量图层(露天广场)
+    window.polygonWall.clear()
+    window.polygonEntity.clear()
+    // 加载图层
     getBuilding(response.data.data.detailsInfoAndChildren)
   })
 }
