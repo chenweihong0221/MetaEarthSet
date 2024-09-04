@@ -86,6 +86,9 @@ onMounted(() => {
         stateStore.commit("updateSelectedAreaCode", selectedArea.value)
         stateStore.commit("updateSelectedAreaId", districtId.value)
         getDetail(districtId.value, districtId.value).then(function (response) {
+          // 初始化全局墙壁和矢量图层(露天广场)
+          window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
+          window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
           getBuilding(response.data.data.detailsInfoAndChildren)
         })
       })
