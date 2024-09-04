@@ -260,8 +260,8 @@ const beginStore = () => {
       const path = convertToJSON(pos)
       const params = {
         districtId: id,
-        path: pos.toString(),
-        longitudeAndLatitudeJson: pos.toString()
+        path: path.toString(),
+        longitudeAndLatitudeJson: path.toString()
       }
       // 调取修改接口
       updateModel(params).then((res) => {
