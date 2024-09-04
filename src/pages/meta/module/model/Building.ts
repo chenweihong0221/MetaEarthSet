@@ -4,7 +4,7 @@ import { mapStore, stateStore } from "@mars/pages/meta/module/store/store"
 import { useStore } from "vuex"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
 import { ModelData } from "@mars/pages/meta/api/adopter"
-import { castTo2DArr } from "@mars/pages/meta/module/tool/position"
+import { castTo2DArr, convertToJSON } from "@mars/pages/meta/module/tool/position"
 import * as uuid from "uuid"
 import { addModel } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
@@ -278,21 +278,10 @@ export class Building implements GraphicInterface {
     }
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
-    const path = this.convertToJSON(pos)
+    const path = convertToJSON(pos)
     return new ModelData(areaId, this.id, this.name, path, position, 3, this.floorNumber)
   }
 
-  convertToJSON(path: number[][]) {
-    // 创建一个对象数组来存储路径点信息
-    const pathObjects = path.map((point, index) => ({
-      x: point[0],
-      y: point[1],
-      z: point[2]
-    }))
-    // 将对象数组转换为 JSON 字符串
-    const jsonString = JSON.stringify(pathObjects)
-    return jsonString
-  }
 }
 
 export class Floor implements GraphicInterface {
@@ -427,21 +416,10 @@ export class Floor implements GraphicInterface {
   toModelData(): ModelData {
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
-    const path = this.convertToJSON(pos)
+    const path = convertToJSON(pos)
     return new ModelData(null, null, this.name, path, position, 4, this.floorNo)
   }
 
-  convertToJSON(path: number[][]) {
-    // 创建一个对象数组来存储路径点信息
-    const pathObjects = path.map((point, index) => ({
-      x: point[0],
-      y: point[1],
-      z: point[2]
-    }))
-    // 将对象数组转换为 JSON 字符串
-    const jsonString = JSON.stringify(pathObjects)
-    return jsonString
-  }
 }
 
 export class Space implements GraphicInterface {
@@ -525,20 +503,9 @@ export class Space implements GraphicInterface {
   toModelData(): ModelData {
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
-    const path = this.convertToJSON(pos)
+    const path = convertToJSON(pos)
     return new ModelData(this.parent.code, this.id, this.name, path, position, 5, null)
   }
 
-  convertToJSON(path: number[][]) {
-    // 创建一个对象数组来存储路径点信息
-    const pathObjects = path.map((point, index) => ({
-      x: point[0],
-      y: point[1],
-      z: point[2]
-    }))
-    // 将对象数组转换为 JSON 字符串
-    const jsonString = JSON.stringify(pathObjects)
-    return jsonString
-  }
 }
 

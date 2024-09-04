@@ -7,7 +7,7 @@ import { mapKey, stateKey } from "@mars/pages/meta/module/store/store"
 import { deleteModel, updateModel, getDetail } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
 import { Cesium } from "mars3d"
-import { castTo2DArr } from "@mars/pages/meta/module/tool/position"
+import { castTo2DArr, convertToJSON } from "@mars/pages/meta/module/tool/position"
 import { Building, Floor } from "@mars/pages/meta/module/model/Building"
 import { OpenAir } from "@mars/pages/meta/module/model/OpenAir"
 import store from "../../widget-store"
@@ -257,6 +257,7 @@ const beginStore = () => {
         })
       }
       const pos = castTo2DArr(newPositions)
+      const path = convertToJSON(pos)
       const params = {
         districtId: id,
         path: pos.toString(),

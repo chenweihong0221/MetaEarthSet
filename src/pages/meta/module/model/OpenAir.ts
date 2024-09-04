@@ -5,7 +5,7 @@ import { mapStore, stateStore } from "@mars/pages/meta/module/store/store"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
 import { ModelData } from "@mars/pages/meta/api/adopter"
 import { addModel } from "@mars/pages/meta/api/api"
-import { castTo2DArr } from "@mars/pages/meta/module/tool/position"
+import { castTo2DArr, convertToJSON } from "@mars/pages/meta/module/tool/position"
 import { message } from "ant-design-vue"
 
 export class OpenAir implements GraphicInterface {
@@ -124,19 +124,7 @@ export class OpenAir implements GraphicInterface {
     }
     const pos = castTo2DArr(positions)
     const position = mars3d.PolyUtil.centerOfMass(positions)
-    const path = this.convertToJSON(pos)
+    const path = convertToJSON(pos)
     return new ModelData(areaId, this.id, this.name, path, position, 7, 1)
-  }
-
-  convertToJSON(path: number[][]) {
-    // 创建一个对象数组来存储路径点信息
-    const pathObjects = path.map((point, index) => ({
-      x: point[0],
-      y: point[1],
-      z: point[2]
-    }))
-    // 将对象数组转换为 JSON 字符串
-    const jsonString = JSON.stringify(pathObjects)
-    return jsonString
   }
 }

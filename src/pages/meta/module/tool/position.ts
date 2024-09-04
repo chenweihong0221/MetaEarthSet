@@ -9,3 +9,16 @@ export function castTo2DArr(positions: Cesium.Cartesian3 | Cesium.Cartesian3[] |
   }
   return [[positions.x, positions.y, positions.z]]
 }
+
+// 将数组转换为JSON格式
+export function convertToJSON(path: number[][]) {
+  // 创建一个对象数组来存储路径点信息
+  const pathObjects = path.map((point, index) => ({
+    x: point[0],
+    y: point[1],
+    z: point[2]
+  }))
+  // 将对象数组转换为 JSON 字符串
+  const jsonString = JSON.stringify(pathObjects)
+  return jsonString
+}
