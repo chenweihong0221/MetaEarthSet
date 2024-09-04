@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { useStore } from "vuex"
-import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
+import { mapKey, stateKey } from "@mars/pages/meta/module/store/store"
 import * as mars3d from "mars3d"
-import { Building, Floor, setHeight } from "@mars/pages/demo/module/model/Building"
+import { Building, Floor, setHeight } from "@mars/pages/meta/module/model/Building"
 import { Cesium } from "mars3d"
 import MarsButton from "@mars/components/mars-ui/mars-button/index.vue"
-import { CesiumRoleController } from "@mars/pages/demo/module/store/CesiumRoleController"
-import { Fence } from "@mars/pages/demo/module/model/Fence"
-import { OpenAir } from "@mars/pages/demo/module/model/OpenAir"
-import { Human } from "@mars/pages/demo/module/model/Human"
-import { GraphicDraw } from "@mars/pages/demo/module/model/GraphicDraw"
-import { Camera } from "@mars/pages/demo/module/model/Camera"
+import { CesiumRoleController } from "@mars/pages/meta/module/store/CesiumRoleController"
+import { Fence } from "@mars/pages/meta/module/model/Fence"
+import { OpenAir } from "@mars/pages/meta/module/model/OpenAir"
+import { Human } from "@mars/pages/meta/module/model/Human"
+import { GraphicDraw } from "@mars/pages/meta/module/model/GraphicDraw"
+import { Camera } from "@mars/pages/meta/module/model/Camera"
 
 // 1，3的时候直接绘制即可，2的时候要先选择楼层
 const selectedState = ref<string>("1") // 当前状态，0 未绘制， 1 绘制建筑物， 2 绘制楼层内空间， 3 绘制围栏

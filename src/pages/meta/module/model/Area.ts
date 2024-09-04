@@ -1,11 +1,11 @@
-import { Building } from "@mars/pages/demo/module/model/Building"
-import { Fence } from "@mars/pages/demo/module/model/Fence"
-import { OpenAir } from "@mars/pages/demo/module/model/OpenAir"
-import { GraphicDraw } from "@mars/pages/demo/module/model/GraphicDraw"
-import { Human } from "@mars/pages/demo/module/model/Human"
-import { Camera } from "@mars/pages/demo/module/model/Camera"
+import { Building } from "@mars/pages/meta/module/model/Building"
+import { Fence } from "@mars/pages/meta/module/model/Fence"
+import { OpenAir } from "@mars/pages/meta/module/model/OpenAir"
+import { GraphicDraw } from "@mars/pages/meta/module/model/GraphicDraw"
+import { Human } from "@mars/pages/meta/module/model/Human"
+import { Camera } from "@mars/pages/meta/module/model/Camera"
 import * as uuid from "uuid"
-import { loadJSON } from "@mars/pages/demo/module/tool/persistence"
+import { loadJSON } from "@mars/pages/meta/module/tool/persistence"
 
 export class AreaData {
   buildings: Building[]

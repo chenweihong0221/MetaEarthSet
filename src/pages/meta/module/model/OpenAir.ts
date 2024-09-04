@@ -1,11 +1,11 @@
 import { Cesium } from "mars3d"
 import * as mars3d from "mars3d"
 import * as uuid from "uuid"
-import { mapStore, stateStore } from "@mars/pages/demo/module/store/store"
-import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
-import { ModelData } from "@mars/pages/demo/api/adopter"
-import { addModel } from "@mars/pages/demo/api/api"
-import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
+import { mapStore, stateStore } from "@mars/pages/meta/module/store/store"
+import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
+import { ModelData } from "@mars/pages/meta/api/adopter"
+import { addModel } from "@mars/pages/meta/api/api"
+import { castTo2DArr } from "@mars/pages/meta/module/tool/position"
 import { message } from "ant-design-vue"
 
 export class OpenAir implements GraphicInterface {

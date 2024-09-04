@@ -1,6 +1,6 @@
-import { Building, Floor } from "@mars/pages/demo/module/model/Building"
-import { mapStore, stateStore } from "@mars/pages/demo/module/store/store"
-import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
+import { Building, Floor } from "@mars/pages/meta/module/model/Building"
+import { mapStore, stateStore } from "@mars/pages/meta/module/store/store"
+import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
 import { Cesium } from "mars3d"
 import { Space } from "ant-design-vue"
 

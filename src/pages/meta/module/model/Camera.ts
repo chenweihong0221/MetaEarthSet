@@ -1,10 +1,10 @@
 import * as mars3d from "mars3d"
 import Flv from "flv-h265.js"
-import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
-import { mapStore } from "@mars/pages/demo/module/store/store"
+import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
+import { mapStore } from "@mars/pages/meta/module/store/store"
 import { Cesium } from "mars3d"
-import { ModelData } from "@mars/pages/demo/api/adopter"
-import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
+import { ModelData } from "@mars/pages/meta/api/adopter"
+import { castTo2DArr } from "@mars/pages/meta/module/tool/position"
 
 export class Camera implements GraphicInterface {
   id: string

@@ -1,11 +1,11 @@
 import { mapStore, stateStore } from "../store/store"
-import { Building } from "@mars/pages/demo/module/model/Building"
-import { Fence } from "@mars/pages/demo/module/model/Fence"
-import { OpenAir } from "@mars/pages/demo/module/model/OpenAir"
-import { Human } from "@mars/pages/demo/module/model/Human"
-import { GraphicDraw } from "@mars/pages/demo/module/model/GraphicDraw"
-import { Camera } from "@mars/pages/demo/module/model/Camera"
-import { AreaData, AreaLocalStorage } from "@mars/pages/demo/module/model/Area"
+import { Building } from "@mars/pages/meta/module/model/Building"
+import { Fence } from "@mars/pages/meta/module/model/Fence"
+import { OpenAir } from "@mars/pages/meta/module/model/OpenAir"
+import { Human } from "@mars/pages/meta/module/model/Human"
+import { GraphicDraw } from "@mars/pages/meta/module/model/GraphicDraw"
+import { Camera } from "@mars/pages/meta/module/model/Camera"
+import { AreaData, AreaLocalStorage } from "@mars/pages/meta/module/model/Area"
 
 function getNowAreaData(): AreaData {
   const buildingArr = Array.from(mapStore.state.buildingMap.values())

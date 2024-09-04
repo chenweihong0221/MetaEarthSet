@@ -1,9 +1,9 @@
 import * as mars3d from "mars3d"
 import { Cesium, LngLatPoint } from "mars3d"
-import { mapStore } from "@mars/pages/demo/module/store/store"
-import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
-import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
-import { ModelData } from "@mars/pages/demo/api/adopter"
+import { mapStore } from "@mars/pages/meta/module/store/store"
+import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
+import { castTo2DArr } from "@mars/pages/meta/module/tool/position"
+import { ModelData } from "@mars/pages/meta/api/adopter"
 
 export class Fence implements GraphicInterface {
   id: string
