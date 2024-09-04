@@ -61,8 +61,9 @@ export class OpenAir implements GraphicInterface {
             }
           })
           // this.layer.addGraphic(this.polygon)
+          // this.layer.addGraphic(this.wall)
           window.drawGraphicLayer.addGraphic(this.polygon)
-          this.layer.addGraphic(this.wall)
+          window.polygonWall.set(this.id, this.wall)
           window.polygonEntity.set(this.id, this.polygon)
           message.success(res.data.msg)
         } else {
@@ -105,8 +106,16 @@ export class OpenAir implements GraphicInterface {
   }
 
   toModelData(areaId: string): ModelData {
-    const pos = castTo2DArr(this.positions)
-    const position = mars3d.PolyUtil.centerOfMass(this.positions)
+    let positions: Cesium.Cartesian3[]
+    if (this.positions[0] instanceof mars3d.Cesium.Cartesian3) {
+      positions = this.positions as Cesium.Cartesian3[]
+    } else {
+      positions = (this.positions as { x: number; y: number; z: number }[]).map((item) => {
+        return new Cesium.Cartesian3(item.x, item.y, item.z)
+      })
+    }
+    const pos = castTo2DArr(positions)
+    const position = mars3d.PolyUtil.centerOfMass(positions)
     const path = this.convertToJSON(pos)
     return new ModelData(areaId, this.id, this.name, path, position, 7, 1)
   }

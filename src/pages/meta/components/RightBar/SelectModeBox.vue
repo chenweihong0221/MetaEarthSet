@@ -243,6 +243,7 @@ const beginStore = () => {
   } else if (selectedType === 4) {
     const openAir = mapStore.state.openAirMap.get(id)
     // openAir.layer.startEditing(openAir.polygon)
+    window.polygonWall.get(id).show = false
     window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
   }
 }
