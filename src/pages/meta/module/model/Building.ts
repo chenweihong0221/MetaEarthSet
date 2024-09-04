@@ -1,12 +1,12 @@
 import * as mars3d from "mars3d"
 import { Cesium, EventType } from "mars3d"
-import { mapStore, stateStore } from "@mars/pages/demo/module/store/store"
+import { mapStore, stateStore } from "@mars/pages/meta/module/store/store"
 import { useStore } from "vuex"
-import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
-import { ModelData } from "@mars/pages/demo/api/adopter"
-import { castTo2DArr } from "@mars/pages/demo/module/tool/position"
+import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
+import { ModelData } from "@mars/pages/meta/api/adopter"
+import { castTo2DArr } from "@mars/pages/meta/module/tool/position"
 import * as uuid from "uuid"
-import { addModel } from "@mars/pages/demo/api/api"
+import { addModel } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
 import { ref } from "vue"
 
@@ -188,8 +188,8 @@ export class Building implements GraphicInterface {
           })
         }
       }
+      isFirst++
     })
-    isFirst++
   }
 
 
@@ -473,6 +473,7 @@ export class Space implements GraphicInterface {
         if (res.data.code === "0") {
           this.id = res.data.data.districtId
           this.code = res.data.data.districtCode
+          message.success("新增区域成功")
         } else {
           message.error(res.data.msg)
         }

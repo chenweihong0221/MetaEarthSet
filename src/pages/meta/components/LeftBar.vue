@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useStore } from "vuex"
-import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
+import { mapKey, stateKey } from "@mars/pages/meta/module/store/store"
 
 import { nextTick, ref, watch, watchEffect } from "vue"
 import { TreeProps } from "ant-design-vue"
-import { GraphicInterface } from "@mars/pages/demo/module/model/GraphicInterface"
+import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
 import { Building } from "../module/model/Building"
 
 const store = useStore(mapKey)

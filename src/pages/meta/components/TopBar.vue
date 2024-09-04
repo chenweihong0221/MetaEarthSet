@@ -1,11 +1,11 @@
 <script setup lang="ts">
 // import "ant-design-vue/dist/antd.css"
-import { addModel, deleteModel, getModel, getThree, getDetail } from "@mars/pages/demo/api/api"
+import { addModel, deleteModel, getModel, getThree, getDetail } from "@mars/pages/meta/api/api"
 import { Cesium } from "mars3d"
 import * as mars3d from "mars3d"
-import { Area, getAllAreaIdAndName } from "@mars/pages/demo/module/model/Area"
-import { mapKey, stateKey } from "@mars/pages/demo/module/store/store"
-import { loadJSON } from "@mars/pages/demo/module/tool/persistence"
+import { Area, getAllAreaIdAndName } from "@mars/pages/meta/module/model/Area"
+import { mapKey, stateKey } from "@mars/pages/meta/module/store/store"
+import { loadJSON } from "@mars/pages/meta/module/tool/persistence"
 import { message } from "ant-design-vue"
 import type { Dayjs } from "dayjs"
 import { onMounted, reactive, ref } from "vue"
@@ -279,14 +279,14 @@ function getFloor(parent: any, building: Building) {
       if (child.districtType === 4) {
         const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
           positions,
-          i * (5 + 1)
+          i * (5 + 0.1)
         ) as Cesium.Cartesian3[]
         floorNo += 1
         const floor = new Floor(newPosition, building, child.name, floorNo, null, child.districtId, parent.id, false)
         floor.code = child.code
         building.floors.set(child.districtId, floor)
         store.state.floorBuildingMap.set(floor.id, building.id)
-        // getSpace(child, floor)
+        getSpace(child, floor)
       }
     }
   }
@@ -294,30 +294,30 @@ function getFloor(parent: any, building: Building) {
   stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
-// function getSpace(parent: any, floor: Floor) {
-//   const children = parent.children
-//   if (children) {
-//     for (let i = 0; i < children.length; i++) {
-//       const child = children[i]
-//       let positions = []
-//       if (child.path === null || child.path === "") {
-//         positions = floor.positions
-//       } else {
-//         positions = JSON.parse(child.path)
-//       }
-//       if (child.districtType === 5) {
-//         const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
-//           positions,
-//           i * (5 + 1)
-//         ) as Cesium.Cartesian3[]
-//         const space = new Space(newPosition, floor, child.name, null, child.districtId, false)
-//         floor.spaces.set(space.id, space)
-//         space.code = child.code
-//         store.state.spaceFloorMap.set(space.id, floor.id)
-//       }
-//     }
-//   }
-// }
+function getSpace(parent: any, floor: Floor) {
+  const children = parent.children
+  if (children) {
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i]
+      let positions = []
+      if (child.path === null || child.path === "") {
+        positions = floor.positions
+      } else {
+        positions = JSON.parse(child.path)
+      }
+      if (child.districtType === 5) {
+        const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+          positions,
+          i * (5 + 0.1)
+        ) as Cesium.Cartesian3[]
+        const space = new Space(newPosition, floor, child.name, null, child.districtId, false)
+        floor.spaces.set(space.id, space)
+        space.code = child.code
+        store.state.spaceFloorMap.set(space.id, floor.id)
+      }
+    }
+  }
+}
 
 const handleDel = () => {
   deleteModel(districtId.value).then(response => {
