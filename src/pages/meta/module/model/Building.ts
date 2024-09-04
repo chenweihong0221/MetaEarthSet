@@ -168,7 +168,7 @@ export class Building implements GraphicInterface {
 
   onlyShowFirstFloor(): void {
     let isFirst = 0
-    this.floors.forEach((floor: Floor, index) => {
+    this.floors.forEach((floor: Floor) => {
       if (isFirst === 0) {
         floor.polygon.show = true
         floor.wall.show = false
@@ -228,6 +228,12 @@ export class Building implements GraphicInterface {
           space.wall.show = true
         })
       }
+    })
+  }
+
+  getFirstFloor() {
+    this.floors.forEach((floor: Floor) => {
+      return floor
     })
   }
 

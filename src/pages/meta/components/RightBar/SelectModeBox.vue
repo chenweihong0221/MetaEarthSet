@@ -279,6 +279,8 @@ const beginStore = () => {
     if (selectedType === 0) {
       const building = mapStore.state.buildingMap.get(id)
       building.onlyShowFirstFloor()
+      const floor = building.getFirstFloor()
+      window.drawGraphicLayer.startEditing(window.polygonEntity.get(floor.id))
     } else {
       window.polygonWall.get(id).show = false
       window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
