@@ -171,11 +171,11 @@ export class Building implements GraphicInterface {
     this.floors.forEach((floor: Floor, index) => {
       if (isFirst === 0) {
         floor.polygon.show = true
-        floor.wall.show = true
+        floor.wall.show = false
         if (floor.spaces) {
           floor.spaces.forEach((space: Space) => {
-            space.polygon.show = true
-            space.wall.show = true
+            space.polygon.show = false
+            space.wall.show = false
           })
         }
       } else {

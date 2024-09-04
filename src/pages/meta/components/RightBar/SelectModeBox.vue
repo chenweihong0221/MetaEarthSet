@@ -240,7 +240,7 @@ const handleShowChange = (param) => {
 const beginStore = () => {
   const id = stateStore.state.selectedGraphicId
   const selectedType = stateStore.state.selectedGraphicType
-  if (window.polygonEntity.get(id).isEditing) {
+  if (startEdit.value) {
     if (selectedType === 0) {
       const building = mapStore.state.buildingMap.get(id)
       building.showAllFloors()
@@ -249,7 +249,6 @@ const beginStore = () => {
       const positions = window.polygonEntity.get(id).editing.positions
       window.polygonWall.get(id).positions = positions
       window.polygonWall.get(id).show = true
-      startEdit.value = false
       // 生成接口参数
       let newPositions: Cesium.Cartesian3[]
       if (positions[0] instanceof mars3d.Cesium.Cartesian3) {
@@ -275,6 +274,7 @@ const beginStore = () => {
         }
       })
     }
+    startEdit.value = false
   } else {
     if (selectedType === 0) {
       const building = mapStore.state.buildingMap.get(id)
