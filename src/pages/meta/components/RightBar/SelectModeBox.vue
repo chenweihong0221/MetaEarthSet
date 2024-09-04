@@ -7,6 +7,7 @@ import { mapKey, stateKey } from "@mars/pages/meta/module/store/store"
 import { deleteModel, updateModel, getDetail } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
 import { Cesium } from "mars3d"
+import { castTo2DArr, convertToJSON } from "@mars/pages/meta/module/tool/position"
 import { Building, Floor } from "@mars/pages/meta/module/model/Building"
 import { OpenAir } from "@mars/pages/meta/module/model/OpenAir"
 import store from "../../widget-store"
@@ -22,6 +23,7 @@ const selectedGraphicId = ref("")
 const name = ref("")
 const type = ref("")
 const show = ref(true)
+const startEdit = ref<boolean>(false)
 const lat = ref()
 const lng = ref()
 const alt = ref()
@@ -241,14 +243,40 @@ const beginStore = () => {
   if (selectedType === 4) {
     if (window.polygonEntity.get(id).isEditing) {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
-      window.polygonWall.get(id).positions = window.polygonEntity.get(id).editing.positions
+      const positions = window.polygonEntity.get(id).editing.positions
+      window.polygonWall.get(id).positions = positions
       window.polygonWall.get(id).show = true
+      startEdit.value = false
+      // 生成接口参数
+      let newPositions: Cesium.Cartesian3[]
+      if (positions[0] instanceof mars3d.Cesium.Cartesian3) {
+        newPositions = positions as Cesium.Cartesian3[]
+      } else {
+        newPositions = (positions as { x: number; y: number; z: number }[]).map((item) => {
+          return new Cesium.Cartesian3(item.x, item.y, item.z)
+        })
+      }
+      const pos = castTo2DArr(newPositions)
+      const path = convertToJSON(pos)
+      const params = {
+        districtId: id,
+        path: path.toString(),
+        longitudeAndLatitudeJson: path.toString()
+      }
+      // 调取修改接口
+      updateModel(params).then((res) => {
+        if (res.data.code === "0") {
+          message.success(res.data.msg)
+        } else {
+          message.error(res.data.msg)
+        }
+      })
     } else {
       window.polygonWall.get(id).show = false
       window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
+      startEdit.value = true
     }
   }
-  
 }
 </script>
 
@@ -315,7 +343,8 @@ const beginStore = () => {
               <mars-button class="my-button-interaction" @click="updateStore">修改</mars-button>
             </div>
             <div class="msg-row">
-              <mars-button class="my-button-edit" @click="beginStore">切换编辑模式</mars-button>
+              <mars-button class="my-button-edit" @click="beginStore" v-show="!startEdit">开始编辑</mars-button>
+              <mars-button class="my-button-edit" @click="beginStore" v-show="startEdit">停止编辑</mars-button>
             </div>
           </div>
         </a-collapse-panel>
@@ -529,7 +558,7 @@ input {
 
 .my-button-edit {
   margin: auto 1em;
-  width: 120px;
+  width: 100px;
   height: 32px;
   background-color: #444444 !important;
   border-color: #1DA57A !important;
