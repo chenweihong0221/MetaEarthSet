@@ -66,7 +66,7 @@ export class OpenAir implements GraphicInterface {
     window.drawGraphicLayer.addGraphic(this.polygon)
     this.layer.addGraphic(this.wall)
 
-    window.graphWallTest = this.polygon
+    window.polygonEntity = this.polygon
   }
 
   setShow(show: boolean): void {
