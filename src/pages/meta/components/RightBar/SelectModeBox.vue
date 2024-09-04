@@ -242,7 +242,8 @@ const beginStore = () => {
   const selectedType = stateStore.state.selectedGraphicType
   if (window.polygonEntity.get(id).isEditing) {
     if (selectedType === 0) {
-
+      const building = mapStore.state.buildingMap.get(id)
+      building.showAllFloors()
     } else if (selectedType === 4) {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
       const positions = window.polygonEntity.get(id).editing.positions
@@ -278,8 +279,7 @@ const beginStore = () => {
     if (selectedType === 0) {
       const building = mapStore.state.buildingMap.get(id)
       building.onlyShowFirstFloor()
-    }
-    else {
+    } else {
       window.polygonWall.get(id).show = false
       window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
     }
