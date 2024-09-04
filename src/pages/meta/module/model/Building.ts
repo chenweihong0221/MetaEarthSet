@@ -233,12 +233,12 @@ export class Building implements GraphicInterface {
 
   getFirstFloor(): Floor | undefined {
     // 将 Map 转换为数组，并获取第一个元素
-    const floorsArray = Array.from(this.floors.values());
+    const floorsArray = Array.from(this.floors.values())
     if (floorsArray.length > 0) {
-      return floorsArray[0];
+      return floorsArray[0]
     }
     // 如果 Map 为空，则返回 undefined
-    return undefined;
+    return undefined
   }
 
   static arrayToJSON(buildingArr: Building[]): string {
