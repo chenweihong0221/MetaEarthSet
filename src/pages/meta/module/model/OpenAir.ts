@@ -39,39 +39,46 @@ export class OpenAir implements GraphicInterface {
           this.id = res.data.data.districtId
           mapStore.commit("addOpenAir", this)
           stateStore.commit("updateLeftBarNeedUpdate", true)
-          this.polygon = new mars3d.graphic.PolygonEntity({
-            positions,
-            name: name || "露天场所",
-            style: {
-              // color: "#be3aea",
-              color: "#CECECE",
-              opacity: 1
-            }
-          })
-          this.wall = new mars3d.graphic.ThickWall({
-            positions,
-            name: name || "露天场所",
-            style: {
-              // color: "#be3aea",
-              color: "#A9A9A9", // modify by cwh 202408081127
-              opacity: 1,
-              diffHeight: this.height,
-              width: 0.1,
-              closure: true
-            }
-          })
-          // this.layer.addGraphic(this.polygon)
-          // this.layer.addGraphic(this.wall)
-          window.drawGraphicLayer.addGraphic(this.polygon)
-          window.polygonWall.set(this.id, this.wall)
-          window.polygonEntity.set(this.id, this.polygon)
+          this.makePolygon(positions, name)
           message.success(res.data.msg)
         } else {
           message.error(res.data.msg)
         }
       })
+    } else {
+      this.makePolygon(positions, name)
     }
   }
+
+  makePolygon(positions: Cesium.Cartesian3[], name: string): void {
+    this.polygon = new mars3d.graphic.PolygonEntity({
+      positions,
+      name: name || "露天场所",
+      style: {
+        // color: "#be3aea",
+        color: "#CECECE",
+        opacity: 1
+      }
+    })
+    this.wall = new mars3d.graphic.ThickWall({
+      positions,
+      name: name || "露天场所",
+      style: {
+        // color: "#be3aea",
+        color: "#A9A9A9", // modify by cwh 202408081127
+        opacity: 1,
+        diffHeight: this.height,
+        width: 0.1,
+        closure: true
+      }
+    })
+    // this.layer.addGraphic(this.polygon)
+    // this.layer.addGraphic(this.wall)
+    window.drawGraphicLayer.addGraphic(this.polygon)
+    window.polygonWall.set(this.id, this.wall)
+    window.polygonEntity.set(this.id, this.polygon)
+  }
+
 
   setShow(show: boolean): void {
     this.show = show
