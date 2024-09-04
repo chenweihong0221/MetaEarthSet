@@ -89,6 +89,7 @@ onMounted(() => {
           // 初始化全局墙壁和矢量图层(露天广场)
           window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
           window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
+          // 加载图层
           getBuilding(response.data.data.detailsInfoAndChildren)
         })
       })
