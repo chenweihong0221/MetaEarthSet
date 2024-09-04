@@ -239,8 +239,16 @@ const handleArea = (area) => {
   stateStore.commit("updateSelectedAreaId", area.districtId)
   getDetail(area.districtId, area.districtId).then(function (response) {
     // 初始化全局墙壁和矢量图层(露天广场)
-    window.polygonWall.clear()
-    window.polygonEntity.clear()
+    if (window.polygonWall === undefined) {
+      window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
+    } else {
+      window.polygonWall.clear()
+    }
+    if (window.polygonWall === undefined) {
+      window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
+    } else {
+      window.polygonWall.clear()
+    }
     // 加载图层
     getBuilding(response.data.data.detailsInfoAndChildren)
   })
