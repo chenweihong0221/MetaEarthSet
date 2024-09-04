@@ -63,7 +63,7 @@ export class OpenAir implements GraphicInterface {
           // this.layer.addGraphic(this.polygon)
           window.drawGraphicLayer.addGraphic(this.polygon)
           this.layer.addGraphic(this.wall)
-          window.polygonEntity = this.polygon
+          window.polygonEntity.set(this.id, this.polygon)
           message.success(res.data.msg)
         } else {
           message.error(res.data.msg)

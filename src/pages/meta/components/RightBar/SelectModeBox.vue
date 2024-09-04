@@ -243,9 +243,8 @@ const beginStore = () => {
   } else if (selectedType === 4) {
     const openAir = mapStore.state.openAirMap.get(id)
     // openAir.layer.startEditing(openAir.polygon)
-    window.drawGraphicLayer.startEditing(window.polygonEntity)
+    window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
   }
-
 }
 </script>
 
