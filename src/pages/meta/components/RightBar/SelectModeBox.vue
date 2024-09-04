@@ -240,8 +240,10 @@ const handleShowChange = (param) => {
 const beginStore = () => {
   const id = stateStore.state.selectedGraphicId
   const selectedType = stateStore.state.selectedGraphicType
-  if (selectedType === 4) {
-    if (window.polygonEntity.get(id).isEditing) {
+  if (window.polygonEntity.get(id).isEditing) {
+    if (selectedType === 0) {
+
+    } else if (selectedType === 4) {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
       const positions = window.polygonEntity.get(id).editing.positions
       window.polygonWall.get(id).positions = positions
@@ -271,11 +273,17 @@ const beginStore = () => {
           message.error(res.data.msg)
         }
       })
-    } else {
+    }
+  } else {
+    if (selectedType === 0) {
+      const building = mapStore.state.buildingMap.get(id)
+      building.onlyShowFirstFloor()
+    }
+    else {
       window.polygonWall.get(id).show = false
       window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
-      startEdit.value = true
     }
+    startEdit.value = true
   }
 }
 </script>

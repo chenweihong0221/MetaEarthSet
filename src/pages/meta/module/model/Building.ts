@@ -371,8 +371,12 @@ export class Floor implements GraphicInterface {
         closure: true
       }
     })
-    this.layer.addGraphic(this.polygon)
-    this.layer.addGraphic(this.wall)
+    // this.layer.addGraphic(this.polygon)
+    // this.layer.addGraphic(this.wall)
+    window.drawGraphicLayer.addGraphic(this.polygon)
+    window.drawGraphicLayer.addGraphic(this.wall)
+    window.polygonWall.set(this.id, this.wall)
+    window.polygonEntity.set(this.id, this.polygon)
   }
 
   /**
