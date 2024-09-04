@@ -35,38 +35,41 @@ export class OpenAir implements GraphicInterface {
     if (api === true) {
       const model = this.toModelData(stateStore.state.selectedAreaCode)
       addModel(model).then((res) => {
-        this.id = res.data.data.districtId
-        mapStore.commit("addOpenAir", this)
-        stateStore.commit("updateLeftBarNeedUpdate", true)
-        message.success(res.data.msg)
+        if (res.data.code === "0") {
+          this.id = res.data.data.districtId
+          mapStore.commit("addOpenAir", this)
+          stateStore.commit("updateLeftBarNeedUpdate", true)
+          this.polygon = new mars3d.graphic.PolygonEntity({
+            positions,
+            name: name || "露天场所",
+            style: {
+              // color: "#be3aea",
+              color: "#CECECE",
+              opacity: 1
+            }
+          })
+          this.wall = new mars3d.graphic.ThickWall({
+            positions,
+            name: name || "露天场所",
+            style: {
+              // color: "#be3aea",
+              color: "#A9A9A9", // modify by cwh 202408081127
+              opacity: 1,
+              diffHeight: this.height,
+              width: 0.1,
+              closure: true
+            }
+          })
+          // this.layer.addGraphic(this.polygon)
+          window.drawGraphicLayer.addGraphic(this.polygon)
+          this.layer.addGraphic(this.wall)
+          window.polygonEntity = this.polygon
+          message.success(res.data.msg)
+        } else {
+          message.error(res.data.msg)
+        }
       })
     }
-    this.polygon = new mars3d.graphic.PolygonEntity({
-      positions,
-      name: name || "露天场所",
-      style: {
-        // color: "#be3aea",
-        color: "#CECECE",
-        opacity: 1
-      }
-    })
-    this.wall = new mars3d.graphic.ThickWall({
-      positions,
-      name: name || "露天场所",
-      style: {
-        // color: "#be3aea",
-        color: "#A9A9A9", // modify by cwh 202408081127
-        opacity: 1,
-        diffHeight: this.height,
-        width: 0.1,
-        closure: true
-      }
-    })
-    // this.layer.addGraphic(this.polygon)
-    window.drawGraphicLayer.addGraphic(this.polygon)
-    this.layer.addGraphic(this.wall)
-
-    window.polygonEntity = this.polygon
   }
 
   setShow(show: boolean): void {
