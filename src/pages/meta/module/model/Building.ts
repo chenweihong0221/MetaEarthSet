@@ -5,6 +5,7 @@ import { useStore } from "vuex"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
 import { ModelData } from "@mars/pages/meta/api/adopter"
 import { castTo2DArr, convertToJSON } from "@mars/pages/meta/module/tool/position"
+import { deleteModel, updateModel, getDetail } from "@mars/pages/meta/api/api"
 import * as uuid from "uuid"
 import { addModel } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
@@ -241,7 +242,7 @@ export class Building implements GraphicInterface {
     return undefined
   }
 
-  setPositions(positions: Cesium.Cartesian3[]) {
+  updatePositions(positions: Cesium.Cartesian3[], api: boolean) {
     let i = 0
     this.positions = positions
     this.floors.forEach((floor: Floor) => {
@@ -252,8 +253,35 @@ export class Building implements GraphicInterface {
       floor.positions = positions
       floor.polygon.positions = newPosition
       floor.wall.positions = newPosition
+      if (api) {
+        timer.value = setTimeout(() => {
+          const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+            this.positions,
+            i * (this.floorHeight + this.floorInterval)
+          ) as Cesium.Cartesian3[]
+          // 生成接口参数
+          const pos = castTo2DArr(newPosition)
+          const path = convertToJSON(pos)
+          const params = {
+            districtId: floor.id,
+            path: path.toString(),
+            longitudeAndLatitudeJson: path.toString()
+          }
+          // 调取修改接口
+          updateModel(params).then((res) => {
+            if (res.data.code === "0") {
+              message.success(res.data.msg)
+            } else {
+              message.error(res.data.msg)
+            }
+          })
+        }, 250)
+      }
       i++
     })
+    if (api) {
+      clearInterval(timer.value)
+    }
   }
 
   static arrayToJSON(buildingArr: Building[]): string {

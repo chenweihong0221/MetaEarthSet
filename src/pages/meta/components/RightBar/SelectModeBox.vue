@@ -246,7 +246,7 @@ const beginStore = () => {
       const floor = building.getFirstFloor()
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(floor.id))
       const positions = window.polygonEntity.get(id).editing.positions
-      building.setPositions(positions)
+      building.updatePositions(positions, true)
       building.showAllFloors()
     } else if (selectedType === 4) {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
