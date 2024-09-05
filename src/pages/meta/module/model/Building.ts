@@ -286,21 +286,12 @@ export class Building implements GraphicInterface {
     console.log("updateSpacePositions")
     console.log(x, y, z)
     floor.spaces.forEach((space: Space) => {
-      space.positions.forEach((position: Cesium.Cartesian3) => {
-        position.x += x
-        position.y += y
-        position.z += z
+      const positions = space.positions.map((position: Cesium.Cartesian3) => {
+        return Cesium.Cartesian3.add(position, new Cesium.Cartesian3(x, y, z), new Cesium.Cartesian3())
       })
-      space.polygon.positions.forEach((position: Cesium.Cartesian3) => {
-        position.x += x
-        position.y += y
-        position.z += z
-      })
-      space.wall.positions.forEach((position: Cesium.Cartesian3) => {
-        position.x += x
-        position.y += y
-        position.z += z
-      })
+      space.positions = positions
+      space.polygon.positions = positions
+      space.wall.positions = positions
     })
   }
 
