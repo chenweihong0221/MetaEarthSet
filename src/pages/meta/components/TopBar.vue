@@ -268,7 +268,6 @@ function getBuilding(parent) {
       if (child.districtType === 3) {
         const building = new Building(store.state.graphicLayer, positions, child.name, 0, 5, null, true, child.districtId, false)
         getFloor(children[i], building)
-
       }
       if (child.districtType === 7) {
         const openAir = new OpenAir(store.state.graphicLayer, positions, child.name, null, child.districtId, false)
@@ -288,7 +287,7 @@ function getFloor(parent: any, building: Building) {
       const child = children[i]
       let positions = []
       if (child.path === null || child.path === "") {
-        positions = building.positions
+        positions = JSON.parse(parent.path)
       } else {
         positions = JSON.parse(child.path)
       }
