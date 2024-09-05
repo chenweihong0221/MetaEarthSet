@@ -83,7 +83,9 @@ const stopDraw = () => {
   if (selectedBuilding) {
     selectedBuilding.showAllFloors()
   }
-  personController.destroy()
+  if (personController) {
+    personController.destroy()
+  }
 }
 
 const drawBuilding = () => {
@@ -138,11 +140,11 @@ const drawSpace = () => {
   store.state.graphicLayer2d.addGraphic(groundPolygon)
   startDraw.value = true
   store.state.map.onlyPickTerrainPosition = true
-  store.state.graphicLayer.startDraw({
+  window.drawGraphicLayer.startDraw({
     type: "polygon",
     style: {
-      color: "#57cec0",
-      opacity: 0.5
+      color: "#106eac",
+      opacity: 0.8
     },
     validDrawPosition(...params) {
       const xyzLocation = params[0]
@@ -166,7 +168,7 @@ const drawSpace = () => {
     }
     selectedBuilding.showAllFloors()
     groundPolygon.destroy()
-    e.destroy()
+    e.destroy(false)
     drawCallback()
   })
 }
