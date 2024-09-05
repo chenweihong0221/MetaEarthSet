@@ -234,8 +234,8 @@ const handleClick = () => {
   store.commit("flytoHome")
 }
 
-const handleArea = (area) => {
-  if(area.id === districtId.value){
+const handleArea = (area: any) => {
+  if (area.id === districtId.value) {
     return
   }
   districtId.value = area.districtId
