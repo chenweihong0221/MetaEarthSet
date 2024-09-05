@@ -254,7 +254,17 @@ export class Building implements GraphicInterface {
       floor.wall.positions = newPosition
       if (floor.spaces) {
         floor.spaces.forEach((space: Space) => {
-          this.updateSpacePositions(newPosition, this.positions, floor)
+          const x = newPosition[0].x - this.positions[0].x
+          const y = newPosition[0].y - this.positions[0].y
+          const z = newPosition[0].z - this.positions[0].z
+          console.log(space.positions)
+          const positions = space.positions.map((position: Cesium.Cartesian3) => {
+            return Cesium.Cartesian3.add(position, new Cesium.Cartesian3(x, y, z), new Cesium.Cartesian3())
+          })
+          console.log(positions)
+          space.positions = positions
+          space.polygon.positions = positions
+          space.wall.positions = positions
         })
       }
       if (api) {
@@ -276,22 +286,6 @@ export class Building implements GraphicInterface {
         }, 250)
       }
       i++
-    })
-  }
-
-  updateSpacePositions(newPositions: Cesium.Cartesian3[], oldPositions: Cesium.Cartesian3[], floor: Floor) {
-    const x = newPositions[0].x - oldPositions[0].x
-    const y = newPositions[0].y - oldPositions[0].y
-    const z = newPositions[0].z - oldPositions[0].z
-    console.log("updateSpacePositions")
-    console.log(x, y, z)
-    floor.spaces.forEach((space: Space) => {
-      const positions = space.positions.map((position: Cesium.Cartesian3) => {
-        return Cesium.Cartesian3.add(position, new Cesium.Cartesian3(x, y, z), new Cesium.Cartesian3())
-      })
-      space.positions = positions
-      space.polygon.positions = positions
-      space.wall.positions = positions
     })
   }
 
