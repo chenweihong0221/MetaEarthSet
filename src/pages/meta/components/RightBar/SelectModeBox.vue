@@ -250,8 +250,9 @@ const beginStore = () => {
       const pos = castTo2DArr(positions)
       const path = convertToJSON(pos)
       const params = {
-        id: building.id,
-        path,
+        districtId: building.id,
+        path: path.toString(),
+        longitudeAndLatitudeJson: path.toString()
       }
       updateModel(params).then((res) => {
         if (res.data.code === "0") {
