@@ -12,6 +12,7 @@ import { onMounted, reactive, ref } from "vue"
 import { useStore } from "vuex"
 import { Building, Floor, Space } from "../module/model/Building"
 import { OpenAir } from "../module/model/OpenAir"
+import { GraphicDraw } from "@mars/pages/meta/module/model/GraphicDraw"
 
 interface FormState {
   url: string
@@ -272,6 +273,17 @@ function getBuilding(parent) {
       if (child.districtType === 7) {
         const openAir = new OpenAir(store.state.graphicLayer, positions, child.name, null, child.districtId, false)
         store.commit("addOpenAir", openAir)
+      }
+      if (child.districtType === 10) { // 图上标绘
+
+        // const p_obj = child.position
+        const t_p = new Cesium.Cartesian3(
+          child.position.xAxis, // x 坐标
+          child.position.yAxis, // y 坐标
+          child.position.zAxis // z 坐标
+        )
+
+        const graphicDraw = new GraphicDraw(child.name, t_p, 1, child.districtId, false)
       }
       stateStore.commit("updateLeftBarNeedUpdate", true)
       getBuilding(children)

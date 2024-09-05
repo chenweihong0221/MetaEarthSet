@@ -265,7 +265,7 @@ const handleGraphicDraw = () => {
     console.log("handleClick=========")
 
     const cartesian = new Cesium.Cartesian3(event.cartesian.x, event.cartesian.y, event.cartesian.z)
-    const graphicDraw = new GraphicDraw(selectedGraphicDrawContent.value, cartesian, selectedGraphicDrawStyle.value)
+    const graphicDraw = new GraphicDraw(selectedGraphicDrawContent.value, cartesian, selectedGraphicDrawStyle.value, "", true)
 
     // 放在GraphicDraw构造函数内
     // if (graphicDraw.postState === 0) {
