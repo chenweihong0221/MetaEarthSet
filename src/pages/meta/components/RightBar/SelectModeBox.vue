@@ -243,6 +243,10 @@ const beginStore = () => {
   if (startEdit.value) {
     if (selectedType === 0) {
       const building = mapStore.state.buildingMap.get(id)
+      const floor = building.getFirstFloor()
+      window.drawGraphicLayer.stopEditing(window.polygonEntity.get(floor.id))
+      const positions = window.polygonEntity.get(id).editing.positions
+      building.setPositions(positions)
       building.showAllFloors()
     } else if (selectedType === 4) {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))

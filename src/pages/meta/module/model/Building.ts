@@ -241,6 +241,21 @@ export class Building implements GraphicInterface {
     return undefined
   }
 
+  setPositions(positions: Cesium.Cartesian3[]){
+    let i = 0
+    this.positions = positions
+    this.floors.forEach((floor: Floor) => {
+      const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
+        this.positions,
+        i * (this.floorHeight + this.floorInterval)
+      ) as Cesium.Cartesian3[]
+      floor.positions = positions
+      floor.polygon.positions = newPosition
+      floor.wall.positions = newPosition
+      i++
+    })
+  }
+
   static arrayToJSON(buildingArr: Building[]): string {
     const buildings = buildingArr.map((item) => item.toJSONObject())
     return JSON.stringify(buildings)
