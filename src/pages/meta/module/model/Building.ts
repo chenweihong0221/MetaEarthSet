@@ -241,7 +241,7 @@ export class Building implements GraphicInterface {
     return undefined
   }
 
-  updatePositions(positions: Cesium.Cartesian3[], api: boolean) {
+  updatePositions(positions: Cesium.Cartesian3[]) {
     let i = 0
     this.positions = positions
     this.floors.forEach((floor: Floor) => {
@@ -249,38 +249,11 @@ export class Building implements GraphicInterface {
         this.positions,
         i * (this.floorHeight + this.floorInterval)
       ) as Cesium.Cartesian3[]
-      floor.positions = positions
+      floor.positions = newPosition
       floor.polygon.positions = newPosition
       floor.wall.positions = newPosition
-      if (api) {
-        timer.value = setTimeout(() => {
-          const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
-            this.positions,
-            i * (this.floorHeight + this.floorInterval)
-          ) as Cesium.Cartesian3[]
-          // 生成接口参数
-          const pos = castTo2DArr(newPosition)
-          const path = convertToJSON(pos)
-          const params = {
-            districtId: floor.id,
-            path: path.toString(),
-            longitudeAndLatitudeJson: path.toString()
-          }
-          // 调取修改接口
-          updateModel(params).then((res) => {
-            if (res.data.code === "0") {
-              message.success(res.data.msg)
-            } else {
-              message.error(res.data.msg)
-            }
-          })
-        }, 250)
-      }
       i++
     })
-    if (api) {
-      clearInterval(timer.value)
-    }
   }
 
   static arrayToJSON(buildingArr: Building[]): string {

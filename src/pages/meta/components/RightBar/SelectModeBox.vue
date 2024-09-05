@@ -247,6 +247,19 @@ const beginStore = () => {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(floor.id))
       const positions = window.polygonEntity.get(id).editing.positions
       building.updatePositions(positions, true)
+      const pos = castTo2DArr(positions)
+      const path = convertToJSON(pos)
+      const params = {
+        id: building.id,
+        path,
+      }
+      updateModel(params).then((res) => {
+        if (res.data.code === "0") {
+          message.success(res.data.msg)
+        } else {
+          message.error(res.data.msg)
+        }
+      })
       building.showAllFloors()
     } else if (selectedType === 4) {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
