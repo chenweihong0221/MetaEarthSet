@@ -278,6 +278,7 @@ export class Building implements GraphicInterface {
     })
   }
 
+  // 根据楼层平移坐标计算场所平移坐标
   updateSpacePosition(oldPosition: Cesium.Cartesian3[], newPosition: Cesium.Cartesian3[], floor: Floor, api: boolean) {
     floor.spaces.forEach((space: Space) => {
       const x = newPosition[0].x - oldPosition[0].x
@@ -535,34 +536,58 @@ export class Space implements GraphicInterface {
           this.id = res.data.data.districtId
           this.code = res.data.data.districtCode
           message.success("新增区域成功")
+          this.polygon = new mars3d.graphic.PolygonEntity({
+            positions,
+            name: name || "空间",
+            style: {
+              // color: "#be3aea",
+              color: "#8D79C0", // modify by cwh 202408081127
+              opacity: 1
+            }
+          })
+          this.wall = new mars3d.graphic.ThickWall({
+            positions,
+            name: name || "空间",
+            style: {
+              // color: "#be3aea",
+              color: "#8D79C0", // modify by cwh 202408081127
+              opacity: 1,
+              diffHeight: this.height,
+              width: 0.1,
+              closure: true
+            }
+          })
+          window.drawGraphicLayer.addGraphic(this.polygon)
+          window.drawGraphicLayer.addGraphic(this.wall)
         } else {
           message.error(res.data.msg)
         }
       })
+    } else {
+      this.polygon = new mars3d.graphic.PolygonEntity({
+        positions,
+        name: name || "空间",
+        style: {
+          // color: "#be3aea",
+          color: "#8D79C0", // modify by cwh 202408081127
+          opacity: 1
+        }
+      })
+      this.wall = new mars3d.graphic.ThickWall({
+        positions,
+        name: name || "空间",
+        style: {
+          // color: "#be3aea",
+          color: "#8D79C0", // modify by cwh 202408081127
+          opacity: 1,
+          diffHeight: this.height,
+          width: 0.1,
+          closure: true
+        }
+      })
+      window.drawGraphicLayer.addGraphic(this.polygon)
+      window.drawGraphicLayer.addGraphic(this.wall)
     }
-    this.polygon = new mars3d.graphic.PolygonEntity({
-      positions,
-      name: name || "空间",
-      style: {
-        // color: "#be3aea",
-        color: "#8D79C0", // modify by cwh 202408081127
-        opacity: 1
-      }
-    })
-    this.wall = new mars3d.graphic.ThickWall({
-      positions,
-      name: name || "空间",
-      style: {
-        // color: "#be3aea",
-        color: "#8D79C0", // modify by cwh 202408081127
-        opacity: 1,
-        diffHeight: this.height,
-        width: 0.1,
-        closure: true
-      }
-    })
-    this.parent.layer.addGraphic(this.polygon)
-    this.parent.layer.addGraphic(this.wall)
   }
 
   setShow(show: boolean): void {

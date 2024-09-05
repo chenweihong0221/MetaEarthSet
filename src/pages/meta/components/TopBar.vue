@@ -235,6 +235,9 @@ const handleClick = () => {
 }
 
 const handleArea = (area) => {
+  if(area.id === districtId.value){
+    return
+  }
   districtId.value = area.districtId
   stateStore.commit("updateSelectedAreaCode", area.code)
   stateStore.commit("updateSelectedAreaId", area.districtId)
@@ -282,7 +285,6 @@ function getBuilding(parent) {
           child.position.yAxis, // y 坐标
           child.position.zAxis // z 坐标
         )
-
         const graphicDraw = new GraphicDraw(child.name, t_p, 1, child.districtId, false)
       }
       stateStore.commit("updateLeftBarNeedUpdate", true)
