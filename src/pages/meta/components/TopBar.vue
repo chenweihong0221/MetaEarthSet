@@ -388,11 +388,9 @@ const handleDel = () => {
           添加区域
         </a-select-option>
       </a-select>
-      <mars-button class="my-button" @click="handleImportClick">
-        <div style="visibility: hidden; position: absolute"><input id="import-button" type="file" @change="handleImport"
-            accept=".json"></div>
-        <template #icon><mars-icon icon="save" class="icon-vertical-a" width="16" /></template>
-        导入
+      <mars-button class="my-button" @click="handleDel">
+        <template #icon><mars-icon icon="delete" class="icon-vertical-a" width="16" /></template>
+        删除
       </mars-button>
       <!-- <SmileOutlined />
       <SnippetsOutlined /> -->
