@@ -254,7 +254,7 @@ export class Building implements GraphicInterface {
       floor.wall.positions = newPosition
       if (floor.spaces) {
         floor.spaces.forEach((space: Space) => {
-          this.updateSpacePositions(positions, this.positions, floor)
+          this.updateSpacePositions(newPosition, this.positions, floor)
         })
       }
       if (api) {
@@ -285,6 +285,23 @@ export class Building implements GraphicInterface {
     const z = newPositions[0].z - oldPositions[0].z
     console.log("updateSpacePositions")
     console.log(x, y, z)
+    floor.spaces.forEach((space: Space) => {
+      space.positions.forEach((position: Cesium.Cartesian3) => {
+        position.x += x
+        position.y += y
+        position.z += z
+      })
+      space.polygon.positions.forEach((position: Cesium.Cartesian3) => {
+        position.x += x
+        position.y += y
+        position.z += z
+      })
+      space.wall.positions.forEach((position: Cesium.Cartesian3) => {
+        position.x += x
+        position.y += y
+        position.z += z
+      })
+    })
   }
 
   static arrayToJSON(buildingArr: Building[]): string {
