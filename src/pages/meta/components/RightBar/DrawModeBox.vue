@@ -161,10 +161,12 @@ const drawSpace = () => {
     } else {
       space = floor.addSpace(e.positionsShow)
     }
-    store.state.spaceFloorMap.set(space.id, selectedFloorId.value)
+    if (space.polygon) {
+      store.state.spaceFloorMap.set(space.id, selectedFloorId.value)
+    }
     selectedBuilding.showAllFloors()
-    e.remove()
-    groundPolygon.remove()
+    groundPolygon.destroy()
+    e.destroy()
     drawCallback()
   })
 }
@@ -203,7 +205,7 @@ const createOpenAir = (layer: mars3d.layer.GraphicLayer,
   return openAir
 }
 
-const drawOpenAir = (name:string) => {
+const drawOpenAir = (name: string) => {
   startDraw.value = true
   store.state.map.onlyPickTerrainPosition = true
   store.state.graphicLayer.startDraw({

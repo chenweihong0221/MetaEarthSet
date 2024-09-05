@@ -337,7 +337,7 @@ function getSpace(parent: any, floor: Floor) {
       if (child.districtType === 5) {
         const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
           positions,
-          i * (5 + 0.1)
+          0
         ) as Cesium.Cartesian3[]
         const space = new Space(newPosition, floor, child.name, null, child.districtId, false)
         floor.spaces.set(space.id, space)

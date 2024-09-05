@@ -224,8 +224,12 @@ export class Building implements GraphicInterface {
       floor.wall.show = true
       if (floor.spaces.size > 0) {
         floor.spaces.forEach((space: Space) => {
-          space.polygon.show = true
-          space.wall.show = true
+          if (space.polygon){  
+            space.polygon.show = true
+          }
+          if (space.wall){
+            space.wall.show = true
+          }
         })
       }
     })
