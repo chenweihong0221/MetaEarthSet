@@ -241,7 +241,7 @@ export class Building implements GraphicInterface {
     return undefined
   }
 
-  setPositions(positions: Cesium.Cartesian3[]){
+  setPositions(positions: Cesium.Cartesian3[]) {
     let i = 0
     this.positions = positions
     this.floors.forEach((floor: Floor) => {
