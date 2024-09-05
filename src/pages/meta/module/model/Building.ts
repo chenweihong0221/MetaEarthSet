@@ -157,7 +157,7 @@ export class Building implements GraphicInterface {
     this.floors.forEach((floor: Floor) => {
       floor.polygon.show = false
       floor.wall.show = false
-      if (floor.spaces) {
+      if (floor.spaces.size > 0) {
         floor.spaces.forEach((space: Space) => {
           space.polygon.show = false
           space.wall.show = false
@@ -172,7 +172,7 @@ export class Building implements GraphicInterface {
       if (isFirst === 0) {
         floor.polygon.show = true
         floor.wall.show = false
-        if (floor.spaces) {
+        if (floor.spaces.size > 0) {
           floor.spaces.forEach((space: Space) => {
             space.polygon.show = false
             space.wall.show = false
@@ -181,7 +181,7 @@ export class Building implements GraphicInterface {
       } else {
         floor.polygon.show = false
         floor.wall.show = false
-        if (floor.spaces) {
+        if (floor.spaces.size > 0) {
           floor.spaces.forEach((space: Space) => {
             space.polygon.show = false
             space.wall.show = false
@@ -199,7 +199,7 @@ export class Building implements GraphicInterface {
       if (floor.id.toString() === id) {
         floor.polygon.show = true
         floor.wall.show = true
-        if (floor.spaces) {
+        if (floor.spaces.size > 0) {
           floor.spaces.forEach((space: Space) => {
             space.polygon.show = true
             space.wall.show = true
@@ -208,7 +208,7 @@ export class Building implements GraphicInterface {
       } else {
         floor.polygon.show = false
         floor.wall.show = false
-        if (floor.spaces) {
+        if (floor.spaces.size > 0) {
           floor.spaces.forEach((space: Space) => {
             space.polygon.show = false
             space.wall.show = false
@@ -222,7 +222,7 @@ export class Building implements GraphicInterface {
     this.floors.forEach((floor: Floor) => {
       floor.polygon.show = true
       floor.wall.show = true
-      if (floor.spaces) {
+      if (floor.spaces.size > 0) {
         floor.spaces.forEach((space: Space) => {
           space.polygon.show = true
           space.wall.show = true
@@ -253,7 +253,7 @@ export class Building implements GraphicInterface {
       floor.positions = newPosition
       floor.polygon.positions = newPosition
       floor.wall.positions = newPosition
-      if (floor.spaces) {
+      if (floor.spaces.size > 0) {
         this.updateSpacePosition(oldPosition, newPosition, floor, api)
       }
       if (api) {
