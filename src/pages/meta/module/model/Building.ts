@@ -249,23 +249,12 @@ export class Building implements GraphicInterface {
         this.positions,
         i * (this.floorHeight + this.floorInterval)
       ) as Cesium.Cartesian3[]
+      const oldPosition = floor.positions
       floor.positions = newPosition
       floor.polygon.positions = newPosition
       floor.wall.positions = newPosition
       if (floor.spaces) {
-        floor.spaces.forEach((space: Space) => {
-          const x = newPosition[0].x - this.positions[0].x
-          const y = newPosition[0].y - this.positions[0].y
-          const z = newPosition[0].z - this.positions[0].z
-          console.log(space.positions)
-          const positions = space.positions.map((position: Cesium.Cartesian3) => {
-            return Cesium.Cartesian3.add(position, new Cesium.Cartesian3(x, y, z), new Cesium.Cartesian3())
-          })
-          console.log(positions)
-          space.positions = positions
-          space.polygon.positions = positions
-          space.wall.positions = positions
-        })
+        this.updateSpacePosition(oldPosition, newPosition, floor, api)
       }
       if (api) {
         timer.value = setTimeout(() => {
@@ -286,6 +275,38 @@ export class Building implements GraphicInterface {
         }, 250)
       }
       i++
+    })
+  }
+
+  updateSpacePosition(oldPosition: Cesium.Cartesian3[], newPosition: Cesium.Cartesian3[], floor: Floor, api: boolean) {
+    floor.spaces.forEach((space: Space) => {
+      const x = newPosition[0].x - oldPosition[0].x
+      const y = newPosition[0].y - oldPosition[0].y
+      const z = newPosition[0].z - oldPosition[0].z
+      const polygonPosition = space.polygon.positions.map((position: Cesium.Cartesian3) => {
+        return Cesium.Cartesian3.add(position, new Cesium.Cartesian3(x, y, z), new Cesium.Cartesian3())
+      })
+      space.positions = polygonPosition
+      space.polygon.positions = polygonPosition
+      space.wall.positions = polygonPosition
+      if (api) {
+        timer.value = setTimeout(() => {
+          // 生成接口参数
+          const pos = castTo2DArr(polygonPosition)
+          const path = convertToJSON(pos)
+          const params = {
+            districtId: space.id,
+            path: path.toString(),
+            longitudeAndLatitudeJson: path.toString()
+          }
+          // 调取修改接口
+          updateModel(params).then((res) => {
+            if (res.data.code !== "0") {
+              message.error(res.data.msg)
+            }
+          })
+        }, 250)
+      }
     })
   }
 
