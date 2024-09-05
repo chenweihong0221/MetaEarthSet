@@ -163,7 +163,7 @@ const drawSpace = () => {
     } else {
       space = floor.addSpace(e.positionsShow)
     }
-    if (space.polygon) {
+    if (space) {
       store.state.spaceFloorMap.set(space.id, selectedFloorId.value)
     }
     selectedBuilding.showAllFloors()

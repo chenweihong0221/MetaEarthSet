@@ -474,8 +474,12 @@ export class Floor implements GraphicInterface {
     // 设置postions的高度和楼层高度一致
     const newPositions = setHeight(positions, this.alt + 1)
     const space = new Space(newPositions, this, name, height, id, true)
-    this.spaces.set(space.id, space)
-    return space
+    if (space.polygon) {
+      this.spaces.set(space.id, space)
+      return space
+    } else {
+      return undefined
+    }
   }
 
   setShow(show: boolean): void {
