@@ -246,7 +246,7 @@ const beginStore = () => {
       const floor = building.getFirstFloor()
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(floor.id))
       const positions = window.polygonEntity.get(floor.id).editing.positions
-      building.updatePositions(positions, true)
+      building.updateFloorPositions(positions, true)
       const pos = castTo2DArr(positions)
       const path = convertToJSON(pos)
       const params = {

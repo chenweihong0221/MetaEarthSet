@@ -241,7 +241,7 @@ export class Building implements GraphicInterface {
     return undefined
   }
 
-  updatePositions(positions: Cesium.Cartesian3[], api: boolean) {
+  updateFloorPositions(positions: Cesium.Cartesian3[], api: boolean) {
     let i = 0
     this.positions = positions
     this.floors.forEach((floor: Floor) => {
@@ -252,6 +252,11 @@ export class Building implements GraphicInterface {
       floor.positions = newPosition
       floor.polygon.positions = newPosition
       floor.wall.positions = newPosition
+      if (floor.spaces) {
+        floor.spaces.forEach((space: Space) => {
+          this.updateSpacePositions(positions, this.positions, floor)
+        })
+      }
       if (api) {
         timer.value = setTimeout(() => {
           // 生成接口参数
@@ -264,9 +269,7 @@ export class Building implements GraphicInterface {
           }
           // 调取修改接口
           updateModel(params).then((res) => {
-            if (res.data.code === "0") {
-              message.success(res.data.msg)
-            } else {
+            if (res.data.code !== "0") {
               message.error(res.data.msg)
             }
           })
@@ -274,9 +277,14 @@ export class Building implements GraphicInterface {
       }
       i++
     })
-    if (api) {
-      clearInterval(timer.value)
-    }
+  }
+
+  updateSpacePositions(newPositions: Cesium.Cartesian3[], oldPositions: Cesium.Cartesian3[], floor: Floor) {
+    const x = newPositions[0].x - oldPositions[0].x
+    const y = newPositions[0].y - oldPositions[0].y
+    const z = newPositions[0].z - oldPositions[0].z
+    console.log("updateSpacePositions")
+    console.log(x, y, z)
   }
 
   static arrayToJSON(buildingArr: Building[]): string {
