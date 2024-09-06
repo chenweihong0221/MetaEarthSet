@@ -134,7 +134,6 @@ const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
     const graphic = store.getters.getGraphicByIdAndType(selectedGraphicId, selectedGraphicType)
     // graphic.removeHighLight()
   }
-
   const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
   selectedGraphicId = selectedKeys[0].toString()
   selectedGraphicType = info.node.dataRef.type

@@ -402,13 +402,12 @@ const handleAddHuman = () => {
         <a-collapse-panel header="图上标绘" key="4">
           <div class="draw-box">
             <div class="draw-row">
-              <div style="width: 7ch">样式：</div>
-              <a-select v-model:value="selectedGraphicDrawStyle"
-                style="left: 15px; color: white; rgba(35, 39, 47, 0.7);!important;" class="c_mars-select"
-                popupClassName="mars-select-dropdown" :options="graphicDrawOptions" />
+              <div style="width: 20px">样式：</div>
+              <a-select v-model:value="selectedGraphicDrawStyle" style="margin-left: 15px; color: white; width: 14em;
+  margin-right: auto;" class="c_mars-select" popupClassName="mars-select-dropdown" :options="graphicDrawOptions" />
             </div>
             <div class="draw-row">
-              <div style="width: 7ch">内容：</div>
+              <div style="width: 20px">内容：</div>
               <a-input class="draw-input" placeholder="1号楼" style="margin-left: 15px;"
                 v-model:value="selectedGraphicDrawContent" />
             </div>

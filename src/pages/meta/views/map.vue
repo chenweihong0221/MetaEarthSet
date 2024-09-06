@@ -69,7 +69,6 @@ const importJson = () => {
   }
 }
 const marsOnload = (map: any) => {
-  console.log("lang object:", mars3d.Lang)
   store.commit("setMap", map)
   // 添加高亮样式
   const highLight = new mars3d.effect.OutlineEffect({
@@ -161,6 +160,9 @@ const marsOnload = (map: any) => {
     if (startDraw.value) {
       return
     }
+    event.graphic.outline = true
+    event.graphic.outlineWidth = 4
+    event.graphic.outlineColor = "#ffff00"
     selectedGraphicId.value = event.graphic.id
     console.log("selectedGraphicId", selectedGraphicId.value)
   })
