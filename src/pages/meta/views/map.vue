@@ -20,6 +20,7 @@ import message from "ant-design-vue/es/message"
 import { useStore } from "vuex"
 import { mapKey, stateStore } from "@mars/pages/meta/module/store/store"
 import { Area } from "@mars/pages/meta/module/model/Area"
+import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
 
 const Cesium = mars3d.Cesium
 
@@ -72,10 +73,10 @@ const marsOnload = (map: any) => {
   store.commit("setMap", map)
   // 添加高亮样式
   const highLight = new mars3d.effect.OutlineEffect({
-    color: "#FFFF00",
-    width: 4,
     eventType: mars3d.EventType.leftDown
   })
+  highLight.color = "#FFFF00"
+  highLight.width = 4
   map.addEffect(highLight)
   store.commit("setOutlineEffect", highLight)
   // 修改显示
@@ -162,10 +163,8 @@ const marsOnload = (map: any) => {
     if (startDraw.value) {
       return
     }
-    window.polygonEntity.get(id).bindHighlight({
-      color: "#FFFF00",
-      width: 4
-    })
+    const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(event.graphic.id, 4)
+    graphic.highLight()
     selectedGraphicId.value = event.graphic.id
     console.log("selectedGraphicId", selectedGraphicId.value)
   })
