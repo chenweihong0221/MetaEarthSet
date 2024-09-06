@@ -19,8 +19,8 @@ export default ({ mode }: ConfigEnv) => {
     base: ENV.VITE_BASE_URL,
     server: {
       host: "localhost",
-      port: 3002,
-      open: true // 启动后自动打开浏览器
+      port: 5187,
+      open: false // 启动后自动打开浏览器
     },
     define: {
       "process.env": {
