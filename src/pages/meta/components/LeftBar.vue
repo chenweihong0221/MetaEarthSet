@@ -124,6 +124,7 @@ watch(leftBarTreeData, () => {
 
 
 const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
+
   if (selectedKeys.length === 0) {
     stateStore.commit("updateSelectedGraphicId", "")
     selectedGraphicId = ""
@@ -131,7 +132,7 @@ const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
   }
   if (selectedGraphicId !== "") {
     const graphic = store.getters.getGraphicByIdAndType(selectedGraphicId, selectedGraphicType)
-    graphic.removeHighLight()
+    // graphic.removeHighLight()
   }
   const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
   selectedGraphicId = selectedKeys[0].toString()
