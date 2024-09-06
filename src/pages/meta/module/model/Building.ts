@@ -435,6 +435,7 @@ export class Floor implements GraphicInterface {
     }
 
     this.polygon = new mars3d.graphic.PolygonEntity({
+      id: this.id,
       positions: this.positions,
       name,
       style: {
@@ -444,6 +445,7 @@ export class Floor implements GraphicInterface {
       }
     })
     this.wall = new mars3d.graphic.ThickWall({
+      id: this.id,
       positions: this.positions,
       name,
       style: {

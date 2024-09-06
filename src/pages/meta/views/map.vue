@@ -162,9 +162,10 @@ const marsOnload = (map: any) => {
     if (startDraw.value) {
       return
     }
-    event.graphic.bindHighLight(
-      { type: mars3d.EventType.click, color: "#00FFFF", width: 6 }
-    )
+    window.polygonEntity.get(id).bindHighlight({
+      color: "#FFFF00",
+      width: 4
+    })
     selectedGraphicId.value = event.graphic.id
     console.log("selectedGraphicId", selectedGraphicId.value)
   })
