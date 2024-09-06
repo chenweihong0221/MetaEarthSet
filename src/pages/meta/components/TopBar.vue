@@ -364,10 +364,31 @@ const handleDel = () => {
       getModel(params)
         .then(function (response) {
           // 处理成功情况
+          districtId.value = response.data.data[0].children[0].districtId
           AreaList.value = response.data.data[0].children
           selectedArea.value = response.data.data[0].children[0].code
           stateStore.commit("updateSelectedAreaCode", selectedArea.value)
-          console.log("AreaList", AreaList.value)
+          stateStore.commit("updateSelectedAreaId", districtId.value)
+          getDetail(districtId.value, districtId.value).then(function (response) {
+            // 初始化全局墙壁和矢量图层(露天广场)
+            if (window.polygonWall === undefined) {
+              window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
+            } else {
+              window.polygonWall.clear()
+            }
+            if (window.polygonEntity === undefined) {
+              window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
+            } else {
+              window.polygonEntity.clear()
+            }
+            if (window.polygonToParent === undefined) {
+              window.polygonToParent = new Map<string, any>()
+            } else {
+              window.polygonToParent.clear()
+            }
+            // 加载图层
+            getBuilding(response.data.data.detailsInfoAndChildren)
+          })
         })
         .catch(function (error) {
           // 处理错误情况
