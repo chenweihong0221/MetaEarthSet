@@ -92,12 +92,12 @@ export class Building implements GraphicInterface {
               i * (this.floorHeight + this.floorInterval)
             ) as Cesium.Cartesian3[]
             const newFloor = new Floor(newPosition, this, `${i + 1} 层`,
-               this.floorNumber, null, children[i].districtId, res.data.data.code,
-               children[i].code, false)
+              this.floorNumber, null, children[i].districtId, res.data.data.code,
+              children[i].code, false)
             this.floors.set(newFloor.id, newFloor)
             i++
           }
-          
+
           mapStore.commit("addBuilding", this)
           stateStore.commit("updateLeftBarNeedUpdate", true)
           message.success("新建楼栋成功")
@@ -561,59 +561,43 @@ export class Space implements GraphicInterface {
           this.id = res.data.data.districtId
           this.code = res.data.data.districtCode
           message.success("新增区域成功")
-          this.polygon = new mars3d.graphic.PolygonEntity({
-            positions,
-            name: name || "空间",
-            style: {
-              // color: "#be3aea",
-              color: "#8D79C0", // modify by cwh 202408081127
-              opacity: 1
-            }
-          })
-          this.wall = new mars3d.graphic.ThickWall({
-            positions,
-            name: name || "空间",
-            style: {
-              // color: "#be3aea",
-              color: "#8D79C0", // modify by cwh 202408081127
-              opacity: 1,
-              diffHeight: this.height,
-              width: 0.1,
-              closure: true
-            }
-          })
-          window.drawGraphicLayer.addGraphic(this.polygon)
-          window.drawGraphicLayer.addGraphic(this.wall)
+          this.makePolygon(positions, name)
         } else {
           message.error(res.data.msg)
         }
       })
     } else {
-      this.polygon = new mars3d.graphic.PolygonEntity({
-        positions,
-        name: name || "空间",
-        style: {
-          // color: "#be3aea",
-          color: "#8D79C0", // modify by cwh 202408081127
-          opacity: 1
-        }
-      })
-      this.wall = new mars3d.graphic.ThickWall({
-        positions,
-        name: name || "空间",
-        style: {
-          // color: "#be3aea",
-          color: "#8D79C0", // modify by cwh 202408081127
-          opacity: 1,
-          diffHeight: this.height,
-          width: 0.1,
-          closure: true
-        }
-      })
-      window.drawGraphicLayer.addGraphic(this.polygon)
-      window.drawGraphicLayer.addGraphic(this.wall)
-      window.polygonToParent.set(this.id, this)
+      this.makePolygon(positions, name)
     }
+  }
+
+  makePolygon(positions: Cesium.Cartesian3[], name: string): void {
+    this.polygon = new mars3d.graphic.PolygonEntity({
+      id: this.id,
+      positions,
+      name: name || "空间",
+      style: {
+        // color: "#be3aea",
+        color: "#8D79C0", // modify by cwh 202408081127
+        opacity: 1
+      }
+    })
+    this.wall = new mars3d.graphic.ThickWall({
+      id: this.id,
+      positions,
+      name: name || "空间",
+      style: {
+        // color: "#be3aea",
+        color: "#8D79C0", // modify by cwh 202408081127
+        opacity: 1,
+        diffHeight: this.height,
+        width: 0.1,
+        closure: true
+      }
+    })
+    window.drawGraphicLayer.addGraphic(this.polygon)
+    window.drawGraphicLayer.addGraphic(this.wall)
+    window.polygonToParent.set(this.id, this)
   }
 
   setShow(show: boolean): void {
