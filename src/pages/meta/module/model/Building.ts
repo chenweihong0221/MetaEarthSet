@@ -171,6 +171,7 @@ export class Building implements GraphicInterface {
     this.floors.forEach((floor: Floor) => {
       if (isFirst === 0) {
         floor.polygon.show = true
+        floor.polygon.setOpacity(0.5)
         floor.wall.show = false
         if (floor.spaces.size > 0) {
           floor.spaces.forEach((space: Space) => {
@@ -466,7 +467,7 @@ export class Floor implements GraphicInterface {
     window.polygonWall.set(this.id, this.wall)
     window.polygonEntity.set(this.id, this.polygon)
     // 高亮时获取对象
-    window.polygonType.set(this.id, 1)
+    window.polygonToParent.set(this.id, this)
   }
 
   /**
@@ -601,7 +602,7 @@ export class Space implements GraphicInterface {
       })
       window.drawGraphicLayer.addGraphic(this.polygon)
       window.drawGraphicLayer.addGraphic(this.wall)
-      window.polygonType.set(this.id, 2)
+      window.polygonToParent.set(this.id, this)
     }
   }
 

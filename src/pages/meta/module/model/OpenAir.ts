@@ -79,7 +79,7 @@ export class OpenAir implements GraphicInterface {
     window.polygonWall.set(this.id, this.wall)
     window.polygonEntity.set(this.id, this.polygon)
     // 高亮时获取对象
-    window.polygonType.set(this.id, 2)
+    window.polygonToParent.set(this.id, this)
   }
 
 
