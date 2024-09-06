@@ -154,15 +154,17 @@ const marsOnload = (map: any) => {
   map.addLayer(graphicLayer)
   map.addLayer(graphicLayer2d)
 
+
+
   // 2.在layer上绑定监听事件
-  graphicLayer.on(mars3d.EventType.click, function(event: any) {
+  graphicLayer.on(mars3d.EventType.click, function (event: any) {
     console.log("监听layer，单击了矢量对象", event)
     if (startDraw.value) {
       return
     }
-    event.graphic.outline = true
-    event.graphic.outlineWidth = 4
-    event.graphic.outlineColor = "#ffff00"
+    event.graphic.bindHighLight(
+      { type: mars3d.EventType.click, color: "#00FFFF", width: 6 }
+    )
     selectedGraphicId.value = event.graphic.id
     console.log("selectedGraphicId", selectedGraphicId.value)
   })
