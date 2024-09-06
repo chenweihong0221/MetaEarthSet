@@ -466,7 +466,7 @@ export class Floor implements GraphicInterface {
     window.polygonWall.set(this.id, this.wall)
     window.polygonEntity.set(this.id, this.polygon)
     // 高亮时获取对象
-    window.polygonToParent.set(this.id, this)
+    window.polygonType.set(this.id, 1)
   }
 
   /**
@@ -601,7 +601,7 @@ export class Space implements GraphicInterface {
       })
       window.drawGraphicLayer.addGraphic(this.polygon)
       window.drawGraphicLayer.addGraphic(this.wall)
-      window.polygonToParent.set(this.id, this)
+      window.polygonType.set(this.id, 2)
     }
   }
 
