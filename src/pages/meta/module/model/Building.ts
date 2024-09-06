@@ -222,6 +222,7 @@ export class Building implements GraphicInterface {
   showAllFloors(): void {
     this.floors.forEach((floor: Floor) => {
       floor.polygon.show = true
+      floor.polygon.setOpacity(1)
       floor.wall.show = true
       if (floor.spaces.size > 0) {
         floor.spaces.forEach((space: Space) => {

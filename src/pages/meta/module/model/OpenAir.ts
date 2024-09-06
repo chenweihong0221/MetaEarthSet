@@ -52,6 +52,7 @@ export class OpenAir implements GraphicInterface {
 
   makePolygon(positions: Cesium.Cartesian3[], name: string): void {
     this.polygon = new mars3d.graphic.PolygonEntity({
+      id: this.id,
       positions,
       name: name || "露天场所",
       style: {
