@@ -16,6 +16,7 @@ let selectedGraphicType = 0
 const graphicIdTypeMap = new Map<string, number>()
 const showGraphicIdSet = new Set<string>()
 const showKeys = ref<string[]>([])
+  const highLight = ref<String>("")
 
 
 watchEffect(() => {
@@ -124,7 +125,13 @@ watch(leftBarTreeData, () => {
 
 
 const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
-
+  // 判断当前选择是否相同, 若相同则关闭高亮
+  if (highLight.value === selectedKeys[0].toString()) {
+    const graphic = store.getters.getGraphicByIdAndType(selectedGraphicId, selectedGraphicType)
+    graphic.removeHighLight()
+    stateStore.commit("updateSelectedGraphicId", null)
+    stateStore.commit("updateSelectedGraphicType", null)
+  }
   if (selectedKeys.length === 0) {
     stateStore.commit("updateSelectedGraphicId", "")
     selectedGraphicId = ""
@@ -132,7 +139,7 @@ const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
   }
   if (selectedGraphicId !== "") {
     const graphic = store.getters.getGraphicByIdAndType(selectedGraphicId, selectedGraphicType)
-    // graphic.removeHighLight()
+    graphic.removeHighLight()
   }
   const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
   selectedGraphicId = selectedKeys[0].toString()
