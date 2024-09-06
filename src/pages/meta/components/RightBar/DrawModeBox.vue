@@ -182,7 +182,7 @@ const createBuilding = (layer: mars3d.layer.GraphicLayer,
   positions: Cesium.Cartesian3[],
   name: string,
   floorNumber: number): Building => {
-  const building = new Building(layer, positions, name, floorNumber, null, null, true, null, true)
+  const building = new Building(layer, positions, name, floorNumber, null, null, true, null, null, true)
   console.log(building)
   return building
 }

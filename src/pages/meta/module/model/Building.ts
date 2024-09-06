@@ -29,6 +29,7 @@ const timer = ref(null)
 const count = ref(0)
 export class Building implements GraphicInterface {
   id: string
+  code: string
   name: string
   floorNumber: number
   floorHeight: number
@@ -50,9 +51,11 @@ export class Building implements GraphicInterface {
     spaceHeight?: number,
     autoCreateFloor = true,
     id?: string,
+    code?: string,
     api?: boolean
   ) {
     this.id = id || uuid.v4()
+    this.code = code
     if (positions !== undefined && positions !== null) {
       const firstPositionItem = positions[0]
       if (firstPositionItem instanceof mars3d.Cesium.Cartesian3) {
@@ -82,12 +85,15 @@ export class Building implements GraphicInterface {
           this.id = res.data.data.districtId
           // this.addFloors(res.data.data.code) // 后端以及默认新增5个楼层
           let i = 0
-          while (i < this.floorNumber) {
+          const children = res.data.data.children
+          while (i < children.length) {
             const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
               this.positions,
               i * (this.floorHeight + this.floorInterval)
             ) as Cesium.Cartesian3[]
-            const newFloor = new Floor(newPosition, this, `${i + 1} 层`, this.floorNumber, null, id, res.data.data.code, false)
+            const newFloor = new Floor(newPosition, this, `${i + 1} 层`,
+               this.floorNumber, null, children[i].id, res.data.data.code,
+               children[i].code, false)
             this.floors.set(newFloor.id.toString(), newFloor)
             i++
           }
@@ -119,8 +125,8 @@ export class Building implements GraphicInterface {
     }, 200)
   }
 
-  addFloor(positions: Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string, code?: string): Floor {
-    const newFloor = new Floor(positions, this, name, floorNo, height, id, code, true)
+  addFloor(positions: Cesium.Cartesian3[], name: string, floorNo: number, height?: number, id?: string, parentCode?: string, code?: string): Floor {
+    const newFloor = new Floor(positions, this, name, floorNo, height, id, parentCode, code, true)
     this.floors.set(newFloor.id.toString(), newFloor)
     return newFloor
   }
@@ -402,10 +408,12 @@ export class Floor implements GraphicInterface {
     height?: number,
     id?: string,
     parentCode?: string,
+    code?: string,
     api?: boolean
   ) {
     this.id = id || uuid.v4()
     this.name = name
+    this.code = code
     this.api = api
     if (positions !== undefined && positions !== null) {
       if (positions[0] instanceof mars3d.Cesium.Cartesian3) {

@@ -276,7 +276,7 @@ function getBuilding(parent) {
         positions = JSON.parse(child.path)
       }
       if (child.districtType === 3) {
-        const building = new Building(store.state.graphicLayer, positions, child.name, 0, 5, null, true, child.districtId, false)
+        const building = new Building(store.state.graphicLayer, positions, child.name, 0, 5, null, true, child.districtId, child.code, false)
         getFloor(children[i], building)
       }
       if (child.districtType === 7) {
@@ -317,7 +317,7 @@ function getFloor(parent: any, building: Building) {
           i * (5 + 0.1)
         ) as Cesium.Cartesian3[]
         floorNo += 1
-        const floor = new Floor(newPosition, building, child.name, floorNo, null, child.districtId, parent.id, false)
+        const floor = new Floor(newPosition, building, child.name, floorNo, null, child.districtId, parent.id, child.code, false)
         floor.code = child.code
         building.floors.set(child.districtId, floor)
         store.state.floorBuildingMap.set(floor.id, building.id)

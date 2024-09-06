@@ -73,7 +73,9 @@ const importJson = () => {
 const marsOnload = (map: any) => {
   store.commit("setMap", map)
   // 添加高亮样式
-  const highLight = new mars3d.effect.OutlineEffect()
+  const highLight = new mars3d.effect.OutlineEffect({
+    eventType: mars3d.EventType.middleDown,
+  })
   highLight.color = "#FFFF00"
   highLight.width = 4
   map.addEffect(highLight)
@@ -163,8 +165,10 @@ const marsOnload = (map: any) => {
     if (startDraw.value) {
       return
     }
-    const graphic: GraphicInterface = window.polygonToParent.get(event.graphic.id)
-    graphic.highLight()
+    const graphic: GraphicInterface = window.polygonToParent.get(event.graphic.options.id)
+    if (graphic) {
+      graphic.highLight()
+    }
     selectedGraphicId.value = event.graphic.id
     console.log("selectedGraphicId", selectedGraphicId.value)
   })
