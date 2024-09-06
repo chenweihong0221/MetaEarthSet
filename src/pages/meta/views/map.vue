@@ -163,7 +163,9 @@ const marsOnload = (map: any) => {
     if (startDraw.value) {
       return
     }
-    const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(event.graphic.id, 4)
+    let graphic: GraphicInterface
+    window.polygonToParent.get(event.graphic.id)
+    graphic = window.polygonToParent.get(event.graphic.id)
     graphic.highLight()
     selectedGraphicId.value = event.graphic.id
     console.log("selectedGraphicId", selectedGraphicId.value)

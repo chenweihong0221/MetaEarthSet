@@ -58,7 +58,7 @@ export class OpenAir implements GraphicInterface {
         // color: "#be3aea",
         color: "#CECECE",
         opacity: 1
-      }
+      },
     })
     this.wall = new mars3d.graphic.ThickWall({
       positions,
@@ -78,6 +78,8 @@ export class OpenAir implements GraphicInterface {
     window.drawGraphicLayer.addGraphic(this.wall)
     window.polygonWall.set(this.id, this.wall)
     window.polygonEntity.set(this.id, this.polygon)
+    // 高亮时获取对象
+    window.polygonToParent.set(this.id, this)
   }
 
 

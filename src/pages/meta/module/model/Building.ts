@@ -459,10 +459,14 @@ export class Floor implements GraphicInterface {
     })
     // this.layer.addGraphic(this.polygon)
     // this.layer.addGraphic(this.wall)
+    // 地图上加载
     window.drawGraphicLayer.addGraphic(this.polygon)
     window.drawGraphicLayer.addGraphic(this.wall)
+    // 平移时获取使用
     window.polygonWall.set(this.id, this.wall)
     window.polygonEntity.set(this.id, this.polygon)
+    // 高亮时获取对象
+    window.polygonToParent.set(this.id, this)
   }
 
   /**
@@ -597,6 +601,7 @@ export class Space implements GraphicInterface {
       })
       window.drawGraphicLayer.addGraphic(this.polygon)
       window.drawGraphicLayer.addGraphic(this.wall)
+      window.polygonToParent.set(this.id, this)
     }
   }
 
