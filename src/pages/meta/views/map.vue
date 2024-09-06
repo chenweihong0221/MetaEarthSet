@@ -18,7 +18,7 @@ import LeftBar from "@mars/pages/meta/components/LeftBar.vue"
 import TopBar from "@mars/pages/meta/components/TopBar.vue"
 import message from "ant-design-vue/es/message"
 import { useStore } from "vuex"
-import { mapKey, stateStore } from "@mars/pages/meta/module/store/store"
+import { mapKey, stateKey } from "@mars/pages/meta/module/store/store"
 import { Area } from "@mars/pages/meta/module/model/Area"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
 
@@ -35,6 +35,7 @@ const router = useRouter()
 
 // 获取自定义的store， 存储全局变量
 const store = useStore(mapKey)
+const stateStore = useStore(stateKey)
 
 
 const configUrl = `${process.env.BASE_URL}config/config.json`
@@ -158,7 +159,7 @@ const marsOnload = (map: any) => {
   // 2.在layer上绑定监听事件
   graphicLayer.on(mars3d.EventType.click, function (event: any) {
     console.log("监听layer，单击了矢量对象", event)
-    startDraw.value = store.state.drawType
+    startDraw.value = stateStore.state.drawType
     if (startDraw.value) {
       return
     }
