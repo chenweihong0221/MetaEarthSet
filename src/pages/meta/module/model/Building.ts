@@ -92,11 +92,12 @@ export class Building implements GraphicInterface {
               i * (this.floorHeight + this.floorInterval)
             ) as Cesium.Cartesian3[]
             const newFloor = new Floor(newPosition, this, `${i + 1} 层`,
-               this.floorNumber, null, children[i].id, res.data.data.code,
+               this.floorNumber, null, children[i].districtId, res.data.data.code,
                children[i].code, false)
-            this.floors.set(newFloor.id.toString(), newFloor)
+            this.floors.set(newFloor.id, newFloor)
             i++
           }
+          
           mapStore.commit("addBuilding", this)
           stateStore.commit("updateLeftBarNeedUpdate", true)
           message.success("新建楼栋成功")

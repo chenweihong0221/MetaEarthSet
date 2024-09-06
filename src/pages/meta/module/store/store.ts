@@ -30,12 +30,12 @@ export const mapStore = createStore({
   mutations: {
     addBuilding(state, building: Building) {
       state.buildingMap.set(building.id, building)
-      // for (const floor of building.floors.values()) {
-      //   state.floorBuildingMap.set(floor.id.toString(), building.id)
-      //   for (const space of floor.spaces.values()) {
-      //     state.spaceFloorMap.set(space.id.toString(), floor.id.toString())
-      //   }
-      // }
+      for (const floor of building.floors.values()) {
+        state.floorBuildingMap.set(floor.id.toString(), building.id)
+        for (const space of floor.spaces.values()) {
+          state.spaceFloorMap.set(space.id.toString(), floor.id.toString())
+        }
+      }
     },
     addFence(state, fence: Fence) {
       state.fenceMap.set(fence.id.toString(), fence)

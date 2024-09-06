@@ -74,7 +74,7 @@ const marsOnload = (map: any) => {
   store.commit("setMap", map)
   // 添加高亮样式
   const highLight = new mars3d.effect.OutlineEffect({
-    eventType: mars3d.EventType.middleDown,
+    eventType: mars3d.EventType.middleDown
   })
   highLight.color = "#FFFF00"
   highLight.width = 4
