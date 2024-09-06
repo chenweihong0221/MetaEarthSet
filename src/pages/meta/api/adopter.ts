@@ -54,6 +54,8 @@ export class ModelData {
   // data: string
   longitudeAndLatitudeJson: string
 
+  content: string
+
   dimension: {
     length: number
     width: number
@@ -78,6 +80,10 @@ export class ModelData {
     this.districtType = type
     this.floorNumber = floorNumber
     this.path = path.toString()
+    this.content = JSON.stringify({
+      name,
+      type
+    })
   }
 
   toGraphicInterface(parentId: string): GraphicInterface {

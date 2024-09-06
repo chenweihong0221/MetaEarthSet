@@ -77,6 +77,7 @@ function drawCallback() {
 
 const stopDraw = () => {
   startDraw.value = false
+  store.commit("updateDrawType", startDraw.value)
   store.state.graphicLayer.stopDraw()
   store.state.graphicLayer2d.stopDraw()
   const selectedBuilding = store.getters.getBuildingById(selectedBuildingId.value)
@@ -90,6 +91,7 @@ const stopDraw = () => {
 
 const drawBuilding = () => {
   startDraw.value = true
+  store.commit("updateDrawType", startDraw.value)
   store.state.map.onlyPickTerrainPosition = true
   store.state.graphicLayer.startDraw({
     type: "polygon",
@@ -99,6 +101,7 @@ const drawBuilding = () => {
     }
   }).then(e => {
     startDraw.value = false
+    store.commit("updateDrawType", startDraw.value)
     store.state.map.onlyPickTerrainPosition = false
     const building = createBuilding(store.state.graphicLayer, e.positionsShow, buildingName.value, floorNum.value)
     if (buildingName.value) {
@@ -139,6 +142,7 @@ const drawSpace = () => {
   })
   store.state.graphicLayer2d.addGraphic(groundPolygon)
   startDraw.value = true
+  store.commit("updateDrawType", startDraw.value)
   store.state.map.onlyPickTerrainPosition = true
   window.drawGraphicLayer.startDraw({
     type: "polygon",
@@ -156,6 +160,7 @@ const drawSpace = () => {
     }
   }).then(e => {
     startDraw.value = false
+    store.commit("updateDrawType", startDraw.value)
     store.state.map.onlyPickTerrainPosition = false
     let space
     if (spaceName.value) {
@@ -184,6 +189,7 @@ const createBuilding = (layer: mars3d.layer.GraphicLayer,
 
 const drawFence = () => {
   startDraw.value = true
+  store.commit("updateDrawType", startDraw.value)
   store.state.graphicLayer.startDraw({
     type: "polygon",
     style: {
@@ -192,6 +198,7 @@ const drawFence = () => {
     }
   }).then(e => {
     startDraw.value = false
+    store.commit("updateDrawType", startDraw.value)
     const positions = e.points
     const fence = new Fence(positions, fenceName.value)
     store.commit("addFence", fence)
@@ -209,6 +216,7 @@ const createOpenAir = (layer: mars3d.layer.GraphicLayer,
 
 const drawOpenAir = (name: string) => {
   startDraw.value = true
+  store.commit("updateDrawType", startDraw.value)
   store.state.map.onlyPickTerrainPosition = true
   store.state.graphicLayer.startDraw({
     type: "polygon",
@@ -218,6 +226,7 @@ const drawOpenAir = (name: string) => {
     }
   }).then(e => {
     startDraw.value = false
+    store.commit("updateDrawType", startDraw.value)
     store.state.map.onlyPickTerrainPosition = false
     const openAir = createOpenAir(store.state.graphicLayer, e.positionsShow, openAirName.value)
     if (openAirName.value) {
@@ -243,6 +252,7 @@ const drawPerson = () => {
     return
   }
   startDraw.value = true
+  store.commit("updateDrawType", startDraw.value)
   store.state.map.setCursor("crosshair")
   store.state.map.once("click", event => {
     store.state.map.setCursor("default")

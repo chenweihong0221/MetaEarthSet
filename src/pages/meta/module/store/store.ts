@@ -253,12 +253,16 @@ export const stateStore = createStore({
       selectedGraphicType: 0, // 0未选中，1楼层，2空间，3围栏，4露天场所
       leftBarNeedUpdate: false,
       selectedAreaCode: "",
-      selectedAreaId: ""
+      selectedAreaId: "",
+      drawType: false
     }
   },
   mutations: {
     updateTopBarState(state, topBarState) {
       state.topBarState = topBarState
+    },
+    updateDrawType(state, drawType) {
+      state.drawType = drawType
     },
     updateSelectedGraphicId(state, selectedGraphicId: string) {
       state.selectedGraphicId = selectedGraphicId
