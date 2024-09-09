@@ -122,10 +122,13 @@ export class ModelData {
 
   pathToCartesian3(): Cesium.Cartesian3[] | Cesium.Cartesian3 {
     if (this.path.length === 1) {
-      return new Cesium.Cartesian3(this.path[0][0], this.path[0][1], this.path[0][2])
+      return new Cesium.Cartesian3(Number(this.path[0][0]), Number(this.path[0][1]), Number(this.path[0][2]))
     } else {
-      return this.path.map((item) => {
-        return new Cesium.Cartesian3(item[0], item[1], item[2])
+
+      const path_arr: string[] = JSON.parse(this.path) as string[]
+
+      return path_arr.map((item) => {
+        return new Cesium.Cartesian3(Number(item[0]), Number(item[1]), Number(item[2]))
       })
     }
   }

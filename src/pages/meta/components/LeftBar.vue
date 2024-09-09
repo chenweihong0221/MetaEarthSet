@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { useStore } from "vuex"
-import { mapKey, stateKey } from "@mars/pages/meta/module/store/store"
+import { stateKey, mapStore } from "@mars/pages/meta/module/store/store"
 
 import { nextTick, ref, watch, watchEffect } from "vue"
 import { TreeProps } from "ant-design-vue"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
 import { Building } from "../module/model/Building"
 
-const store = useStore(mapKey)
 const stateStore = useStore(stateKey)
 
 const leftBarTreeData = ref<TreeProps["treeData"]>([])
@@ -26,7 +25,7 @@ watchEffect(() => {
     return
   }
   const treeData = []
-  Array.from(store.state.buildingMap.values()).map(building => {
+  Array.from(mapStore.state.buildingMap.values()).map(building => {
     graphicIdTypeMap.set(building.id, 0)
     return {
       title: building.name,
@@ -53,7 +52,7 @@ watchEffect(() => {
 
   // 处理围栏
 
-  Array.from(store.state.fenceMap.values()).map(fence => {
+  Array.from(mapStore.state.fenceMap.values()).map(fence => {
     graphicIdTypeMap.set(fence.id.toString(), 3)
     return {
       title: fence.name,
@@ -64,7 +63,7 @@ watchEffect(() => {
 
   // 处理露天场所
 
-  Array.from(store.state.openAirMap.values()).map(openAir => {
+  Array.from(mapStore.state.openAirMap.values()).map(openAir => {
     graphicIdTypeMap.set(openAir.id, 4)
     return {
       title: openAir.name,
@@ -75,7 +74,7 @@ watchEffect(() => {
 
   // 处理图上绘标
 
-  Array.from(store.state.graphicDrawMap.values()).map(graphicDraw => {
+  Array.from(mapStore.state.graphicDrawMap.values()).map(graphicDraw => {
     graphicIdTypeMap.set(graphicDraw.id.toString(), 5)
     return {
       title: graphicDraw.name,
@@ -88,7 +87,7 @@ watchEffect(() => {
 
   // 处理人员模型
 
-  Array.from(store.state.humanMap.values()).map(human => {
+  Array.from(mapStore.state.humanMap.values()).map(human => {
     graphicIdTypeMap.set(human.id.toString(), 6)
     return {
       title: human.id.toString(),
@@ -99,7 +98,7 @@ watchEffect(() => {
 
   // 处理监控设备
 
-  Array.from(store.state.cameraMap.values()).map(camera => {
+  Array.from(mapStore.state.cameraMap.values()).map(camera => {
     graphicIdTypeMap.set(camera.id.toString(), 7)
     return {
       title: camera.id.toString(),
@@ -131,10 +130,10 @@ const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
     return
   }
   if (selectedGraphicId !== "") {
-    const graphic = store.getters.getGraphicByIdAndType(selectedGraphicId, selectedGraphicType)
+    const graphic = mapStore.getters.getGraphicByIdAndType(selectedGraphicId, selectedGraphicType)
     // graphic.removeHighLight()
   }
-  const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
+  const graphic: GraphicInterface = mapStore.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
   selectedGraphicId = selectedKeys[0].toString()
   selectedGraphicType = info.node.dataRef.type
   graphic.highLight()
@@ -205,7 +204,7 @@ const getGraphicById = (id: string | number) => {
   } else {
     idStr = id.toString()
   }
-  return store.getters.getGraphicByIdAndType(idStr, graphicIdTypeMap.get(idStr))
+  return mapStore.getters.getGraphicByIdAndType(idStr, graphicIdTypeMap.get(idStr))
 }
 
 </script>

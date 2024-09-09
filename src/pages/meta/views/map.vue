@@ -63,7 +63,7 @@ const importJson = () => {
     console.log("saveJson", saveJson)
     const saveJsonObject = JSON.parse(saveJson)
     const jsonArrStr: string = saveJsonObject.buildingMap
-    const buildingArr = Building.fromJSONArray(jsonArrStr, graphicLayer)
+    const buildingArr = Building.fromJSONArray(jsonArrStr, window.drawGraphicLayer)
     store.commit("clearMap")
     buildingArr.forEach(item => {
       store.commit("addBuilding", item)
@@ -81,7 +81,9 @@ const marsOnload = (map: any) => {
   map.addEffect(highLight)
   store.commit("setOutlineEffect", highLight)
   // 修改显示
-  mars3d.Lang["_双击完成绘制"] = "点击滚轮完成绘制"
+  // mars3d.Lang["_双击完成绘制"] = "点击滚轮完成绘制"
+  map.setLangText("_双击完成绘制", "点击滚轮完成绘制")
+
   tiles3dLayer = new mars3d.layer.TilesetLayer({
     name: "石化工厂",
     url: "//data.mars3d.cn/3dtiles/max-shihua/tileset.json",
@@ -105,8 +107,8 @@ const marsOnload = (map: any) => {
     highlight: {
       type: mars3d.EventType.click, // 默认为鼠标移入高亮，也可以指定click单击高亮
       outlineEffect: true, // 采用OutlineEffect方式来高亮
-      color: "#00FF00",
-      width: 6
+      color: "#00FF00"
+      // width: 6
     },
     center: { lat: 34.813178, lng: 113.529168, alt: 354, heading: 319, pitch: -23 },
     flyTo: false
@@ -114,7 +116,7 @@ const marsOnload = (map: any) => {
   // 加载油田联合站模型
   const tiles3dLayer2 = new mars3d.layer.TilesetLayer({
     pid: 2020,
-    type: "3dtiles",
+    // type: "3dtiles",
     name: "油田联合站",
     url: "//data.mars3d.cn/3dtiles/max-ytlhz/tileset.json",
     // position: { lng: 117.270617, lat: 31.815012, alt: 26.4 },
@@ -125,9 +127,11 @@ const marsOnload = (map: any) => {
   })
   map.addLayer(tiles3dLayer2)
   const graphicLayer = new mars3d.layer.GraphicLayer({
+    // @ts-ignore
     drawEndEventType: mars3d.EventType.middleClick
   })
   const graphicLayer2d = new mars3d.layer.GraphicLayer({
+    // @ts-ignore
     drawEndEventType: mars3d.EventType.middleClick
   })
 
