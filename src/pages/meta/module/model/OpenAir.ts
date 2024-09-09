@@ -128,6 +128,7 @@ export class OpenAir implements GraphicInterface {
     const pos = castTo2DArr(positions)
     const position = mars3d.PolyUtil.centerOfMass(positions)
     const path = convertToJSON(pos)
-    return new ModelData(areaId, this.id, this.name, path, position, 7, 1)
+    const lngLatPoint = this.positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
+    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, position, 7, 1)
   }
 }

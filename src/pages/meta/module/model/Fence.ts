@@ -98,6 +98,7 @@ export class Fence implements GraphicInterface {
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
     const path = convertToJSON(pos)
-    return new ModelData(areaId, this.id, this.name, path, position, 8, null)
+    const lngLatPoint = this.positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
+    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, position, 8, null)
   }
 }

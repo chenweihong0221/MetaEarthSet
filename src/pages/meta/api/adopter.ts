@@ -1,7 +1,7 @@
 import { Building, Floor } from "@mars/pages/meta/module/model/Building"
 import { mapStore, stateStore } from "@mars/pages/meta/module/store/store"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
-import { Cesium } from "mars3d"
+import { Cesium, LngLatPoint } from "mars3d"
 import { Space } from "ant-design-vue"
 
 
@@ -62,7 +62,14 @@ export class ModelData {
     depth: number
   }
 
-  constructor(parentCode: string, code: string, name: string, path: string, position: Cesium.Cartesian3, type: number, floorNumber?: number) {
+  constructor(
+    parentCode: string,
+    code: string,
+    name: string, path: string,
+    lngLatPoint: LngLatPoint[] | LngLatPoint,
+    position: Cesium.Cartesian3,
+    type: number,
+    floorNumber?: number) {
     this.parentCode = parentCode
     this.name = name
     this.position = {
@@ -70,7 +77,7 @@ export class ModelData {
       yAxis: position.y,
       zAxis: position.z
     }
-    this.longitudeAndLatitudeJson = path.toString()
+    this.longitudeAndLatitudeJson = lngLatPoint.toString()
     this.dimension = {
       length: 0,
       width: 0,

@@ -372,9 +372,9 @@ export class Building implements GraphicInterface {
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
     const path = convertToJSON(pos)
-    const lngLatPoint = this.positions.forEach((position) => mars3d.LngLatPoint.fromCartesian(position))
-    console.log()
-    return new ModelData(areaId, this.id, this.name, path, position, 3, this.floorNumber)
+    const lngLatPoint = this.positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
+    
+    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, position, 3, this.floorNumber)
   }
 
 }
@@ -528,7 +528,8 @@ export class Floor implements GraphicInterface {
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
     const path = convertToJSON(pos)
-    return new ModelData(null, null, this.name, path, position, 4, this.floorNo)
+    const lngLatPoint = this.positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
+    return new ModelData(null, null, this.name, path, lngLatPoint, position, 4, this.floorNo)
   }
 
 }
@@ -624,7 +625,8 @@ export class Space implements GraphicInterface {
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
     const path = convertToJSON(pos)
-    return new ModelData(this.parent.code, this.id, this.name, path, position, 5, null)
+    const lngLatPoint = this.positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
+    return new ModelData(this.parent.code, this.id, this.name, path, lngLatPoint, position, 5, null)
   }
 
 }
