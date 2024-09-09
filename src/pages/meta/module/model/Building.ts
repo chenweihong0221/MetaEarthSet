@@ -372,6 +372,8 @@ export class Building implements GraphicInterface {
     const pos = castTo2DArr(this.positions)
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
     const path = convertToJSON(pos)
+    const lngLatPoint = this.positions.forEach((position) => mars3d.LngLatPoint.fromCartesian(position))
+    console.log()
     return new ModelData(areaId, this.id, this.name, path, position, 3, this.floorNumber)
   }
 

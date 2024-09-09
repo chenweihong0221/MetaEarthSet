@@ -200,7 +200,7 @@ const drawFence = () => {
     startDraw.value = false
     stateStore.commit("updateDrawType", startDraw.value)
     const positions = e.points
-    const fence = new Fence(positions, fenceName.value)
+    const fence = new Fence(positions, fenceName.value, null, null, true)
     store.commit("addFence", fence)
     e.remove()
     drawCallback()

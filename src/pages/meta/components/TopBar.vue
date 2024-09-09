@@ -11,6 +11,7 @@ import type { Dayjs } from "dayjs"
 import { onMounted, reactive, ref } from "vue"
 import { useStore } from "vuex"
 import { Building, Floor, Space } from "../module/model/Building"
+import { Fence } from "@mars/pages/meta/module/model/Fence"
 import { OpenAir } from "../module/model/OpenAir"
 import { GraphicDraw } from "@mars/pages/meta/module/model/GraphicDraw"
 
@@ -282,6 +283,10 @@ function getBuilding(parent) {
       if (child.districtType === 7) {
         const openAir = new OpenAir(store.state.graphicLayer, positions, child.name, null, child.districtId, false)
         store.commit("addOpenAir", openAir)
+      }
+      if (child.districtType === 8) {
+        const fence = new Fence(positions, child.name, null, child.districtId, false)
+        store.commit("addFence", fence)
       }
       if (child.districtType === 10) { // 图上标绘
 

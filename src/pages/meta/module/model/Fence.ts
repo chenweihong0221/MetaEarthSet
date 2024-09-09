@@ -1,21 +1,47 @@
 import * as mars3d from "mars3d"
 import { Cesium, LngLatPoint } from "mars3d"
-import { mapStore } from "@mars/pages/meta/module/store/store"
+import { mapStore, stateStore } from "@mars/pages/meta/module/store/store"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
-import { castTo2DArr } from "@mars/pages/meta/module/tool/position"
+import { castTo2DArr, convertToJSON } from "@mars/pages/meta/module/tool/position"
 import { ModelData } from "@mars/pages/meta/api/adopter"
+import { addModel } from "@mars/pages/meta/api/api"
+import { message } from "ant-design-vue"
 
 export class Fence implements GraphicInterface {
   id: string
+  code: string
   polygon: mars3d.graphic.ScrollWall
   height: number
   name: string
-
+  positions: Cesium.Cartesian3[]
   show: boolean = true // 是否显示
 
-  constructor(positions: Cesium.Cartesian3[] | LngLatPoint[], name?: string, height?: number, id?: string) {
+  constructor(positions: Cesium.Cartesian3[] | LngLatPoint[], name?: string, height?: number, id?: string, api?: boolean) {
     this.height = height || 5
     this.name = name || "围栏"
+    if (positions[0] instanceof mars3d.Cesium.Cartesian3) {
+      this.positions = positions as Cesium.Cartesian3[]
+    } else {
+      this.positions = (positions as { x: number; y: number; z: number }[]).map((item) => {
+        return Cesium.Cartesian3.fromDegrees(item.x, item.y, item.z)
+      })
+    }
+    this.id = id || this.polygon.id.toString()
+    if (api) {
+      const model = this.toModelData(stateStore.state.selectedAreaCode)
+      addModel(model).then((res) => {
+        // eslint-disable-next-line
+        if (res.data.code === "0") {
+          this.id = res.data.data.districtId
+          this.code = res.data.data.districtCode
+          message.success("新增围栏成功")
+          mapStore.commit("addFence", this)
+          stateStore.commit("updateLeftBarNeedUpdate", true)
+        } else {
+          message.error(res.data.msg)
+        }
+      })
+    }
     this.polygon = new mars3d.graphic.ScrollWall({
       positions,
       name: name || "围栏",
@@ -25,8 +51,9 @@ export class Fence implements GraphicInterface {
         opacity: 0.8
       }
     })
-    this.id = id || this.polygon.id.toString()
-    mapStore.state.graphicLayer.addGraphic(this.polygon)
+    // mapStore.state.graphicLayer.addGraphic(this.polygon)
+    window.drawGraphicLayer.addGraphic(this.polygon)
+    window.polygonWall.set(this.id, this.polygon)
   }
 
   setShow(show: boolean): void {
@@ -65,6 +92,12 @@ export class Fence implements GraphicInterface {
   }
 
   toModelData(areaId?: string): ModelData {
-    return new ModelData(areaId, this.id, this.name, castTo2DArr(this.polygon.positions), 3)
+    if (areaId == null) {
+      throw new Error("areaId is null")
+    }
+    const pos = castTo2DArr(this.positions)
+    const position = mars3d.PolyUtil.centerOfMass(this.positions)
+    const path = convertToJSON(pos)
+    return new ModelData(areaId, this.id, this.name, path, position, 8, null)
   }
 }
