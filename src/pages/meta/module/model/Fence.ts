@@ -6,6 +6,7 @@ import { castTo2DArr, convertToJSON, LngLatPointToJSON } from "@mars/pages/meta/
 import { ModelData } from "@mars/pages/meta/api/adopter"
 import { addModel } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
+import * as uuid from "uuid"
 
 export class Fence implements GraphicInterface {
   id: string
@@ -16,7 +17,7 @@ export class Fence implements GraphicInterface {
   positions: Cesium.Cartesian3[]
   show: boolean = true // 是否显示
 
-  constructor(positions: Cesium.Cartesian3[] | LngLatPoint[], name?: string, height?: number, id?: string, api?: boolean) {
+  constructor(positions: Cesium.Cartesian3[] | { x: number; y: number; z: number }[], name?: string, height?: number, id?: string, api?: boolean) {
     this.height = height || 5
     this.name = name || "围栏"
     if (positions[0] instanceof mars3d.Cesium.Cartesian3) {
@@ -26,7 +27,7 @@ export class Fence implements GraphicInterface {
         return Cesium.Cartesian3.fromDegrees(item.x, item.y, item.z)
       })
     }
-    this.id = id || this.polygon.id.toString()
+    this.id = id || uuid.v4()
     if (api) {
       const model = this.toModelData(stateStore.state.selectedAreaCode)
       addModel(model).then((res) => {

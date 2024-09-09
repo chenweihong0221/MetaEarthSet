@@ -199,7 +199,7 @@ const drawFence = () => {
   }).then(e => {
     startDraw.value = false
     stateStore.commit("updateDrawType", startDraw.value)
-    const positions = e.points
+    const positions = e.positionsShow
     const fence = new Fence(positions, fenceName.value, null, null, true)
     store.commit("addFence", fence)
     e.remove()
@@ -247,6 +247,7 @@ const drawOpenAir = (name: string) => {
 }
 
 const drawPerson = () => {
+  console.log("human")
   if (humanId.value === "") {
     alert("请输入人员ID")
     return
@@ -320,6 +321,7 @@ const handleAddHuman = () => {
     const human = new Human(humanId.value, event.cartesian, store.state.graphicLayer)
     store.state.humanMap.set(human.id, human)
     humanId.value = ""
+    console.log("human", human)
     drawCallback()
   })
 }
