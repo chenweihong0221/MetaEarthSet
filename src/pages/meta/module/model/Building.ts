@@ -4,7 +4,7 @@ import { mapStore, stateStore } from "@mars/pages/meta/module/store/store"
 import { useStore } from "vuex"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
 import { ModelData } from "@mars/pages/meta/api/adopter"
-import { castTo2DArr, convertToJSON } from "@mars/pages/meta/module/tool/position"
+import { castTo2DArr, convertToJSON, LngLatPointToJSON } from "@mars/pages/meta/module/tool/position"
 import * as uuid from "uuid"
 import { addModel, updateModel } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
@@ -373,8 +373,8 @@ export class Building implements GraphicInterface {
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
     const path = convertToJSON(pos)
     const lngLatPoint = this.positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
-    
-    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, position, 3, this.floorNumber)
+    const lngLatPointPath = LngLatPointToJSON(lngLatPoint)
+    return new ModelData(areaId, this.id, this.name, path, lngLatPointPath, position, 3, this.floorNumber)
   }
 
 }

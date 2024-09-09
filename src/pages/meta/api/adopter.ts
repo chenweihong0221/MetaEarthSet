@@ -65,8 +65,9 @@ export class ModelData {
   constructor(
     parentCode: string,
     code: string,
-    name: string, path: string,
-    lngLatPoint: LngLatPoint[] | LngLatPoint,
+    name: string,
+    path: string,
+    lngLatPoint: string,
     position: Cesium.Cartesian3,
     type: number,
     floorNumber?: number) {
