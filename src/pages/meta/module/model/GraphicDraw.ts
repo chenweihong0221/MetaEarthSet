@@ -254,7 +254,8 @@ export class GraphicDraw implements GraphicInterface {
     }
     const pos = castTo2DArr(this.position)
     const path = ""
-    return new ModelData(areaId, this.id, this.name, path, this.position, 10)
+    const lngLatPoint = ""
+    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, this.position, 10)
   }
 
 

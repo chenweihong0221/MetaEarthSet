@@ -2,7 +2,7 @@ import * as mars3d from "mars3d"
 import { Cesium, LngLatPoint } from "mars3d"
 import { mapStore, stateStore } from "@mars/pages/meta/module/store/store"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
-import { castTo2DArr, convertToJSON } from "@mars/pages/meta/module/tool/position"
+import { castTo2DArr, convertToJSON, LngLatPointToJSON } from "@mars/pages/meta/module/tool/position"
 import { ModelData } from "@mars/pages/meta/api/adopter"
 import { addModel } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
@@ -99,6 +99,7 @@ export class Fence implements GraphicInterface {
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
     const path = convertToJSON(pos)
     const lngLatPoint = this.positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
-    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, position, 8, null)
+    const lngLatPointPath = LngLatPointToJSON(lngLatPoint)
+    return new ModelData(areaId, this.id, this.name, path, lngLatPointPath, position, 8, null)
   }
 }

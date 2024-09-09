@@ -5,7 +5,7 @@ import { mapStore, stateStore } from "@mars/pages/meta/module/store/store"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
 import { ModelData } from "@mars/pages/meta/api/adopter"
 import { addModel } from "@mars/pages/meta/api/api"
-import { castTo2DArr, convertToJSON } from "@mars/pages/meta/module/tool/position"
+import { castTo2DArr, convertToJSON, LngLatPointToJSON } from "@mars/pages/meta/module/tool/position"
 import { message } from "ant-design-vue"
 
 export class OpenAir implements GraphicInterface {
@@ -129,6 +129,7 @@ export class OpenAir implements GraphicInterface {
     const position = mars3d.PolyUtil.centerOfMass(positions)
     const path = convertToJSON(pos)
     const lngLatPoint = this.positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
-    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, position, 7, 1)
+    const lngLatPointPath = LngLatPointToJSON(lngLatPoint)
+    return new ModelData(areaId, this.id, this.name, path, lngLatPointPath, position, 7, 1)
   }
 }

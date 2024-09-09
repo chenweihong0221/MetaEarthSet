@@ -23,12 +23,12 @@ export function convertToJSON(path: number[][]) {
   return jsonString
 }
 
-export function LngLatPointToJSON(path: LngLatPoint[]) {
+export function LngLatPointToJSON(lngLatPoint: LngLatPoint[]) {
   // 创建一个对象数组来存储路径点信息
-  const pathObjects = path.map((point, index) => ({
-    lng: point[0],
+  const pathObjects = lngLatPoint.map((point, index) => ({
+    alt: point[0],
     lat: point[1],
-    alt: point[2]
+    lng: point[2]
   }))
   // 将对象数组转换为 JSON 字符串
   const jsonString = JSON.stringify(pathObjects)

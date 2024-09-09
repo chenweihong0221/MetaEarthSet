@@ -529,7 +529,8 @@ export class Floor implements GraphicInterface {
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
     const path = convertToJSON(pos)
     const lngLatPoint = this.positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
-    return new ModelData(null, null, this.name, path, lngLatPoint, position, 4, this.floorNo)
+    const lngLatPointPath = LngLatPointToJSON(lngLatPoint)
+    return new ModelData(null, null, this.name, path, lngLatPointPath, position, 4, this.floorNo)
   }
 
 }
@@ -626,7 +627,8 @@ export class Space implements GraphicInterface {
     const position = mars3d.PolyUtil.centerOfMass(this.positions)
     const path = convertToJSON(pos)
     const lngLatPoint = this.positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
-    return new ModelData(this.parent.code, this.id, this.name, path, lngLatPoint, position, 5, null)
+    const lngLatPointPath = LngLatPointToJSON(lngLatPoint)
+    return new ModelData(this.parent.code, this.id, this.name, path, lngLatPointPath, position, 5, null)
   }
 
 }

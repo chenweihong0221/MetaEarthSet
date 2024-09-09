@@ -4,7 +4,7 @@ import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface
 import { mapStore } from "@mars/pages/meta/module/store/store"
 import { Cesium } from "mars3d"
 import { ModelData } from "@mars/pages/meta/api/adopter"
-import { castTo2DArr, convertToJSON } from "@mars/pages/meta/module/tool/position"
+import { castTo2DArr, convertToJSON, LngLatPointToJSON } from "@mars/pages/meta/module/tool/position"
 
 export class Camera implements GraphicInterface {
   id: string
@@ -107,7 +107,13 @@ export class Camera implements GraphicInterface {
     const pos = castTo2DArr(this.position)
     const path = convertToJSON(pos)
     const lngLatPoint = mars3d.LngLatPoint.fromCartesian(this.position)
-    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, this.position, 2)
+    const lngLatPointPath = {
+      lng: lngLatPoint.lng,
+      lat: lngLatPoint.lat,
+      alt: lngLatPoint.alt
+    }
+    const jsonString = JSON.stringify(lngLatPointPath)
+    return new ModelData(areaId, this.id, this.name, path, jsonString, this.position, 2)
   }
 
 
