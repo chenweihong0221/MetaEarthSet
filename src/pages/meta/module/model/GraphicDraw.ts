@@ -26,7 +26,11 @@ export class GraphicDraw implements GraphicInterface {
     p_type?: number,
     id?: string,
     isCreate?: boolean) {
-    this.content = content
+    if (content === "" || content === undefined) {
+      this.content = name
+    } else {
+      this.content = content
+    }
     this.id = ""
     this.name = name
     this.position = position
@@ -144,7 +148,7 @@ export class GraphicDraw implements GraphicInterface {
                             <div class="draw-style-content"
                                   style="font-size: 23px;display: flex;align-items: center;justify-content: center;"
                                   >
-                              ${content}
+                              ${this.content}
                             </div>
                           </div>
                         `,
@@ -159,7 +163,7 @@ export class GraphicDraw implements GraphicInterface {
             style: {
               html: `<div class="marsBlackPanel  animation-spaceInDown">
                       <div class="marsBlackPanel-text" style="">
-                        ${content} <span class="temperature"></span> ℃
+                        ${this.content} <span class="temperature"></span> ℃
                       </div>
                     </div>`,
               horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
@@ -172,7 +176,7 @@ export class GraphicDraw implements GraphicInterface {
             position,
             style: {
               html: `<div class="marsBlueGradientPnl">
-                    <div>${content}</div>
+                    <div>${this.content}</div>
                 </div>`,
               offsetY: -60,
               horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
@@ -201,7 +205,7 @@ export class GraphicDraw implements GraphicInterface {
             style: {
               html: `<div class="mars-spot">
                 <div class="mars-spot-board">
-                <h5>${content}</h5>
+                <h5>${this.content}</h5>
                 </div>
                 <div class="mars-spot-line"></div>
                 </div>`,
@@ -252,7 +256,7 @@ export class GraphicDraw implements GraphicInterface {
     return new GraphicDraw(json.name, json.position, json.id)
   }
 
-  toModelDataDraw(areaId: string, content:string): ModelData {
+  toModelDataDraw(areaId: string, content: string): ModelData {
     if (areaId == null) {
       throw new Error("areaId is null")
     }
@@ -269,6 +273,6 @@ export class GraphicDraw implements GraphicInterface {
     const pos = castTo2DArr(this.position)
     const path = ""
     const lngLatPoint = ""
-    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, this.position, 10, null, content)
+    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, this.position, 10, null)
   }
 }
