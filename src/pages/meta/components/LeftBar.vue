@@ -74,21 +74,16 @@ watchEffect(() => {
     }
   }).forEach((openAir) => treeData.push(openAir))
 
-  // 处理图上绘标
-  treeData.push({
-    title: "图上标绘",
-    key: "draw",
-    type: -1,
-    children: Array.from(store.state.graphicDrawMap.values()).map(graphicDraw => {
-      graphicIdTypeMap.set(graphicDraw.id.toString(), 5)
-      return {
-        title: graphicDraw.name,
-        key: graphicDraw.id.toString(),
-        type: 5
-      }
-    })
+  // 处理图上标绘
+  Array.from(store.state.graphicDrawMap.values()).map(graphicDraw => {
+    graphicIdTypeMap.set(graphicDraw.id.toString(), 5)
+    return {
+      title: graphicDraw.name,
+      key: graphicDraw.id.toString(),
+      type: 5
+    }
   })
-  showGraphicIdSet.add("draw")
+
 
   // 处理人员模型
 
@@ -179,13 +174,6 @@ const handleCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
         getGraphicById(child.key).setShow(true)
       })
     }
-    if (type === -1) {
-      const children = info.node.children
-      children.forEach((child: any) => {
-        showGraphicIdSet.add(child.key)
-        getGraphicById(child.key).setShow(true)
-      })
-    }
   } else {
     showGraphicIdSet.delete(id)
     if (type === 0) {
@@ -200,13 +188,6 @@ const handleCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
       })
     }
     if (type === 1) {
-      const children = info.node.children
-      children.forEach((child: any) => {
-        showGraphicIdSet.delete(child.key)
-        getGraphicById(child.key).setShow(false)
-      })
-    }
-    if (type === -1) {
       const children = info.node.children
       children.forEach((child: any) => {
         showGraphicIdSet.delete(child.key)
