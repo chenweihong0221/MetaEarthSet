@@ -88,7 +88,7 @@ watchEffect(() => {
       }
     })
   })
-
+  showGraphicIdSet.add("draw")
 
   // 处理人员模型
 
@@ -155,7 +155,7 @@ const handleCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
   const type = info.node.dataRef.type
 
   const polygon = getGraphicById(id)
-  if (polygon !== undefined) {
+  if (polygon !== null) {
     polygon.setShow(show)
   }
   if (show) {
