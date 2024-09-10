@@ -21,6 +21,8 @@ const selectedGraphicId = ref("")
 
 // 信息部分
 const name = ref("")
+const content = ref("")
+const contentShow = ref(false)
 const type = ref("")
 const show = ref(true)
 const startEdit = ref<boolean>(false)
@@ -137,6 +139,12 @@ const onMessageNameChange = () => {
   }
 }
 
+const onMessageContentChange = () => {
+  const val = stateStore.state.selectedGraphicId
+  const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(val)
+  graphicDraw.content = content.value
+}
+
 const deleteStore = () => {
   const id = stateStore.state.selectedGraphicId
   if (id === "") {
@@ -207,6 +215,7 @@ const handleShowChange = (param) => {
   console.log("handleShowChange", value)
   const selectedType = stateStore.state.selectedGraphicType
   const id = stateStore.state.selectedGraphicId
+  contentShow.value = false
   if (selectedType === 0) {
     const building = mapStore.state.buildingMap.get(id)
     building.setShow(value)
@@ -229,6 +238,7 @@ const handleShowChange = (param) => {
   } else if (selectedType === 5) {
     // type为5， 选中的图形为图上标绘
     const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(id)
+    contentShow.value = true
     graphicDraw.setShow(value)
   } else if (selectedType === 6) {
     // type为6， 选中的图形为模型
@@ -351,6 +361,10 @@ const beginStore = () => {
             <div class="msg-row">
               <div class="msg-name">名称：</div>
               <input class="msg-name-input" v-model="name" @change="onMessageNameChange" />
+            </div>
+            <div class="msg-row" v-show="contentShow">
+              <div class="msg-name">内容：</div>
+              <input class="msg-name-input" v-model="content" @change="onMessageContentChange" />
             </div>
             <div class="msg-row">
               <div class="msg-name">id：&nbsp;&nbsp;&nbsp;&nbsp;</div>

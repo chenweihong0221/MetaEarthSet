@@ -312,7 +312,7 @@ function getFloor(parent: any, building: Building) {
       const child = children[i]
       let positions = []
       if (child.path === null || child.path === "") {
-        positions = JSON.parse(parent.path)
+        positions.push(new Cesium.Cartesian3())
       } else {
         positions = JSON.parse(child.path)
       }

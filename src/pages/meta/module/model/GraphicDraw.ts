@@ -8,6 +8,7 @@ import { castTo2DArr } from "@mars/pages/meta/module/tool/position"
 import { addModel } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
 import { useStore } from "vuex"
+import * as uuid from "uuid"
 
 // 导入全局样式
 import "../../style/divGraphic.css"
@@ -31,7 +32,7 @@ export class GraphicDraw implements GraphicInterface {
     } else {
       this.content = content
     }
-    this.id = ""
+    this.id = id || uuid.v4()
     this.name = name
     this.position = position
 
@@ -123,10 +124,6 @@ export class GraphicDraw implements GraphicInterface {
               })
               break
           }
-
-          mapStore.state.graphicLayer.addGraphic(this.graphic)
-          mapStore.state.graphicDrawMap.set(this.id, this)
-          stateStore.commit("updateLeftBarNeedUpdate", true)
         } else {
           message.error(res.data.msg)
         }
@@ -216,11 +213,10 @@ export class GraphicDraw implements GraphicInterface {
           })
           break
       }
-
-      mapStore.state.graphicLayer.addGraphic(this.graphic)
-      mapStore.state.graphicDrawMap.set(this.id, this)
-      stateStore.commit("updateLeftBarNeedUpdate", true)
     }
+    mapStore.state.graphicLayer.addGraphic(this.graphic)
+    mapStore.state.graphicDrawMap.set(this.id, this)
+    stateStore.commit("updateLeftBarNeedUpdate", true)
     // this.id = id || this.graphic.id.toString()
     // this.name = name
     // this.position = position
