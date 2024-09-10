@@ -37,186 +37,21 @@ export class GraphicDraw implements GraphicInterface {
     this.position = position
 
     if (isCreate === true) { // 手动创建
-      const postData = this.toModelDataDraw(stateStore.state.selectedAreaCode, this.content)
+      const postData = this.toModelData(stateStore.state.selectedAreaCode)
       addModel(postData).then((res) => {
         if (res.data.code === "0") {
           this.id = res.data.data.districtId
-          switch (p_type) {
-            case 1:
-              this.graphic = new mars3d.graphic.DivGraphic({
-                position,
-                style: {
-                  html: `     <div class="mars3d-graphicDraw-content">
-                                <img class="mars3d-graphicDraw-img"
-                                  src="/img/icon/textPnl.png"
-                                  alt="样式一"
-                                >
-                              </div>
-                              <div class="mars3d-draw-content-wrapper">
-                                <div class="draw-style-content"
-                                      style="font-size: 23px;display: flex;align-items: center;justify-content: center;"
-                                      >
-                                  ${content}
-                                </div>
-                              </div>
-                            `,
-                  offsetX: -16,
-                  distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
-                }
-              })
-              break
-            case 2:
-              this.graphic = new mars3d.graphic.DivGraphic({
-                position,
-                style: {
-                  html: `<div class="marsBlackPanel  animation-spaceInDown">
-                          <div class="marsBlackPanel-text" style="">
-                            ${content} <span class="temperature"></span> ℃
-                          </div>
-                        </div>`,
-                  horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
-                  verticalOrigin: Cesium.VerticalOrigin.CENTER
-                }
-              })
-              break
-            case 3:
-              this.graphic = new mars3d.graphic.DivGraphic({
-                position,
-                style: {
-                  html: `<div class="marsBlueGradientPnl">
-                        <div>${content}</div>
-                    </div>`,
-                  offsetY: -60,
-                  horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
-                  verticalOrigin: Cesium.VerticalOrigin.BOTTOM
-                }
-              })
-              break
-            case 4:
-              // this.graphic = new mars3d.graphic.DivGraphic({
-              this.graphic = new mars3d.graphic.DivUpLabel({
-                position,
-                style: {
-                  text: name,
-                  color: "#fff",
-                  font_size: 16,
-                  font_family: "微软雅黑",
-                  lineHeight: 50,
-                  circleSize: 8,
-                  distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000) // 按视距距离显示
-                }
-              })
-              break
-            case 5:
-              this.graphic = new mars3d.graphic.DivGraphic({
-                position,
-                style: {
-                  html: `<div class="mars-spot">
-                    <div class="mars-spot-board">
-                    <h5>${name}</h5>
-                    </div>
-                    <div class="mars-spot-line"></div>
-                    </div>`,
-                  offsetY: -60,
-                  horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
-                  verticalOrigin: Cesium.VerticalOrigin.BOTTOM
-                }
-              })
-              break
-          }
+          this.makeGraphic(p_type, position)
+          mapStore.state.graphicLayer.addGraphic(this.graphic)
+          mapStore.state.graphicDrawMap.set(this.id, this)
+          stateStore.commit("updateLeftBarNeedUpdate", true)
         } else {
           message.error(res.data.msg)
         }
       })
     } else { // 通过服务端获取
-
-      switch (p_type) {
-        case 1:
-          this.graphic = new mars3d.graphic.DivGraphic({
-            position,
-            style: {
-              html: `     <div class="mars3d-graphicDraw-content">
-                            <img class="mars3d-graphicDraw-img"
-                              src="/img/icon/textPnl.png"
-                              alt="样式一"
-                            >
-                          </div>
-                          <div class="mars3d-draw-content-wrapper">
-                            <div class="draw-style-content"
-                                  style="font-size: 23px;display: flex;align-items: center;justify-content: center;"
-                                  >
-                              ${this.content}
-                            </div>
-                          </div>
-                        `,
-              offsetX: -16,
-              distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
-            }
-          })
-          break
-        case 2:
-          this.graphic = new mars3d.graphic.DivGraphic({
-            position,
-            style: {
-              html: `<div class="marsBlackPanel  animation-spaceInDown">
-                      <div class="marsBlackPanel-text" style="">
-                        ${this.content} <span class="temperature"></span> ℃
-                      </div>
-                    </div>`,
-              horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
-              verticalOrigin: Cesium.VerticalOrigin.CENTER
-            }
-          })
-          break
-        case 3:
-          this.graphic = new mars3d.graphic.DivGraphic({
-            position,
-            style: {
-              html: `<div class="marsBlueGradientPnl">
-                    <div>${this.content}</div>
-                </div>`,
-              offsetY: -60,
-              horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
-              verticalOrigin: Cesium.VerticalOrigin.BOTTOM
-            }
-          })
-          break
-        case 4:
-          // this.graphic = new mars3d.graphic.DivGraphic({
-          this.graphic = new mars3d.graphic.DivUpLabel({
-            position,
-            style: {
-              text: name,
-              color: "#fff",
-              font_size: 16,
-              font_family: "微软雅黑",
-              lineHeight: 50,
-              circleSize: 8,
-              distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000) // 按视距距离显示
-            }
-          })
-          break
-        case 5:
-          this.graphic = new mars3d.graphic.DivGraphic({
-            position,
-            style: {
-              html: `<div class="mars-spot">
-                <div class="mars-spot-board">
-                <h5>${this.content}</h5>
-                </div>
-                <div class="mars-spot-line"></div>
-                </div>`,
-              offsetY: -60,
-              horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
-              verticalOrigin: Cesium.VerticalOrigin.BOTTOM
-            }
-          })
-          break
-      }
+      this.makeGraphic(p_type, position)
     }
-    mapStore.state.graphicLayer.addGraphic(this.graphic)
-    mapStore.state.graphicDrawMap.set(this.id, this)
-    stateStore.commit("updateLeftBarNeedUpdate", true)
     // this.id = id || this.graphic.id.toString()
     // this.name = name
     // this.position = position
@@ -252,14 +87,93 @@ export class GraphicDraw implements GraphicInterface {
     return new GraphicDraw(json.name, json.position, json.id)
   }
 
-  toModelDataDraw(areaId: string, content: string): ModelData {
-    if (areaId == null) {
-      throw new Error("areaId is null")
+  makeGraphic(type: number, position: Cesium.Cartesian3) {
+    switch (type) {
+      case 1:
+        this.graphic = new mars3d.graphic.DivGraphic({
+          position,
+          style: {
+            html: `     <div class="mars3d-graphicDraw-content">
+                          <img class="mars3d-graphicDraw-img"
+                            src="/img/icon/textPnl.png"
+                            alt="样式一"
+                          >
+                        </div>
+                        <div class="mars3d-draw-content-wrapper">
+                          <div class="draw-style-content"
+                                style="font-size: 23px;display: flex;align-items: center;justify-content: center;"
+                                >
+                            ${this.content}
+                          </div>
+                        </div>
+                      `,
+            offsetX: -16,
+            distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000)
+          }
+        })
+        break
+      case 2:
+        this.graphic = new mars3d.graphic.DivGraphic({
+          position,
+          style: {
+            html: `<div class="marsBlackPanel  animation-spaceInDown">
+                    <div class="marsBlackPanel-text" style="">
+                      ${this.content} <span class="temperature"></span> ℃
+                    </div>
+                  </div>`,
+            horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+            verticalOrigin: Cesium.VerticalOrigin.CENTER
+          }
+        })
+        break
+      case 3:
+        this.graphic = new mars3d.graphic.DivGraphic({
+          position,
+          style: {
+            html: `<div class="marsBlueGradientPnl">
+                  <div>${this.content}</div>
+              </div>`,
+            offsetY: -60,
+            horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+            verticalOrigin: Cesium.VerticalOrigin.BOTTOM
+          }
+        })
+        break
+      case 4:
+        // this.graphic = new mars3d.graphic.DivGraphic({
+        this.graphic = new mars3d.graphic.DivUpLabel({
+          position,
+          style: {
+            text: name,
+            color: "#fff",
+            font_size: 16,
+            font_family: "微软雅黑",
+            lineHeight: 50,
+            circleSize: 8,
+            distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 100000) // 按视距距离显示
+          }
+        })
+        break
+      case 5:
+        this.graphic = new mars3d.graphic.DivGraphic({
+          position,
+          style: {
+            html: `<div class="mars-spot">
+              <div class="mars-spot-board">
+              <h5>${this.content}</h5>
+              </div>
+              <div class="mars-spot-line"></div>
+              </div>`,
+            offsetY: -60,
+            horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+            verticalOrigin: Cesium.VerticalOrigin.BOTTOM
+          }
+        })
+        break
     }
-    const pos = castTo2DArr(this.position)
-    const path = ""
-    const lngLatPoint = ""
-    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, this.position, 10, null, content)
+    mapStore.state.graphicLayer.addGraphic(this.graphic)
+    mapStore.state.graphicDrawMap.set(this.id, this)
+    stateStore.commit("updateLeftBarNeedUpdate", true)
   }
 
   toModelData(areaId: string): ModelData {
@@ -269,6 +183,6 @@ export class GraphicDraw implements GraphicInterface {
     const pos = castTo2DArr(this.position)
     const path = ""
     const lngLatPoint = ""
-    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, this.position, 10, null)
+    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, this.position, 10, null, this.content)
   }
 }
