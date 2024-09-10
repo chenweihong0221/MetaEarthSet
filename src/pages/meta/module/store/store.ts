@@ -111,9 +111,9 @@ export const mapStore = createStore({
       }
     },
     removeGraphicDraw(state, id: string) {
-      const graphicDraw = state.graphicDrawMap.get(id)
+      // const graphicDraw = state.graphicDrawMap.get(id)
       state.graphicDrawMap.delete(id)
-      graphicDraw.graphic.destroy()
+      // graphicDraw.graphic.destroy()
     },
     removeHuman(state, id: string) {
       const human = state.humanMap.get(id)

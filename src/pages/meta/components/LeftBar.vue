@@ -82,7 +82,7 @@ watchEffect(() => {
       key: graphicDraw.id.toString(),
       type: 5
     }
-  })
+  }).forEach((graphicDraw) => treeData.push(graphicDraw))
 
 
   // 处理人员模型

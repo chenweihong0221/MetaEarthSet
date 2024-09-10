@@ -172,6 +172,7 @@ const deleteStore = () => {
     mapStore.commit("removeOpenAir", id)
   } else if (selectedType === 5) {
     // type为5， 选中的图形为图上标绘
+    window.divGraphic.get(id).destroy()
     mapStore.commit("removeGraphicDraw", id)
   } else if (selectedType === 6) {
     mapStore.commit("removeHuman", id)

@@ -171,7 +171,8 @@ export class GraphicDraw implements GraphicInterface {
         })
         break
     }
-    mapStore.state.graphicLayer.addGraphic(this.graphic)
+    window.drawGraphicLayer.addGraphic(this.graphic)
+    window.divGraphic.set(this.id, this.graphic)
     mapStore.state.graphicDrawMap.set(this.id, this)
     stateStore.commit("updateLeftBarNeedUpdate", true)
   }

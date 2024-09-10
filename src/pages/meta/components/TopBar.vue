@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // import "ant-design-vue/dist/antd.css"
-import { addModel, deleteModel, getModel, getThree, getDetail } from "@mars/pages/meta/api/api"
+import { addModel, deleteModel, getModel, getThree, getDetail, getCamera } from "@mars/pages/meta/api/api"
 import { Cesium } from "mars3d"
 import * as mars3d from "mars3d"
 import { Area, getAllAreaIdAndName } from "@mars/pages/meta/module/model/Area"
@@ -87,6 +87,7 @@ onMounted(() => {
         selectedArea.value = response.data.data[0].children[0].code
         stateStore.commit("updateSelectedAreaCode", selectedArea.value)
         stateStore.commit("updateSelectedAreaId", districtId.value)
+        // 获取楼栋模型
         getDetail(districtId.value, districtId.value).then(function (response) {
           // 初始化全局墙壁和矢量图层(露天广场)
           window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
@@ -95,6 +96,11 @@ onMounted(() => {
           // 加载图层
           getBuilding(response.data.data.detailsInfoAndChildren)
         })
+
+        // 获取监控设备
+        // getCamera().then(function (response){
+
+        // })
       })
       .catch(function (error) {
         // 处理错误情况

@@ -72,3 +72,7 @@ export function getDetail(secondLevelDistrictId, currentDistrictId) {
   // alert("/xay/v1/sys/district/find-tree-info/" + secondLevelDistrictId + "/" + currentDistrictId)
   return instance.get("/xay/v1/sys/district/find-tree-info/" + secondLevelDistrictId + "/" + currentDistrictId)
 }
+
+export function getCamera(){
+  return instance.get("")
+}
