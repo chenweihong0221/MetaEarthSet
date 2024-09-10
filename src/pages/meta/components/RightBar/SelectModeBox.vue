@@ -245,6 +245,7 @@ const beginStore = () => {
       const building = mapStore.state.buildingMap.get(id)
       const floor = building.getFirstFloor()
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(floor.id))
+      // @ts-ignore
       const positions = window.polygonEntity.get(floor.id).editing.positions
       building.updateFloorPositions(positions, true)
       const pos = castTo2DArr(positions)
@@ -264,6 +265,7 @@ const beginStore = () => {
       building.showAllFloors()
     } else if (selectedType === 4) {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
+      // @ts-ignore
       const positions = window.polygonEntity.get(id).editing.positions
       window.polygonWall.get(id).positions = positions
       window.polygonWall.get(id).show = true
