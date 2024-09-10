@@ -70,7 +70,8 @@ export class ModelData {
     lngLatPoint: string,
     position: Cesium.Cartesian3,
     type: number,
-    floorNumber?: number) {
+    floorNumber?: number,
+    content?: string) {
     this.parentCode = parentCode
     this.name = name
     this.position = {
@@ -88,10 +89,14 @@ export class ModelData {
     this.districtType = type
     this.floorNumber = floorNumber
     this.path = path.toString()
-    this.content = JSON.stringify({
-      name,
-      type
-    })
+    if (this.content === "") {
+      this.content = JSON.stringify({
+        name,
+        type
+      })
+    } else {
+      this.content = content
+    }
   }
 
   toGraphicInterface(parentId: string): GraphicInterface {

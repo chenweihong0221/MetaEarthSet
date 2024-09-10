@@ -33,6 +33,7 @@ const selectableFloor = ref<Floor[]>([]) // 绘制空间时可选择的楼层
 const collapseActiveKey = ref<string[]>(["1", "4", "5"]) // 折叠面板激活的key
 const selectedGraphicDrawStyle = ref(1)
 const selectedGraphicDrawContent = ref("1号楼") // 图上标绘内容
+const selectedGraphicDrawContentName = ref("1号楼")
 const graphicDrawOptions = ref([
   {
     value: 1,
@@ -275,12 +276,18 @@ const drawPerson = () => {
 
 // 添加图上绘制功能
 const handleGraphicDraw = () => {
-
+  if (selectedGraphicDrawContentName.value === "") {
+    alert("请输入标签名称")
+    return
+  }
+  if (selectedGraphicDrawContent.value === "") {
+    alert("请输入标签内容")
+    return
+  }
   function handleClick(event) {
     console.log("handleClick=========")
-
     const cartesian = new Cesium.Cartesian3(event.cartesian.x, event.cartesian.y, event.cartesian.z)
-    const graphicDraw = new GraphicDraw(selectedGraphicDrawContent.value, cartesian, selectedGraphicDrawStyle.value, "", true)
+    const graphicDraw = new GraphicDraw(selectedGraphicDrawContentName.value, selectedGraphicDrawContent.value, cartesian, selectedGraphicDrawStyle.value, "", true)
 
     // 放在GraphicDraw构造函数内
     // if (graphicDraw.postState === 0) {
@@ -414,12 +421,17 @@ const handleAddHuman = () => {
         <a-collapse-panel header="图上标绘" key="4">
           <div class="draw-box">
             <div class="draw-row">
-              <div style="width: 20px">样式：</div>
+              <div style="width: 60px">样式：</div>
               <a-select v-model:value="selectedGraphicDrawStyle" style="margin-left: 15px; color: white; width: 14em;
   margin-right: auto;" class="c_mars-select" popupClassName="mars-select-dropdown" :options="graphicDrawOptions" />
             </div>
             <div class="draw-row">
-              <div style="width: 20px">内容：</div>
+              <div style="width: 60px">名称：</div>
+              <a-input class="draw-input" placeholder="1号楼" style="margin-left: 15px;"
+                v-model:value="selectedGraphicDrawContentName" />
+            </div>
+            <div class="draw-row">
+              <div style="width: 60px">内容：</div>
               <a-input class="draw-input" placeholder="1号楼" style="margin-left: 15px;"
                 v-model:value="selectedGraphicDrawContent" />
             </div>

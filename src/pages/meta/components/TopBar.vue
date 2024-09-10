@@ -296,7 +296,7 @@ function getBuilding(parent) {
           child.position.yAxis, // y 坐标
           child.position.zAxis // z 坐标
         )
-        const graphicDraw = new GraphicDraw(child.name, t_p, 1, child.districtId, false)
+        const graphicDraw = new GraphicDraw(child.name, child.content, t_p, 1, child.districtId, false)
       }
       stateStore.commit("updateLeftBarNeedUpdate", true)
       getBuilding(children)
