@@ -42,12 +42,15 @@ watch(
     selectedGraphicId.value = val
     if (val === "") {
       name.value = ""
+      content.value = ""
       type.value = ""
       show.value = true
+      contentShow.value = false
       return
     }
     const selectedType = stateStore.state.selectedGraphicType
     let position: mars3d.Cesium.Cartesian3
+    contentShow.value = false
     if (selectedType === 0) {
       const building = mapStore.state.buildingMap.get(val)
       name.value = building.name
@@ -86,8 +89,10 @@ watch(
       // type为5， 选中的图形为图上标绘
       const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(val)
       name.value = graphicDraw.name
+      content.value = graphicDraw.content
       type.value = "图上标绘"
       show.value = graphicDraw.graphic.show
+      contentShow.value = true
       position = mars3d.PolyUtil.centerOfMass(graphicDraw.positions)
     } else if (selectedType === 6) {
       // type为6， 选中的图形为模型
@@ -174,6 +179,7 @@ const deleteStore = () => {
     mapStore.commit("removeCamera", id)
   }
   name.value = ""
+  content.value = ""
   selectedGraphicId.value = ""
   type.value = ""
   console.log("id", id)
@@ -192,7 +198,8 @@ const updateStore = () => {
   }
   const params = {
     districtId: id,
-    name: name.value
+    name: name.value,
+    content: content.value
   }
   updateModel(params).then((res) => {
     if (res.data.code === "0") {
@@ -215,7 +222,6 @@ const handleShowChange = (param) => {
   console.log("handleShowChange", value)
   const selectedType = stateStore.state.selectedGraphicType
   const id = stateStore.state.selectedGraphicId
-  contentShow.value = false
   if (selectedType === 0) {
     const building = mapStore.state.buildingMap.get(id)
     building.setShow(value)
@@ -238,7 +244,6 @@ const handleShowChange = (param) => {
   } else if (selectedType === 5) {
     // type为5， 选中的图形为图上标绘
     const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(id)
-    contentShow.value = true
     graphicDraw.setShow(value)
   } else if (selectedType === 6) {
     // type为6， 选中的图形为模型

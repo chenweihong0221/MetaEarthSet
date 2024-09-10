@@ -26,7 +26,7 @@ watchEffect(() => {
     return
   }
   const treeData = []
-  const treeDraw = []
+
   Array.from(store.state.buildingMap.values()).map(building => {
     graphicIdTypeMap.set(building.id, 0)
     return {
@@ -78,7 +78,7 @@ watchEffect(() => {
   treeData.push({
     title: "图上标绘",
     key: "draw",
-    type: 5,
+    type: -1,
     children: Array.from(store.state.graphicDrawMap.values()).map(graphicDraw => {
       graphicIdTypeMap.set(graphicDraw.id.toString(), 5)
       return {
@@ -86,8 +86,7 @@ watchEffect(() => {
         key: graphicDraw.id.toString(),
         type: 5
       }
-      return
-    }).forEach((graphicDraw) => treeData.push(graphicDraw))
+    })
   })
 
 
@@ -155,7 +154,10 @@ const handleCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
   const show = !showGraphicIdSet.has(id)
   const type = info.node.dataRef.type
 
-  getGraphicById(id).setShow(show)
+  const polygon = getGraphicById(id)
+  if (polygon !== undefined) {
+    polygon.setShow(show)
+  }
   if (show) {
     // 针对于type为0，1的情况，需要处理子节点
     showGraphicIdSet.add(id)
@@ -177,6 +179,13 @@ const handleCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
         getGraphicById(child.key).setShow(true)
       })
     }
+    if (type === -1) {
+      const children = info.node.children
+      children.forEach((child: any) => {
+        showGraphicIdSet.add(child.key)
+        getGraphicById(child.key).setShow(true)
+      })
+    }
   } else {
     showGraphicIdSet.delete(id)
     if (type === 0) {
@@ -191,6 +200,13 @@ const handleCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
       })
     }
     if (type === 1) {
+      const children = info.node.children
+      children.forEach((child: any) => {
+        showGraphicIdSet.delete(child.key)
+        getGraphicById(child.key).setShow(false)
+      })
+    }
+    if (type === -1) {
       const children = info.node.children
       children.forEach((child: any) => {
         showGraphicIdSet.delete(child.key)
