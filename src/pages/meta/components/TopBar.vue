@@ -272,6 +272,7 @@ const handleArea = (area: any) => {
     } else {
       window.divGraphic.clear()
     }
+    store.commit("clearAllMap")
     // 加载图层
     getBuilding(response.data.data.detailsInfoAndChildren)
   })

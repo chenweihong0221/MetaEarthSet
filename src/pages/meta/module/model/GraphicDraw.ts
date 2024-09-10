@@ -27,7 +27,7 @@ export class GraphicDraw implements GraphicInterface {
     p_type?: number,
     id?: string,
     isCreate?: boolean) {
-    if (content === "" || content === undefined) {
+    if (content === "" || content === undefined || content === null) {
       this.content = name
     } else {
       this.content = content
