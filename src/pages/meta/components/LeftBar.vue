@@ -26,6 +26,7 @@ watchEffect(() => {
     return
   }
   const treeData = []
+  const treeDraw = []
   Array.from(store.state.buildingMap.values()).map(building => {
     graphicIdTypeMap.set(building.id, 0)
     return {
@@ -74,16 +75,20 @@ watchEffect(() => {
   }).forEach((openAir) => treeData.push(openAir))
 
   // 处理图上绘标
-
-  Array.from(store.state.graphicDrawMap.values()).map(graphicDraw => {
-    graphicIdTypeMap.set(graphicDraw.id.toString(), 5)
-    return {
-      title: graphicDraw.name,
-      key: graphicDraw.id.toString(),
-      type: 5
-    }
-  }).forEach((graphicDraw) => treeData.push(graphicDraw))
-
+  treeData.push({
+    title: "图上标绘",
+    key: "draw",
+    type: 5,
+    children: Array.from(store.state.graphicDrawMap.values()).map(graphicDraw => {
+      graphicIdTypeMap.set(graphicDraw.id.toString(), 5)
+      return {
+        title: graphicDraw.name,
+        key: graphicDraw.id.toString(),
+        type: 5
+      }
+      return
+    }).forEach((graphicDraw) => treeData.push(graphicDraw))
+  })
 
 
   // 处理人员模型
@@ -107,8 +112,6 @@ watchEffect(() => {
       type: 7
     }
   }).forEach((camera) => treeData.push(camera))
-
-
   leftBarTreeData.value = treeData
   console.log("treeData", treeData)
   stateStore.commit("updateLeftBarNeedUpdate", false)
@@ -212,9 +215,9 @@ const getGraphicById = (id: string | number) => {
 <template>
   <div class="border" style="position: absolute; top: 4em;  width: 15em; height: 100%; background: #555555">
     <div class="container">
-      <a-tree :show-icon="true" :show-line="false" :block-node="true" v-model:checked-keys="showKeys"
-              :checkable="true" :tree-data="leftBarTreeData" @check="handleCheck" :check-strictly="true"
-              @select="handleSelected" @rightClick="handleRightClick">
+      <a-tree :show-icon="true" :show-line="false" :block-node="true" v-model:checked-keys="showKeys" :checkable="true"
+        :tree-data="leftBarTreeData" @check="handleCheck" :check-strictly="true" @select="handleSelected"
+        @rightClick="handleRightClick">
         <template #icon="dataRef">
           <align-center-outlined v-show="dataRef.type === 0" />
           <pic-center-outlined v-show="dataRef.type === 1" />
@@ -312,6 +315,4 @@ const getGraphicById = (id: string | number) => {
 .container {
   width: 14em;
 }
-
-
 </style>
