@@ -4,14 +4,14 @@ import { ref } from "vue"
 import axios from "axios"
 
 export const instance = axios.create({
-    // baseURL: "https://api.test01.platform.ahjtest.top",// 测试环境
-    baseURL: "https://api.dev3.platform.ahjdev.top", // dev 环境
-    timeout: 1000,
-    headers: {
-      "Content-Type": "application/json",
-      // Authorization: "Bearer ea8c0470-7f2f-473d-b3c0-be2add35a42c" // 测试环境
-      Authorization: "Bearer e837fa8f-432c-4d1b-85c4-c6029f27f6a4" // dev环境
-    }
+  // baseURL: "https://api.test01.platform.ahjtest.top",// 测试环境
+  baseURL: "https://api.dev3.platform.ahjdev.top", // dev 环境
+  timeout: 1000,
+  headers: {
+    "Content-Type": "application/json",
+    // Authorization: "Bearer ea8c0470-7f2f-473d-b3c0-be2add35a42c" // 测试环境
+    Authorization: "Bearer e837fa8f-432c-4d1b-85c4-c6029f27f6a4" // dev环境
+  }
 })
 
 instance.interceptors.request.use(
@@ -73,6 +73,6 @@ export function getDetail(secondLevelDistrictId, currentDistrictId) {
   return instance.get("/xay/v1/sys/district/find-tree-info/" + secondLevelDistrictId + "/" + currentDistrictId)
 }
 
-export function getCamera(){
+export function getCamera() {
   return instance.get("")
 }

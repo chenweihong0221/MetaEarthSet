@@ -93,6 +93,7 @@ onMounted(() => {
           window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
           window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
           window.polygonToParent = new Map<string, any>()
+          window.divGraphic = new Map<string, mars3d.graphic.DivGraphic>()
           // 加载图层
           getBuilding(response.data.data.detailsInfoAndChildren)
         })
@@ -265,6 +266,11 @@ const handleArea = (area: any) => {
       window.polygonToParent = new Map<string, any>()
     } else {
       window.polygonToParent.clear()
+    }
+    if (window.divGraphic === undefined) {
+      window.divGraphic = new Map<string, mars3d.graphic.DivGraphic>()
+    } else {
+      window.divGraphic.clear()
     }
     // 加载图层
     getBuilding(response.data.data.detailsInfoAndChildren)
