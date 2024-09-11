@@ -3,7 +3,8 @@ import { mapStore, stateStore } from "@mars/pages/meta/module/store/store"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
 import { Cesium } from "mars3d"
 import { ModelData } from "@mars/pages/meta/api/adopter"
-import { castTo2DArr } from "@mars/pages/meta/module/tool/position"
+import { castTo2DArr, LngLatPointToJSON } from "@mars/pages/meta/module/tool/position"
+
 
 import { addModel } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
@@ -182,7 +183,8 @@ export class GraphicDraw implements GraphicInterface {
     }
     const pos = castTo2DArr(this.position)
     const path = ""
-    const lngLatPoint = ""
-    return new ModelData(areaId, this.id, this.name, path, lngLatPoint, this.position, 10, null, this.content)
+    const lngLatPoint = mars3d.LngLatPoint.fromCartesian(this.position)
+    const lngLatPointPath = LngLatPointToJSON(lngLatPoint)
+    return new ModelData(areaId, this.id, this.name, path, lngLatPointPath, this.position, 10, null, this.content)
   }
 }

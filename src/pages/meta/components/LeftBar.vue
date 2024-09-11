@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useStore } from "vuex"
 import { mapKey, stateKey } from "@mars/pages/meta/module/store/store"
-import { AlignCenterOutlined, PicCenterOutlined, PicLeftOutlined, GatewayOutlined, ExpandOutlined, FormOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons-vue'
+import { AlignCenterOutlined, PicCenterOutlined, PicLeftOutlined, GatewayOutlined, ExpandOutlined, FormOutlined, UserOutlined, VideoCameraOutlined } from "@ant-design/icons-vue"
 import { nextTick, ref, watch, watchEffect } from "vue"
 import { TreeProps } from "ant-design-vue"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
