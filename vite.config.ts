@@ -2,6 +2,7 @@ import path from "path"
 import type { ConfigEnv } from "vite"
 import { defineConfig, loadEnv } from "vite" // 帮手函数，这样不用 jsdoc 注解也可以获取类型提示
 import vue from "@vitejs/plugin-vue"
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js"
 // import legacy from "@vitejs/plugin-legacy"
 import eslintPlugin from "vite-plugin-eslint"
 import { mars3dPlugin } from "vite-plugin-mars3d"
@@ -74,11 +75,11 @@ export default ({ mode }: ConfigEnv) => {
         //   index: path.resolve(__dirname, "index.html"),
         //   demo: path.resolve(__dirname, "demo.html")
         // },
-        output: {
-          chunkFileNames: "assets/js/[name]-[hash].js",
-          entryFileNames: "assets/js/[name]-[hash].js",
-          assetFileNames: "assets/[ext]/[name]-[hash].[ext]"
-        }
+        // output: {
+        //   chunkFileNames: "assets/js/[name]-[hash].js",
+        //   entryFileNames: "assets/js/[name]-[hash].js",
+        //   assetFileNames: "assets/[ext]/[name]-[hash].[ext]"
+        // }
       },
       lib: {
         entry: path.resolve(__dirname, "src/pages/meta/main.ts"),
@@ -86,6 +87,8 @@ export default ({ mode }: ConfigEnv) => {
         // fileName: "m_sdk"
         fileName: "m_library" // 自定义输出文件名
       },
+
+
       // 当设置为 true, 构建后将会生成 manifest.json 文件
       manifest: false,
       // 设置为 false 可以禁用最小化混淆,或是用来指定是应用哪种混淆器 boolean | 'terser' | 'esbuild'
@@ -104,6 +107,7 @@ export default ({ mode }: ConfigEnv) => {
     },
     plugins: [
       vue(),
+      cssInjectedByJsPlugin(),
       // 兼容老版本浏览器配置
       // legacy({
       //   targets: ["> 5%", "last 2 major versions", "chrome >80", "not dead"], // 需要兼容的目标列表，可以设置多个,参考.browserslistrc等
