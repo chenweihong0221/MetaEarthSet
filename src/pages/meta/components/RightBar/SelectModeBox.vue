@@ -280,7 +280,24 @@ const beginStore = () => {
       building.showAllFloors()
     } else if (selectedType === 3) {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
-      console.log(window.polygonEntity.get(id))
+      const positions = window.polygonEntity.get(id).editing.positions
+      const pos = castTo2DArr(positions)
+      const path = convertToJSON(pos)
+      const params = {
+        districtId: id,
+        path: path.toString(),
+        longitudeAndLatitudeJson: path.toString()
+      }
+      // 调取修改接口
+      updateModel(params).then((res) => {
+        if (res.data.code === "0") {
+          message.success(res.data.msg)
+        } else {
+          message.error(res.data.msg)
+        }
+      })
+    }
+    startEdit.value = false
     } else if (selectedType === 4) {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
       const positions = window.polygonEntity.get(id).editing.positions
@@ -318,8 +335,8 @@ const beginStore = () => {
       building.onlyShowFirstFloor()
       const floor = building.getFirstFloor()
       window.drawGraphicLayer.startEditing(window.polygonEntity.get(floor.id))
-    } else if(selectedType === 3) {
-      window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
+    } else if (selectedType === 3) {
+      window.drawGraphicLayer.startEditing(window.polygonWall.get(id))
     } else {
       window.polygonWall.get(id).show = false
       window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
