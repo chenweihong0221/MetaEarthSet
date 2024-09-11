@@ -28,6 +28,12 @@ app.use(testStore, testKey)
 // 这里是自定义的store
 app.use(mapStore, mapKey)
 app.use(stateStore, stateKey)
-app.mount("#app")
+// app.mount("#app")
+
+function renderVueComponentToDOM(domElement) {
+  app.mount(domElement)
+}
+
+export default renderVueComponentToDOM
 
 

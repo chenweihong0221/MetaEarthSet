@@ -70,15 +70,21 @@ export default ({ mode }: ConfigEnv) => {
       assetsDir: "assets",
       // 自定义底层的 Rollup 打包配置
       rollupOptions: {
-        input: {
-          index: path.resolve(__dirname, "index.html"),
-          demo: path.resolve(__dirname, "demo.html")
-        },
+        // input: {
+        //   index: path.resolve(__dirname, "index.html"),
+        //   demo: path.resolve(__dirname, "demo.html")
+        // },
         output: {
           chunkFileNames: "assets/js/[name]-[hash].js",
           entryFileNames: "assets/js/[name]-[hash].js",
           assetFileNames: "assets/[ext]/[name]-[hash].[ext]"
         }
+      },
+      lib: {
+        entry: path.resolve(__dirname, "src/pages/meta/main.ts"),
+        name: "m_library",
+        // fileName: "m_sdk"
+        fileName: "m_library" // 自定义输出文件名
       },
       // 当设置为 true, 构建后将会生成 manifest.json 文件
       manifest: false,
