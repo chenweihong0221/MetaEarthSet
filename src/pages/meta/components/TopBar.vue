@@ -330,12 +330,7 @@ function getFloor(parent: any, building: Building) {
   if (children) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
-      let positions = []
-      if (child.path === null || child.path === "") {
-        positions.push(new Cesium.Cartesian3())
-      } else {
-        positions = JSON.parse(child.path)
-      }
+      const positions = building.positions
       if (child.districtType === 4) {
         const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
           positions,

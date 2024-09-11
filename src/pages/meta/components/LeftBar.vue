@@ -53,7 +53,6 @@ watchEffect(() => {
   }).forEach((building) => treeData.push(building))
 
   // 处理围栏
-
   Array.from(store.state.fenceMap.values()).map(fence => {
     graphicIdTypeMap.set(fence.id.toString(), 3)
     return {
@@ -64,7 +63,6 @@ watchEffect(() => {
   }).forEach((fence) => treeData.push(fence))
 
   // 处理露天场所
-
   Array.from(store.state.openAirMap.values()).map(openAir => {
     graphicIdTypeMap.set(openAir.id, 4)
     return {

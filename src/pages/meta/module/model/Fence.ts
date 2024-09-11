@@ -38,11 +38,17 @@ export class Fence implements GraphicInterface {
           message.success("新增围栏成功")
           mapStore.commit("addFence", this)
           stateStore.commit("updateLeftBarNeedUpdate", true)
+          this.makePolygon(this.positions, name)
         } else {
           message.error(res.data.msg)
         }
       })
+    } else{
+      this.makePolygon(this.positions, name)
     }
+  }
+
+  makePolygon(positions: Cesium.Cartesian3[], name: string) {
     this.polygon = new mars3d.graphic.ScrollWall({
       positions,
       name: name || "围栏",
