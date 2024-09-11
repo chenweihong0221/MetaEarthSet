@@ -296,8 +296,7 @@ const beginStore = () => {
           message.error(res.data.msg)
         }
       })
-    }
-    startEdit.value = false
+      startEdit.value = false
     } else if (selectedType === 4) {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
       const positions = window.polygonEntity.get(id).editing.positions
