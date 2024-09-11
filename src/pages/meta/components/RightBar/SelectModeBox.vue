@@ -7,7 +7,7 @@ import { mapKey, stateKey } from "@mars/pages/meta/module/store/store"
 import { deleteModel, updateModel, getDetail } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
 import { Cesium } from "mars3d"
-import { castTo2DArr, convertToJSON } from "@mars/pages/meta/module/tool/position"
+import { castTo2DArr, convertToJSON, LngLatPointToJSON } from "@mars/pages/meta/module/tool/position"
 import { Building, Floor } from "@mars/pages/meta/module/model/Building"
 import { OpenAir } from "@mars/pages/meta/module/model/OpenAir"
 import store from "../../widget-store"
@@ -265,10 +265,12 @@ const beginStore = () => {
       building.updateFloorPositions(positions, true)
       const pos = castTo2DArr(positions)
       const path = convertToJSON(pos)
+      const lngLatPoint = positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
+      const lngLatPointPath = LngLatPointToJSON(lngLatPoint)
       const params = {
         districtId: building.id,
         path: path.toString(),
-        longitudeAndLatitudeJson: path.toString()
+        longitudeAndLatitudeJson: lngLatPointPath.toString()
       }
       updateModel(params).then((res) => {
         if (res.data.code === "0") {
@@ -279,14 +281,16 @@ const beginStore = () => {
       })
       building.showAllFloors()
     } else if (selectedType === 3) {
-      window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
+      window.drawGraphicLayer.stopEditing(window.polygonWall.get(id))
       const positions = window.polygonEntity.get(id).editing.positions
       const pos = castTo2DArr(positions)
       const path = convertToJSON(pos)
+      const lngLatPoint = positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
+      const lngLatPointPath = LngLatPointToJSON(lngLatPoint)
       const params = {
         districtId: id,
         path: path.toString(),
-        longitudeAndLatitudeJson: path.toString()
+        longitudeAndLatitudeJson: lngLatPointPath.toString()
       }
       // 调取修改接口
       updateModel(params).then((res) => {
@@ -313,10 +317,12 @@ const beginStore = () => {
       }
       const pos = castTo2DArr(newPositions)
       const path = convertToJSON(pos)
+      const lngLatPoint = positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))
+      const lngLatPointPath = LngLatPointToJSON(lngLatPoint)
       const params = {
         districtId: id,
         path: path.toString(),
-        longitudeAndLatitudeJson: path.toString()
+        longitudeAndLatitudeJson: lngLatPointPath.toString()
       }
       // 调取修改接口
       updateModel(params).then((res) => {
