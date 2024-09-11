@@ -62,7 +62,7 @@ export class GraphicDraw implements GraphicInterface {
   }
 
   highLight(): void {
-    mapStore.state.outlineEffect.selected = [this.graphic]
+    // mapStore.state.outlineEffect.selected = [this.graphic]
   }
 
   removeHighLight(): void {

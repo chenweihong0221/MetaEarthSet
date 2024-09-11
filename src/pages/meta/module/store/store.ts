@@ -192,7 +192,7 @@ export const mapStore = createStore({
         case 4:
           return state.openAirMap.get(id)
         case 5:
-          return state.graphicDrawMap.get(id)
+          return window.polygonToParent.get(id)
         case 6:
           return state.humanMap.get(id)
         case 7:

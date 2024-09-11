@@ -87,7 +87,7 @@ watch(
       position = mars3d.PolyUtil.centerOfMass(openAir.positions)
     } else if (selectedType === 5) {
       // type为5， 选中的图形为图上标绘
-      const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(val)
+      const graphicDraw = window.polygonToParent.get(val)
       name.value = graphicDraw.name
       content.value = graphicDraw.content
       type.value = "图上标绘"
@@ -135,7 +135,7 @@ const onMessageNameChange = () => {
     openAir.name = name.value
   } else if (selectedType === 5) {
     // type为5， 选中的图形为图上标绘
-    const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(val)
+    const graphicDraw = window.polygonToParent.get(val)
     graphicDraw.name = name.value
   } else if (selectedType === 6) {
     // type为6， 选中的图形为模型
@@ -244,7 +244,7 @@ const handleShowChange = (param) => {
     openAir.setShow(value)
   } else if (selectedType === 5) {
     // type为5， 选中的图形为图上标绘
-    const graphicDraw = mapStore.getters.getGraphicDrawByGraphicDrawId(id)
+    const graphicDraw = window.polygonToParent.get(id)
     graphicDraw.setShow(value)
   } else if (selectedType === 6) {
     // type为6， 选中的图形为模型
