@@ -36,14 +36,12 @@ export class Fence implements GraphicInterface {
           this.id = res.data.data.districtId
           this.code = res.data.data.districtCode
           message.success("新增围栏成功")
-          mapStore.commit("addFence", this)
-          stateStore.commit("updateLeftBarNeedUpdate", true)
           this.makePolygon(this.positions, name)
         } else {
           message.error(res.data.msg)
         }
       })
-    } else{
+    } else {
       this.makePolygon(this.positions, name)
     }
   }
@@ -59,6 +57,8 @@ export class Fence implements GraphicInterface {
       }
     })
     // mapStore.state.graphicLayer.addGraphic(this.polygon)
+    mapStore.commit("addFence", this)
+    stateStore.commit("updateLeftBarNeedUpdate", true)
     window.drawGraphicLayer.addGraphic(this.polygon)
     window.polygonWall.set(this.id, this.polygon)
   }
