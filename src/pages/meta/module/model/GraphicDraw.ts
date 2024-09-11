@@ -184,7 +184,7 @@ export class GraphicDraw implements GraphicInterface {
     const pos = castTo2DArr(this.position)
     const path = ""
     const lngLatPoint = mars3d.LngLatPoint.fromCartesian(this.position)
-    const lngLatPointPath = LngLatPointToJSON(lngLatPoint)
+    const lngLatPointPath = JSON.stringify(lngLatPoint)
     return new ModelData(areaId, this.id, this.name, path, lngLatPointPath, this.position, 10, null, this.content)
   }
 }
