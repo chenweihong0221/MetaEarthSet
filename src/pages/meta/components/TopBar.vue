@@ -310,6 +310,7 @@ function getBuilding(parent) {
           child.position.zAxis // z 坐标
         )
         const graphicDraw = new GraphicDraw(child.name, child.content, t_p, 1, child.districtId, false)
+        store.commit("addGraphicDraw", graphicDraw)
       }
       stateStore.commit("updateLeftBarNeedUpdate", true)
       getBuilding(children)
