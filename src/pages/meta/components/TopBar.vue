@@ -289,7 +289,7 @@ function getBuilding(parent) {
       // } else {
       //   positions = JSON.parse(child.path)
       // }
-      let positions = []
+      const positions = []
       const lngLatPoint = JSON.parse(child.longitudeAndLatitudeJson)
       for (let j = 0; j < lngLatPoint.length; j++) {
         const lngLat = lngLatPoint[j]
@@ -354,11 +354,11 @@ function getSpace(parent: any, floor: Floor) {
   if (children) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
-      let positions = []
-      if (child.path === null || child.path === "") {
-        positions = floor.positions
-      } else {
-        positions = JSON.parse(child.path)
+      const positions = []
+      const lngLatPoint = JSON.parse(child.longitudeAndLatitudeJson)
+      for (let j = 0; j < lngLatPoint.length; j++) {
+        const lngLat = lngLatPoint[j]
+        positions.push(Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt))
       }
       if (child.districtType === 5) {
         const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
