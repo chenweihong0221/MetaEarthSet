@@ -21,6 +21,7 @@ export class GraphicDraw implements GraphicInterface {
   graphic: mars3d.graphic.DivGraphic
   content: string
   show: boolean = true // 是否显示
+  type: number
 
   constructor(name: string,
     content: string,
@@ -36,7 +37,7 @@ export class GraphicDraw implements GraphicInterface {
     this.id = id || uuid.v4()
     this.name = name
     this.position = position
-
+    this.type = p_type
     if (isCreate === true) { // 手动创建
       const postData = this.toModelData(stateStore.state.selectedAreaCode)
       addModel(postData).then((res) => {
@@ -185,6 +186,11 @@ export class GraphicDraw implements GraphicInterface {
     const path = ""
     const lngLatPoint = mars3d.LngLatPoint.fromCartesian(this.position)
     const lngLatPointPath = JSON.stringify(lngLatPoint)
-    return new ModelData(areaId, this.id, this.name, path, lngLatPointPath, this.position, 10, null, this.content)
+    const contentAndType = {
+      content: this.content,
+      type: this.type
+    }
+    return new ModelData(areaId, this.id, this.name, path, lngLatPointPath,
+       this.position, 10, null, JSON.stringify(contentAndType))
   }
 }

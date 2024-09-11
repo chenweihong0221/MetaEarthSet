@@ -14,6 +14,7 @@ import { Building, Floor, Space } from "../module/model/Building"
 import { Fence } from "@mars/pages/meta/module/model/Fence"
 import { OpenAir } from "../module/model/OpenAir"
 import { GraphicDraw } from "@mars/pages/meta/module/model/GraphicDraw"
+import { json } from "stream/consumers"
 
 interface FormState {
   url: string
@@ -315,7 +316,9 @@ function getBuilding(parent) {
           child.position.yAxis, // y 坐标
           child.position.zAxis // z 坐标
         )
-        const graphicDraw = new GraphicDraw(child.name, child.content, t_p, 1, child.districtId, false)
+        const contentType = JSON.parse(child.content)
+
+        const graphicDraw = new GraphicDraw(child.name, contentType.content, contentType.type, 1, child.districtId, false)
         store.commit("addGraphicDraw", graphicDraw)
       }
       stateStore.commit("updateLeftBarNeedUpdate", true)
