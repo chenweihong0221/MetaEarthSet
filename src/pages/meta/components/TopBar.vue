@@ -283,11 +283,17 @@ function getBuilding(parent) {
   if (children) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
+      // let positions = []
+      // if (child.path === null || child.path === "") {
+      //   positions = []
+      // } else {
+      //   positions = JSON.parse(child.path)
+      // }
       let positions = []
-      if (child.path === null || child.path === "") {
-        positions = []
-      } else {
-        positions = JSON.parse(child.path)
+      const lngLatPoint = JSON.parse(child.longitudeAndLatitudeJson)
+      for (let j = 0; j < lngLatPoint.length; j++) {
+        const lngLat = lngLatPoint[j]
+        positions.push(Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt))
       }
       if (child.districtType === 3) {
         const building = new Building(store.state.graphicLayer, positions, child.name, 0, 5, null, true, child.districtId, child.code, false)
