@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useStore } from "vuex"
 import { mapKey, stateKey } from "@mars/pages/meta/module/store/store"
-
+import { AlignCenterOutlined, PicCenterOutlined, PicLeftOutlined, GatewayOutlined, ExpandOutlined, FormOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons-vue'
 import { nextTick, ref, watch, watchEffect } from "vue"
 import { TreeProps } from "ant-design-vue"
 import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
@@ -214,14 +214,14 @@ const getGraphicById = (id: string | number) => {
         :tree-data="leftBarTreeData" @check="handleCheck" :check-strictly="true" @select="handleSelected"
         @rightClick="handleRightClick">
         <template #icon="dataRef">
-          <align-center-outlined v-show="dataRef.type === 0" />
-          <pic-center-outlined v-show="dataRef.type === 1" />
-          <pic-left-outlined v-show="dataRef.type === 2" />
-          <gateway-outlined v-show="dataRef.type === 3" />
-          <expand-outlined v-show="dataRef.type === 4" />
-          <form-outlined v-show="dataRef.type === 5" />
-          <user-outlined v-show="dataRef.type === 6" />
-          <video-camera-outlined v-show="dataRef.type === 7" />
+          <AlignCenterOutlined v-show="dataRef.type === 0" />
+          <PicCenterOutlined v-show="dataRef.type === 1" />
+          <PicLeftOutlined v-show="dataRef.type === 2" />
+          <GatewayOutlined v-show="dataRef.type === 3" />
+          <ExpandOutlined v-show="dataRef.type === 4" />
+          <FormOutlined v-show="dataRef.type === 5" />
+          <UserOutlined v-show="dataRef.type === 6" />
+          <VideoCameraOutlined v-show="dataRef.type === 7" />
         </template>
       </a-tree>
     </div>
