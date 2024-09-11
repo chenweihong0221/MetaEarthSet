@@ -44,13 +44,13 @@ export class GraphicDraw implements GraphicInterface {
         if (res.data.code === "0") {
           this.id = res.data.data.districtId
           // 新增模型
-          this.makeGraphic(p_type, position)
+          this.makeGraphic(p_type, this.position)
         } else {
           message.error(res.data.msg)
         }
       })
     } else { // 通过服务端获取
-      this.makeGraphic(p_type, position)
+      this.makeGraphic(p_type, this.position)
     }
     // this.id = id || this.graphic.id.toString()
     // this.name = name
@@ -185,7 +185,12 @@ export class GraphicDraw implements GraphicInterface {
     const pos = castTo2DArr(this.position)
     const path = ""
     const lngLatPoint = mars3d.LngLatPoint.fromCartesian(this.position)
-    const lngLatPointPath = JSON.stringify(lngLatPoint)
+    const pathObjects = {
+      lng: lngLatPoint.lng,
+      lat: lngLatPoint.lat,
+      alt: lngLatPoint.alt
+    }
+    const lngLatPointPath = JSON.stringify(pathObjects)
     const contentAndType = {
       content: this.content,
       type: this.type
