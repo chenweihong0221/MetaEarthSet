@@ -116,7 +116,7 @@ export class GraphicDraw implements GraphicInterface {
           style: {
             html: `<div class="marsBlackPanel  animation-spaceInDown">
                     <div class="marsBlackPanel-text" style="">
-                      ${this.content} <span class="temperature"></span> ℃
+                      ${this.content} <span class="temperature"></span>
                     </div>
                   </div>`,
             horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
