@@ -278,6 +278,9 @@ const beginStore = () => {
         }
       })
       building.showAllFloors()
+    } else if (selectedType === 3) {
+      window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
+      console.log(window.polygonEntity.get(id))
     } else if (selectedType === 4) {
       window.drawGraphicLayer.stopEditing(window.polygonEntity.get(id))
       const positions = window.polygonEntity.get(id).editing.positions
@@ -315,6 +318,8 @@ const beginStore = () => {
       building.onlyShowFirstFloor()
       const floor = building.getFirstFloor()
       window.drawGraphicLayer.startEditing(window.polygonEntity.get(floor.id))
+    } else if(selectedType === 3) {
+      window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
     } else {
       window.polygonWall.get(id).show = false
       window.drawGraphicLayer.startEditing(window.polygonEntity.get(id))
