@@ -316,9 +316,14 @@ function getBuilding(parent) {
           child.position.yAxis, // y 坐标
           child.position.zAxis // z 坐标
         )
-        const contentType = JSON.parse(child.content)
-
-        const graphicDraw = new GraphicDraw(child.name, contentType.content, contentType.type, 1, child.districtId, false)
+        let contentType = {
+          type: 1,
+          content: "1号楼"
+        }
+        if (child.content) {
+          contentType = JSON.parse(child.content)
+        }
+        const graphicDraw = new GraphicDraw(child.name, contentType.content, lngLatPoint, contentType.type, child.districtId, false)
         store.commit("addGraphicDraw", graphicDraw)
       }
       stateStore.commit("updateLeftBarNeedUpdate", true)
