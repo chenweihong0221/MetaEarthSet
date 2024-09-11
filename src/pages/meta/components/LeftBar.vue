@@ -75,7 +75,7 @@ watchEffect(() => {
   }).forEach((openAir) => treeData.push(openAir))
 
   // 处理图上标绘
-  Array.from(store.state.graphicDrawMap.values()).map(graphicDraw => {
+  Array.from(window.polygonToParent.values()).map(graphicDraw => {
     graphicIdTypeMap.set(graphicDraw.id.toString(), 5)
     return {
       title: graphicDraw.name,

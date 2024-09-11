@@ -41,10 +41,8 @@ export class GraphicDraw implements GraphicInterface {
       addModel(postData).then((res) => {
         if (res.data.code === "0") {
           this.id = res.data.data.districtId
+          // 新增模型
           this.makeGraphic(p_type, position)
-          mapStore.state.graphicLayer.addGraphic(this.graphic)
-          mapStore.state.graphicDrawMap.set(this.id, this)
-          stateStore.commit("updateLeftBarNeedUpdate", true)
         } else {
           message.error(res.data.msg)
         }
@@ -173,7 +171,8 @@ export class GraphicDraw implements GraphicInterface {
     }
     window.drawGraphicLayer.addGraphic(this.graphic)
     window.divGraphic.set(this.id, this.graphic)
-    mapStore.state.graphicDrawMap.set(this.id, this)
+    window.polygonToParent.set(this.id, this)
+    // mapStore.state.graphicDrawMap.set(this.id, this)
     stateStore.commit("updateLeftBarNeedUpdate", true)
   }
 
