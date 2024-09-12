@@ -29,7 +29,7 @@ const fenceName = ref<string>("围栏") // 绘制围栏时输入的围栏名称
 const openAirName = ref<string>("露天场所") // 绘制露天场所时输入的露天场所名称
 const deviceId = ref<string>("") // 绘制围栏时选择的设备id
 const humanId = ref<string>("358946") // 绘制围栏时选择的人员id
-const cameras = ref(window.polygonCamera.values())
+const cameras = ref()
 const selectedBuildingId = ref<string>("") // 绘制空间时选择的建筑物id
 const selectedFloorId = ref<string>("") // 绘制空间时选择的楼层id
 const selectableFloor = ref<Floor[]>([]) // 绘制空间时可选择的楼层
@@ -350,6 +350,11 @@ const handleAddHuman = () => {
     drawCallback()
   })
 }
+
+const getCamera = () => {
+  console.log(window.polygonCamera.values())
+  cameras.value = Array.from(window.polygonCamera.values()) 
+}
 </script>
 
 <template>
@@ -468,7 +473,7 @@ const handleAddHuman = () => {
           <div class="other-box">
             <div class="other-row">
               <div>设备ID：</div>
-              <a-select class="c_mars-select" v-model:value="deviceId">
+              <a-select class="c_mars-select" v-model:value="deviceId" @click="getCamera">
                 <a-select-option v-for="camera in cameras" :key="camera.id">
                   {{ camera.id }}
                 </a-select-option>
