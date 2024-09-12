@@ -439,7 +439,7 @@ function getHuman(humen: any) {
     const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
     const human = new Human(data.userName, position, store.state.graphicLayer)
     store.state.humanMap.set(human.id, human)
-    console.log("获取人员", data)
+    console.log("获取人员", human, position)
   }
 }
 
