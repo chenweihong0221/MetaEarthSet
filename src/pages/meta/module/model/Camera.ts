@@ -7,6 +7,11 @@ import { ModelData } from "@mars/pages/meta/api/adopter"
 import { castTo2DArr, convertToJSON, LngLatPointToJSON } from "@mars/pages/meta/module/tool/position"
 import { getCameraDetail, getChannel } from "@mars/pages/meta/api/api"
 import { message } from "ant-design-vue"
+import { ref } from "vue"
+
+
+const timer = ref(null)
+const count = ref(0)
 
 export class Camera implements GraphicInterface {
   id: string
@@ -65,30 +70,40 @@ export class Camera implements GraphicInterface {
             deviceId: code,
             channelId: data.videoDeviceDTOList.channelCode
           }
-          getChannel(param).then(function (response) {
-            if (response.data.code === "0") {
-              flvUrl = ""
-              const videoElement = event.container.querySelector("#videoPlay") // popup对应的DOM
-              // flv格式转换
-              if (Flv.isSupported() && videoElement) {
-                const flvPlayer = Flv.createPlayer({
-                  type: "flv",
-                  url: flvUrl
-                })
-                flvPlayer.attachMediaElement(videoElement)
-                flvPlayer.load()
-                flvPlayer.play()
-              } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
-                videoElement.src = flvUrl
-                videoElement.play()
-              } else {
-                console.log("camera error: 无法解析视频流格式")
-                console.log("url:" + flvUrl)
-              }
-            } else {
-              message.error(response.data.msg)
+          // 定时获取
+          timer.value = setTimeout(() => {
+            // store.commit("clearHumenMap")
+            console.log("getChannel")
+            count.value++
+            if (count.value > 2) {
+              clearInterval(timer.value)
+              count.value = 0
+              getChannel(param).then(function (response) {
+                if (response.data.code === "0") {
+                  flvUrl = ""
+                  const videoElement = event.container.querySelector("#videoPlay") // popup对应的DOM
+                  // flv格式转换
+                  if (Flv.isSupported() && videoElement) {
+                    const flvPlayer = Flv.createPlayer({
+                      type: "flv",
+                      url: flvUrl
+                    })
+                    flvPlayer.attachMediaElement(videoElement)
+                    flvPlayer.load()
+                    flvPlayer.play()
+                  } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
+                    videoElement.src = flvUrl
+                    videoElement.play()
+                  } else {
+                    console.log("camera error: 无法解析视频流格式")
+                    console.log("url:" + flvUrl)
+                  }
+                } else {
+                  message.error(response.data.msg)
+                }
+              })
             }
-          })
+          }, 2000)
         } else {
           message.error(response.data.msg)
         }
