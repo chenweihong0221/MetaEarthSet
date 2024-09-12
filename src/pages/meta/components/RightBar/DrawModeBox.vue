@@ -12,6 +12,8 @@ import { OpenAir } from "@mars/pages/meta/module/model/OpenAir"
 import { Human } from "@mars/pages/meta/module/model/Human"
 import { GraphicDraw } from "@mars/pages/meta/module/model/GraphicDraw"
 import { Camera } from "@mars/pages/meta/module/model/Camera"
+import { updateCamera } from "@mars/pages/meta/api/api"
+import { message } from "ant-design-vue"
 
 // 1，3的时候直接绘制即可，2的时候要先选择楼层
 const selectedState = ref<string>("1") // 当前状态，0 未绘制， 1 绘制建筑物， 2 绘制楼层内空间， 3 绘制围栏
@@ -310,6 +312,21 @@ const handleAddCamera = () => {
     const camera = new Camera(deviceId.value, flvUrl, cartesian, store.state.graphicLayer)
     store.state.cameraMap.set(camera.id, camera)
     deviceId.value = ""
+
+    // 发送请求修改监控位置
+    const param = {
+      deviceCode: 34020000001310000002,
+      districtCode: 1021699225924174464,
+      latitude: "34",
+      longitude: "45"
+    }
+    updateCamera(param).then(function (response) {
+      if (response.data.code === "0") {
+        message.success("修改成功")
+      } else {
+        message.error(response.data.msg)
+      }
+    })
     drawCallback()
   })
 }

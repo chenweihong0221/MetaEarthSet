@@ -14,7 +14,7 @@ import { Building, Floor, Space } from "../module/model/Building"
 import { Fence } from "@mars/pages/meta/module/model/Fence"
 import { OpenAir } from "../module/model/OpenAir"
 import { GraphicDraw } from "@mars/pages/meta/module/model/GraphicDraw"
-import { json } from "stream/consumers"
+import { Camera } from "@mars/pages/meta/module/model/Camera"
 import { Human } from "../module/model/Human"
 
 interface FormState {
@@ -83,43 +83,47 @@ onMounted(() => {
     }
     getModel(params)
       .then(function (response) {
-        // 处理成功情况
-        districtId.value = response.data.data[0].children[0].districtId
-        AreaList.value = response.data.data[0].children
-        selectedArea.value = response.data.data[0].children[0].code
-        stateStore.commit("updateSelectedAreaCode", selectedArea.value)
-        stateStore.commit("updateSelectedAreaId", districtId.value)
-        // 获取楼栋模型
-        getDetail(districtId.value, districtId.value).then(function (response) {
-          // 初始化全局墙壁和矢量图层(露天广场)
-          window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
-          window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
-          window.polygonToParent = new Map<string, any>()
-          window.divGraphic = new Map<string, mars3d.graphic.DivGraphic>()
-          // 加载图层
-          getBuilding(response.data.data.detailsInfoAndChildren)
-        })
+        if (response.data.code === "0") {
+          // 处理成功情况
+          districtId.value = response.data.data[0].children[0].districtId
+          AreaList.value = response.data.data[0].children
+          selectedArea.value = response.data.data[0].children[0].code
+          stateStore.commit("updateSelectedAreaCode", selectedArea.value)
+          stateStore.commit("updateSelectedAreaId", districtId.value)
+          // 获取楼栋模型
+          getDetail(districtId.value, districtId.value).then(function (response) {
+            // 初始化全局墙壁和矢量图层(露天广场)
+            window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
+            window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
+            window.polygonToParent = new Map<string, any>()
+            window.divGraphic = new Map<string, mars3d.graphic.DivGraphic>()
+            // 加载图层
+            getBuilding(response.data.data.detailsInfoAndChildren)
+          })
 
-        // 获取人员位置
-        getHumen().then(function (response) {
-          if (response.data.code === "0") {
-            const humen = response.data.data
-            getHuman(humen)
+          // 获取人员位置
+          getHumen().then(function (response) {
+            if (response.data.code === "0") {
+              const humen = response.data.data
+              getHuman(humen)
+            }
+          })
+
+          // 获取监控设备
+          const cameraParam = {
+            current: 1,
+            size: 100,
+            deviceClassifyCode: "video"
           }
-        })
-
-        // 获取监控设备
-        const cameraParam = {
-          current: 1,
-          size: 100,
-          deviceClassifyCode: "video"
+          getCamera(cameraParam).then(function (response) {
+            if (response.data.code === "0") {
+              const cameras = response.data.data.records
+              getCameras(cameras)
+            }
+          })
+        } else {
+          message.error(response.data.msg)
         }
-        getCamera(cameraParam).then(function (response) {
-          if (response.data.code === "0") {
-            const cameras = response.data.data.records
-            getCameras(cameras)
-          }
-        })
       })
       .catch(function (error) {
         // 处理错误情况
@@ -401,14 +405,25 @@ function getSpace(parent: any, floor: Floor) {
 
 function getCameras(cameras: any) {
   for (let i = 0; i < cameras.length; i++) {
-    const camera = cameras[i]
-    const deviceExt = JSON.parse(camera.deviceExt)
-    const lngLat = {
-      lng: deviceExt.longitude,
-      lat: deviceExt.latitude,
-      alt: deviceExt.altitude
+    const child = cameras[i]
+    let lngLat
+    if (child.deviceExt) {
+      const deviceExt = JSON.parse(child.deviceExt)
+      lngLat = {
+        lng: deviceExt.longitude,
+        lat: deviceExt.latitude,
+        alt: deviceExt.altitude
+      }
+    } else {
+      lngLat = {
+        lng: 0,
+        lat: 0,
+        alt: 0
+      }
     }
+    const flvUrl = "ws://47.93.190.98:80/rtp/34020000001310000002_34020000001310000001.live.flv"
     const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
+    const camera = new Camera(child.id, flvUrl, position, store.state.graphicLayer)
     console.log("获取camera", camera, position)
   }
 }
