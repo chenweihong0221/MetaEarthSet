@@ -75,35 +75,35 @@ export class Camera implements GraphicInterface {
             // store.commit("clearHumenMap")
             console.log("getChannel")
             count.value++
+            getChannel(param).then(function (response) {
+              if (response.data.code === "0") {
+                flvUrl = response.data.data.ws_flv
+                const videoElement = event.container.querySelector("#videoPlay") // popup对应的DOM
+                // flv格式转换
+                if (Flv.isSupported() && videoElement) {
+                  const flvPlayer = Flv.createPlayer({
+                    type: "flv",
+                    url: flvUrl
+                  })
+                  flvPlayer.attachMediaElement(videoElement)
+                  flvPlayer.load()
+                  flvPlayer.play()
+                } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
+                  videoElement.src = flvUrl
+                  videoElement.play()
+                } else {
+                  console.log("camera error: 无法解析视频流格式")
+                  console.log("url:" + flvUrl)
+                }
+              } else {
+                message.error(response.data.msg)
+              }
+            })
             if (count.value > 2) {
               clearInterval(timer.value)
               count.value = 0
-              getChannel(param).then(function (response) {
-                if (response.data.code === "0") {
-                  flvUrl = response.data.data.ws_flv
-                  const videoElement = event.container.querySelector("#videoPlay") // popup对应的DOM
-                  // flv格式转换
-                  if (Flv.isSupported() && videoElement) {
-                    const flvPlayer = Flv.createPlayer({
-                      type: "flv",
-                      url: flvUrl
-                    })
-                    flvPlayer.attachMediaElement(videoElement)
-                    flvPlayer.load()
-                    flvPlayer.play()
-                  } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
-                    videoElement.src = flvUrl
-                    videoElement.play()
-                  } else {
-                    console.log("camera error: 无法解析视频流格式")
-                    console.log("url:" + flvUrl)
-                  }
-                } else {
-                  message.error(response.data.msg)
-                }
-              })
             }
-          }, 2000)
+          }, 1000)
         } else {
           message.error(response.data.msg)
         }
