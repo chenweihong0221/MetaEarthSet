@@ -5,7 +5,8 @@ import { mapStore } from "@mars/pages/meta/module/store/store"
 import { Cesium } from "mars3d"
 import { ModelData } from "@mars/pages/meta/api/adopter"
 import { castTo2DArr, convertToJSON, LngLatPointToJSON } from "@mars/pages/meta/module/tool/position"
-import { getCameraDetail } from "@mars/pages/meta/api/api"
+import { getCameraDetail, getChannel } from "@mars/pages/meta/api/api"
+import { message } from "ant-design-vue"
 
 export class Camera implements GraphicInterface {
   id: string
@@ -58,25 +59,40 @@ export class Camera implements GraphicInterface {
     window.polygonToParent.set(this.id.toString(), this)
     this.graphic.on(mars3d.EventType.popupOpen, function (event) {
       getCameraDetail(id).then(function (response) {
-        console.log(response)
+        if (response.data.code === "0") {
+          const data = response.data.data
+          const param = {
+            deviceId: code,
+            channelId: data.videoDeviceDTOList.channelCode
+          }
+          getChannel(param).then(function (response) {
+            if (response.data.code === "0") {
+              flvUrl = ""
+              const videoElement = event.container.querySelector("#videoPlay") // popup对应的DOM
+              // flv格式转换
+              if (Flv.isSupported() && videoElement) {
+                const flvPlayer = Flv.createPlayer({
+                  type: "flv",
+                  url: flvUrl
+                })
+                flvPlayer.attachMediaElement(videoElement)
+                flvPlayer.load()
+                flvPlayer.play()
+              } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
+                videoElement.src = flvUrl
+                videoElement.play()
+              } else {
+                console.log("camera error: 无法解析视频流格式")
+                console.log("url:" + flvUrl)
+              }
+            } else {
+              message.error(response.data.msg)
+            }
+          })
+        } else {
+          message.error(response.data.msg)
+        }
       })
-      const videoElement = event.container.querySelector("#videoPlay") // popup对应的DOM
-      // flv格式转换
-      if (Flv.isSupported() && videoElement) {
-        const flvPlayer = Flv.createPlayer({
-          type: "flv",
-          url: flvUrl
-        })
-        flvPlayer.attachMediaElement(videoElement)
-        flvPlayer.load()
-        flvPlayer.play()
-      } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
-        videoElement.src = flvUrl
-        videoElement.play()
-      } else {
-        console.log("camera error: 无法解析视频流格式")
-        console.log("url:" + flvUrl)
-      }
     })
   }
 

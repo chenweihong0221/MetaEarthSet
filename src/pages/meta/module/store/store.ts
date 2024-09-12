@@ -152,6 +152,10 @@ export const mapStore = createStore({
       state.fenceMap.clear()
     },
 
+    clearHumenMap(state) {
+      state.humanMap.clear()
+    },
+
     // add by cwh 202408081054
     flytoHome(state) {
       state.map.flyHome()

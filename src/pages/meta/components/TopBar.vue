@@ -56,6 +56,7 @@ const inputAreaName = ref("")
 const showModal = ref(false)
 const getData = ref(true)
 const districtId = ref("")
+const timer = ref(null)
 
 // 获取区域信息
 const AreaList = ref([
@@ -108,6 +109,11 @@ onMounted(() => {
               getHuman(humen)
             }
           })
+          // 定时获取
+          timer.value = setTimeout(() => {
+            // store.commit("clearHumenMap")
+            console.log("getHuman")
+          }, 2000)
 
           // 获取监控设备
           const cameraParam = {
