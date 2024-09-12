@@ -87,10 +87,15 @@ export function updateCamera(param) {
 }
 
 
-export function getCameraDetail(id:string) {
+export function getCameraDetail(id: string) {
   return instance.get("/xay/v1/iot/device/getById", { params: { id } })
 }
 
 export function getChannel(param) {
-  return instance.get("/xay/v1/iot/device/playStartUrl", param)
+  return instance.get("/xay/v1/iot/device/playStartUrl", {
+    params: {
+      deviceId: param.deviceId,
+      channelId: param.channelId
+    }
+  })
 }
