@@ -310,7 +310,7 @@ const handleAddCamera = () => {
     // const flvUrl = "ws://47.93.190.98:80/rtp/34020000001310000002_34020000001310000001.live.flv"
     // store.state.cameraMap.get(deviceId.value)?.graphic.destroy()
     // const camera = new Camera(deviceId.value, flvUrl, cartesian, store.state.graphicLayer)
-    const camera =  window.polygonToParent.get(deviceId.value)
+    const camera = window.polygonToParent.get(deviceId.value)
     camera.position = cartesian
     camera.polygon.position = cartesian
 
