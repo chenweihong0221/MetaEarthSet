@@ -311,24 +311,24 @@ const handleAddCamera = () => {
     store.state.cameraMap.get(deviceId.value)?.graphic.destroy()
     const camera = new Camera(deviceId.value, flvUrl, cartesian, store.state.graphicLayer)
     store.state.cameraMap.set(camera.id, camera)
-    deviceId.value = ""
 
-    const areaCode = stateStore.state.selectedAreaCode
-    console.log(areaCode)
     // 发送请求修改监控位置
-    // const param = {
-    //   deviceCode: "34020000001310000002",
-    //   districtCode: "1021699225924174464",
-    //   latitude: "34",
-    //   longitude: "45"
-    // }
-    // updateCamera(param).then(function (response) {
-    //   if (response.data.code === "0") {
-    //     message.success("修改成功")
-    //   } else {
-    //     message.error(response.data.msg)
-    //   }
-    // })
+    const areaCode = stateStore.state.selectedAreaCode // 获取当前区域
+    const lngLatPoint = mars3d.LngLatPoint.fromCartesian(cartesian)
+    const param = {
+      deviceCode: deviceId.value,
+      districtCode: areaCode,
+      latitude: lngLatPoint.lat,
+      longitude: lngLatPoint.lng
+    }
+    updateCamera(param).then(function (response) {
+      if (response.data.code === "0") {
+        message.success("修改成功")
+      } else {
+        message.error(response.data.msg)
+      }
+    })
+    deviceId.value = ""
     drawCallback()
   })
 }
