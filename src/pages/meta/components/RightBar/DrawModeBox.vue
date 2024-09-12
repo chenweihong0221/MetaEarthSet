@@ -311,15 +311,15 @@ const handleAddCamera = () => {
     // store.state.cameraMap.get(deviceId.value)?.graphic.destroy()
     // const camera = new Camera(deviceId.value, flvUrl, cartesian, store.state.graphicLayer)
     const camera = window.polygonToParent.get(deviceId.value)
+    const deviceCode = camera.code
     camera.position = cartesian
-    camera.polygon.position = cartesian
+    camera.graphic.position = cartesian
 
     // 发送请求修改监控位置
-    const areaCode = stateStore.state.selectedAreaCode // 获取当前区域
     const lngLatPoint = mars3d.LngLatPoint.fromCartesian(cartesian)
     const param = {
-      deviceCode: deviceId.value,
-      districtCode: areaCode,
+      deviceCode,
+      districtCode: "1021699225924174464",
       latitude: lngLatPoint.lat,
       longitude: lngLatPoint.lng
     }

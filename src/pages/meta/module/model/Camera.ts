@@ -12,12 +12,13 @@ export class Camera implements GraphicInterface {
   graphic: mars3d.graphic.DivGraphic
   layer: mars3d.layer.GraphicLayer
   position: mars3d.Cesium.Cartesian3
-
+  code: string
   show: boolean = true // 是否显示
   flvUrl: string
 
-  constructor(id: string, flvUrl: string, position: mars3d.Cesium.Cartesian3, layer: mars3d.layer.GraphicLayer) {
+  constructor(id: string, code: string, flvUrl: string, position: mars3d.Cesium.Cartesian3, layer: mars3d.layer.GraphicLayer) {
     this.id = id
+    this.code = code
     this.name = id
     this.flvUrl = flvUrl
     this.layer = layer
@@ -53,7 +54,7 @@ export class Camera implements GraphicInterface {
       }
     })
     this.layer.addGraphic(this.graphic)
-    window.polygonToParent.set(this.id, this)
+    window.polygonToParent.set(this.id.toString(), this)
     this.graphic.on(mars3d.EventType.popupOpen, function(event) {
       const videoElement = event.container.querySelector("#videoPlay") // popup对应的DOM
       // flv格式转换

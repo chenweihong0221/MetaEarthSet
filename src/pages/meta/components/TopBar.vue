@@ -423,7 +423,7 @@ function getCameras(cameras: any) {
     }
     const flvUrl = "ws://47.93.190.98:80/rtp/34020000001310000002_34020000001310000001.live.flv"
     const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
-    const camera = new Camera(child.id, flvUrl, position, store.state.graphicLayer)
+    const camera = new Camera(child.id, child.deviceCode, flvUrl, position, store.state.graphicLayer)
     store.state.cameraMap.set(camera.id, camera)
     console.log("获取camera", camera, position)
   }
@@ -443,7 +443,7 @@ function getHuman(humen: any) {
     store.state.humanMap.set(human.id, human)
     console.log("获取人员", human, position)
   }
-  stateStore.commit("updateLeftBarNeedUpdate", true)
+  
 }
 
 const handleDel = () => {
