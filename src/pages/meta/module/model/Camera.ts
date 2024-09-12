@@ -80,7 +80,7 @@ export class Camera implements GraphicInterface {
               count.value = 0
               getChannel(param).then(function (response) {
                 if (response.data.code === "0") {
-                  flvUrl = ""
+                  flvUrl =  response.data.data.ws_flv
                   const videoElement = event.container.querySelector("#videoPlay") // popup对应的DOM
                   // flv格式转换
                   if (Flv.isSupported() && videoElement) {
