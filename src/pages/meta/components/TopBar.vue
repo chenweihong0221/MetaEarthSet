@@ -107,6 +107,8 @@ onMounted(() => {
             if (response.data.code === "0") {
               const humen = response.data.data
               getHuman(humen)
+            } else {
+              message.error(response.data.msg)
             }
           })
           // 定时获取
@@ -448,8 +450,9 @@ function getHuman(humen: any) {
     const human = new Human(data.userName, position, store.state.graphicLayer)
     store.state.humanMap.set(human.id, human)
     console.log("获取人员", human, position)
+    stateStore.commit("updateLeftBarNeedUpdate", true)
   }
-  
+
 }
 
 const handleDel = () => {

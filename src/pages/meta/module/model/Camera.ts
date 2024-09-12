@@ -68,7 +68,7 @@ export class Camera implements GraphicInterface {
           const data = response.data.data
           const param = {
             deviceId: code,
-            channelId: data.videoDeviceDTOList.channelCode
+            channelId: data.videoDeviceDTOList[0].channelCode
           }
           // 定时获取
           timer.value = setTimeout(() => {
