@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // import "ant-design-vue/dist/antd.css"
-import { addModel, deleteModel, getModel, getThree, getDetail, getCamera } from "@mars/pages/meta/api/api"
+import { addModel, deleteModel, getModel, getThree, getDetail, getCamera, getHumen } from "@mars/pages/meta/api/api"
 import { Cesium } from "mars3d"
 import * as mars3d from "mars3d"
 import { Area, getAllAreaIdAndName } from "@mars/pages/meta/module/model/Area"
@@ -15,6 +15,7 @@ import { Fence } from "@mars/pages/meta/module/model/Fence"
 import { OpenAir } from "../module/model/OpenAir"
 import { GraphicDraw } from "@mars/pages/meta/module/model/GraphicDraw"
 import { json } from "stream/consumers"
+import { Human } from "../module/model/Human"
 
 interface FormState {
   url: string
@@ -99,13 +100,29 @@ onMounted(() => {
           getBuilding(response.data.data.detailsInfoAndChildren)
         })
 
+        // 获取人员位置
+        getHumen().then(function (response) {
+          if (response.data.code === "0") {
+            const data = response.data.data[0]
+            const lngLat = {
+              lng: data.longitude,
+              lat: data.latitude,
+              alt: 0
+            }
+            const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
+            const human = new Human(data.userName, position, store.state.graphicLayer)
+            store.state.humanMap.set(human.id, human)
+            console.log("获取人员", data)
+          }
+        })
+
         // 获取监控设备
         const cameraParam = {
           current: 1,
           size: 100,
           deviceClassifyCode: "video"
         }
-        getCamera(cameraParam).then(function (response){
+        getCamera(cameraParam).then(function (response) {
           if (response.data.code === "0") {
             const cameras = response.data.data.records
             getCameras(cameras)
@@ -390,17 +407,17 @@ function getSpace(parent: any, floor: Floor) {
   }
 }
 
-function getCameras(cameras: any){
-  for(let i = 0; i < cameras.length; i++){
+function getCameras(cameras: any) {
+  for (let i = 0; i < cameras.length; i++) {
     const camera = cameras[i]
     const deviceExt = JSON.parse(camera.deviceExt)
     const lngLat = {
-      lng: camera.longitude,
-      lat: camera.latitude,
-      alt: camera.altitude
+      lng: deviceExt.longitude,
+      lat: deviceExt.latitude,
+      alt: deviceExt.altitude
     }
     const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
-    console.log("获取camera" , camera, position)
+    console.log("获取camera", camera, position)
   }
 }
 
