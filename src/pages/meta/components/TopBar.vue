@@ -103,16 +103,8 @@ onMounted(() => {
         // 获取人员位置
         getHumen().then(function (response) {
           if (response.data.code === "0") {
-            const data = response.data.data[0]
-            const lngLat = {
-              lng: data.longitude,
-              lat: data.latitude,
-              alt: 0
-            }
-            const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
-            const human = new Human(data.userName, position, store.state.graphicLayer)
-            store.state.humanMap.set(human.id, human)
-            console.log("获取人员", data)
+            const humen = response.data.data
+            getHuman(humen)
           }
         })
 
@@ -418,6 +410,21 @@ function getCameras(cameras: any) {
     }
     const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
     console.log("获取camera", camera, position)
+  }
+}
+
+function getHuman(humen: any) {
+  for (let i = 0; i < humen.length; i++) {
+    const data = humen[i]
+    const lngLat = {
+      lng: data.longitude,
+      lat: data.latitude,
+      alt: 0
+    }
+    const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
+    const human = new Human(data.userName, position, store.state.graphicLayer)
+    store.state.humanMap.set(human.id, human)
+    console.log("获取人员", data)
   }
 }
 

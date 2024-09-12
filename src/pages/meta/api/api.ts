@@ -74,10 +74,10 @@ export function getDetail(secondLevelDistrictId, currentDistrictId) {
 }
 
 export function getHumen() {
-  return instance.get("/v1/iot/device/queryUserGps")
+  return instance.get("/xay/v1/iot/device/queryUserGps")
 }
 
 
 export function getCamera(param) {
-  return instance.post("/v1/iot/device/selectMonitorDevicePage", param)
+  return instance.post("/xay/v1/iot/device/selectMonitorDevicePage", param)
 }
