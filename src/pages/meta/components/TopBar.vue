@@ -306,6 +306,34 @@ const handleArea = (area: any) => {
     // 加载图层
     getBuilding(response.data.data.detailsInfoAndChildren)
   })
+
+  // 获取人员位置
+  getHumen().then(function (response) {
+    if (response.data.code === "0") {
+      const humen = response.data.data
+      getHuman(humen)
+    } else {
+      message.error(response.data.msg)
+    }
+  })
+  // 定时获取
+  timer.value = setTimeout(() => {
+    // store.commit("clearHumenMap")
+    console.log("getHuman")
+  }, 2000)
+
+  // 获取监控设备
+  const cameraParam = {
+    current: 1,
+    size: 100,
+    deviceClassifyCode: "video"
+  }
+  getCamera(cameraParam).then(function (response) {
+    if (response.data.code === "0") {
+      const cameras = response.data.data.records
+      getCameras(cameras)
+    }
+  })
 }
 
 function getBuilding(parent) {
