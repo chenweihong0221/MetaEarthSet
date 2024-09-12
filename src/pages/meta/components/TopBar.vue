@@ -100,9 +100,17 @@ onMounted(() => {
         })
 
         // 获取监控设备
-        // getCamera().then(function (response){
-
-        // })
+        const cameraParam = {
+          current: 1,
+          size: 100,
+          deviceClassifyCode: "video"
+        }
+        getCamera(cameraParam).then(function (response){
+          if (response.data.code === "0") {
+            const cameras = response.data.data.records
+            getCameras(cameras)
+          }
+        })
       })
       .catch(function (error) {
         // 处理错误情况
@@ -379,6 +387,20 @@ function getSpace(parent: any, floor: Floor) {
         store.state.spaceFloorMap.set(space.id, floor.id)
       }
     }
+  }
+}
+
+function getCameras(cameras: any){
+  for(let i = 0; i < cameras.length; i++){
+    const camera = cameras[i]
+    const deviceExt = JSON.parse(camera.deviceExt)
+    const lngLat = {
+      lng: camera.longitude,
+      lat: camera.latitude,
+      alt: camera.altitude
+    }
+    const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
+    console.log("获取camera" , camera, position)
   }
 }
 

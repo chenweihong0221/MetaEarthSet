@@ -282,7 +282,7 @@ const beginStore = () => {
       building.showAllFloors()
     } else if (selectedType === 3) {
       window.drawGraphicLayer.stopEditing(window.polygonWall.get(id))
-      const positions = window.polygonEntity.get(id).editing.positions
+      const positions = window.polygonWall.get(id).positions
       const pos = castTo2DArr(positions)
       const path = convertToJSON(pos)
       const lngLatPoint = positions.map((position) => mars3d.LngLatPoint.fromCartesian(position))

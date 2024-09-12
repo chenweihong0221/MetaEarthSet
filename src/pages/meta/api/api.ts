@@ -73,6 +73,6 @@ export function getDetail(secondLevelDistrictId, currentDistrictId) {
   return instance.get("/xay/v1/sys/district/find-tree-info/" + secondLevelDistrictId + "/" + currentDistrictId)
 }
 
-export function getCamera() {
-  return instance.get("")
+export function getCamera(param) {
+  return instance.post("/v1/iot/device/selectMonitorDevicePage", param)
 }
