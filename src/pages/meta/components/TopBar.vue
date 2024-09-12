@@ -81,6 +81,7 @@ onMounted(() => {
       childrenParentCode: "",
       name: ""
     }
+    // 初始化全局墙壁和矢量图层(露天广场)
     getModel(params)
       .then(function (response) {
         if (response.data.code === "0") {
@@ -90,13 +91,12 @@ onMounted(() => {
           selectedArea.value = response.data.data[0].children[0].code
           stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           stateStore.commit("updateSelectedAreaId", districtId.value)
+          window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
+          window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
+          window.polygonToParent = new Map<string, any>()
+          window.divGraphic = new Map<string, mars3d.graphic.DivGraphic>()
           // 获取楼栋模型
           getDetail(districtId.value, districtId.value).then(function (response) {
-            // 初始化全局墙壁和矢量图层(露天广场)
-            window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
-            window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
-            window.polygonToParent = new Map<string, any>()
-            window.divGraphic = new Map<string, mars3d.graphic.DivGraphic>()
             // 加载图层
             getBuilding(response.data.data.detailsInfoAndChildren)
           })
@@ -424,8 +424,10 @@ function getCameras(cameras: any) {
     const flvUrl = "ws://47.93.190.98:80/rtp/34020000001310000002_34020000001310000001.live.flv"
     const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
     const camera = new Camera(child.id, flvUrl, position, store.state.graphicLayer)
+    store.state.cameraMap.set(camera.id, camera)
     console.log("获取camera", camera, position)
   }
+  stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
 function getHuman(humen: any) {
@@ -441,6 +443,7 @@ function getHuman(humen: any) {
     store.state.humanMap.set(human.id, human)
     console.log("获取人员", human, position)
   }
+  stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
 const handleDel = () => {
