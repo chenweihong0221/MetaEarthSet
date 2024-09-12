@@ -96,6 +96,7 @@ onMounted(() => {
           window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
           window.polygonToParent = new Map<string, any>()
           window.divGraphic = new Map<string, mars3d.graphic.DivGraphic>()
+          window.polygonCamera = new Map<string, any>()
           // 获取楼栋模型
           getDetail(districtId.value, districtId.value).then(function (response) {
             // 加载图层
@@ -281,27 +282,6 @@ const handleArea = (area: any) => {
   stateStore.commit("updateSelectedAreaCode", area.code)
   stateStore.commit("updateSelectedAreaId", area.districtId)
   getDetail(area.districtId, area.districtId).then(function (response) {
-    // 初始化全局墙壁和矢量图层(露天广场)
-    if (window.polygonWall === undefined) {
-      window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
-    } else {
-      window.polygonWall.clear()
-    }
-    if (window.polygonEntity === undefined) {
-      window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
-    } else {
-      window.polygonEntity.clear()
-    }
-    if (window.polygonToParent === undefined) {
-      window.polygonToParent = new Map<string, any>()
-    } else {
-      window.polygonToParent.clear()
-    }
-    if (window.divGraphic === undefined) {
-      window.divGraphic = new Map<string, mars3d.graphic.DivGraphic>()
-    } else {
-      window.divGraphic.clear()
-    }
     store.commit("clearAllMap")
     // 加载图层
     getBuilding(response.data.data.detailsInfoAndChildren)
@@ -460,10 +440,8 @@ function getCameras(cameras: any) {
     const flvUrl = "ws://47.93.190.98:80/rtp/34020000001310000002_34020000001310000001.live.flv"
     const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
     const camera = new Camera(child.id, child.deviceCode, flvUrl, position, store.state.graphicLayer)
-    store.state.cameraMap.set(camera.id, camera)
     console.log("获取camera", camera, position)
   }
-  stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
 function getHuman(humen: any) {
@@ -476,9 +454,7 @@ function getHuman(humen: any) {
     }
     const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
     const human = new Human(data.userName, position, store.state.graphicLayer)
-    store.state.humanMap.set(human.id, human)
     console.log("获取人员", human, position)
-    stateStore.commit("updateLeftBarNeedUpdate", true)
   }
 
 }

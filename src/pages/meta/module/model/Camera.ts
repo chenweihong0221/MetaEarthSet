@@ -61,6 +61,7 @@ export class Camera implements GraphicInterface {
       }
     })
     this.layer.addGraphic(this.graphic)
+    window.polygonCamera.set(this.id.toString(), this)
     window.polygonToParent.set(this.id.toString(), this)
     this.graphic.on(mars3d.EventType.popupOpen, function (event) {
       getCameraDetail(id).then(function (response) {

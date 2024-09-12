@@ -27,8 +27,9 @@ const floorNum = ref<number>(5) // 绘制建筑时输入的楼层数量
 const spaceName = ref<string>("会议室1") // 绘制空间时输入的空间名称
 const fenceName = ref<string>("围栏") // 绘制围栏时输入的围栏名称
 const openAirName = ref<string>("露天场所") // 绘制露天场所时输入的露天场所名称
-const deviceId = ref<string>("246835") // 绘制围栏时选择的设备id
+const deviceId = ref<string>("") // 绘制围栏时选择的设备id
 const humanId = ref<string>("358946") // 绘制围栏时选择的人员id
+const cameras = ref(window.polygonCamera.values())
 const selectedBuildingId = ref<string>("") // 绘制空间时选择的建筑物id
 const selectedFloorId = ref<string>("") // 绘制空间时选择的楼层id
 const selectableFloor = ref<Floor[]>([]) // 绘制空间时可选择的楼层
@@ -289,7 +290,7 @@ const handleGraphicDraw = () => {
     console.log("handleClick=========")
     const cartesian = new Cesium.Cartesian3(event.cartesian.x, event.cartesian.y, event.cartesian.z)
     const graphicDraw = new GraphicDraw(selectedGraphicDrawName.value, selectedGraphicDrawContent.value, cartesian, selectedGraphicDrawStyle.value, "", true)
-
+    store.commit("addGraphicDraw", graphicDraw)
     // 放在GraphicDraw构造函数内
     // if (graphicDraw.postState === 0) {
     //   store.state.graphicDrawMap.set(graphicDraw.id, graphicDraw)
@@ -346,7 +347,6 @@ const handleAddHuman = () => {
     const human = new Human(humanId.value, event.cartesian, store.state.graphicLayer)
     store.state.humanMap.set(human.id, human)
     humanId.value = ""
-    console.log("human", human)
     drawCallback()
   })
 }
@@ -468,7 +468,11 @@ const handleAddHuman = () => {
           <div class="other-box">
             <div class="other-row">
               <div>设备ID：</div>
-              <input class="other-input" v-model="deviceId">
+              <a-select class="c_mars-select" v-model:value="deviceId">
+                <a-select-option v-for="camera in cameras" :key="camera.id">
+                  {{ camera.id }}
+                </a-select-option>
+              </a-select>
             </div>
             <div class="other-row">
               <mars-button class="my-button" @click="handleAddCamera">监控设备</mars-button>
