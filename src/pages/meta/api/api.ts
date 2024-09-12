@@ -85,3 +85,7 @@ export function getCamera(param) {
 export function updateCamera(param) {
   return instance.post("/xay/v1/iot/device/updateDeviceGps", param)
 }
+
+export function getCameraDetail(id: string) {
+  return instance.get("/v1/iot/device/getById" + id)
+}

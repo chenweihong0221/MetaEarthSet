@@ -5,6 +5,7 @@ import { mapStore } from "@mars/pages/meta/module/store/store"
 import { Cesium } from "mars3d"
 import { ModelData } from "@mars/pages/meta/api/adopter"
 import { castTo2DArr, convertToJSON, LngLatPointToJSON } from "@mars/pages/meta/module/tool/position"
+import { getCameraDetail } from "@mars/pages/meta/api/api"
 
 export class Camera implements GraphicInterface {
   id: string
@@ -55,7 +56,10 @@ export class Camera implements GraphicInterface {
     })
     this.layer.addGraphic(this.graphic)
     window.polygonToParent.set(this.id.toString(), this)
-    this.graphic.on(mars3d.EventType.popupOpen, function(event) {
+    this.graphic.on(mars3d.EventType.popupOpen, function (event) {
+      getCameraDetail(id).then(function (response) {
+        console.log(response)
+      })
       const videoElement = event.container.querySelector("#videoPlay") // popup对应的DOM
       // flv格式转换
       if (Flv.isSupported() && videoElement) {
@@ -102,7 +106,7 @@ export class Camera implements GraphicInterface {
   }
 
   static fromJSONObject(json: any): Camera {
-    return new Camera(json.id, json.flvUrl, json.position, mapStore.state.graphicLayer)
+    return new Camera(json.id, json.code, json.flvUrl, json.position, mapStore.state.graphicLayer)
   }
 
   toModelData(areaId: string): ModelData {
