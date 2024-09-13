@@ -92,27 +92,7 @@ onMounted(() => {
           selectedArea.value = response.data.data[0].children[0].code
           stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           stateStore.commit("updateSelectedAreaId", districtId.value)
-          // 初始化矢量图层
-          initWindow()
-          // 获取楼栋模型
-          getDetail(districtId.value, districtId.value).then(function (response) {
-            // 加载图层
-            getBuilding(response.data.data.detailsInfoAndChildren)
-          })
-          // 获取人员位置
-          timeGetHuman()
-          // 获取监控设备
-          const cameraParam = {
-            current: 1,
-            size: 100,
-            deviceClassifyCode: "video"
-          }
-          getCamera(cameraParam).then(function (response) {
-            if (response.data.code === "0") {
-              const cameras = response.data.data.records
-              getCameras(cameras)
-            }
-          })
+          getAllModel()
         } else {
           message.error(response.data.msg)
         }
@@ -288,15 +268,19 @@ const handleArea = (area: any) => {
   districtId.value = area.districtId
   stateStore.commit("updateSelectedAreaCode", area.code)
   stateStore.commit("updateSelectedAreaId", area.districtId)
-  getDetail(area.districtId, area.districtId).then(function (response) {
-    store.commit("clearAllMap")
+  store.commit("clearAllMap")
+  getAllModel()
+}
+
+const getAllModel = () => { 
+  // 初始化全局墙壁和矢量图层(露天广场)
+  initWindow()
+  getDetail(districtId.value, districtId.value).then(function (response) {
     // 加载图层
     getBuilding(response.data.data.detailsInfoAndChildren)
   })
-
   // 获取人员位置
   timeGetHuman()
-
   // 获取监控设备
   const cameraParam = {
     current: 1,
@@ -502,12 +486,7 @@ const handleDel = () => {
           stateStore.commit("updateSelectedAreaId", districtId.value)
           // 关闭递归调用人员位置接口
           clearTimeout(timer.value)
-          getDetail(districtId.value, districtId.value).then(function (response) {
-            // 初始化全局墙壁和矢量图层(露天广场)
-            initWindow()
-            // 加载图层
-            getBuilding(response.data.data.detailsInfoAndChildren)
-          })
+          getAllModel()
         })
         .catch(function (error) {
           // 处理错误情况
