@@ -135,13 +135,13 @@ const timeGetHuman = () => {
       const human = response.data.data
       getHuman(human)
       // 定时获取
-      console.log("getHuman", window.polygonMan)
       timer.value = setTimeout(() => {
         store.commit("clearHumenMap")
         timeGetHuman()
       }, 2000)
     } else {
       message.error(response.data.msg)
+      // 关闭递归调用人员位置接口
       clearTimeout(timer.value)
     }
   })
@@ -238,6 +238,8 @@ const handleOk = () => {
   AreaAdd.value.name = newArea.name
   addModel(AreaAdd.value).then(res => {
     if (res.data.code === "0") {
+      // 关闭递归调用人员位置接口
+      clearTimeout(timer.value)
       newArea.districtId = res.data.data.districtId
       newArea.code = res.data.data.code
       message.success("新增区域成功")
@@ -281,6 +283,8 @@ const handleArea = (area: any) => {
   if (area.districtId === districtId.value) {
     return
   }
+  // 关闭递归调用人员位置接口
+  clearTimeout(timer.value)
   districtId.value = area.districtId
   stateStore.commit("updateSelectedAreaCode", area.code)
   stateStore.commit("updateSelectedAreaId", area.districtId)
@@ -464,11 +468,9 @@ function getHuman(humen: any) {
     // 新增轨道
     const polyLine = window.polygonPolyline.get(data.userName)
     if (polyLine) {
-      console.log(polyLine, polyLine[polyLine.length - 1])
-      if (polyLine[polyLine.length - 1].lng !== lngLat.lng &&
-        polyLine[polyLine.length - 1].lat !== lngLat.lat &&
-        polyLine[polyLine.length - 1].alt !== lngLat.alt
-      ) {
+      if (polyLine[polyLine.length - 1].lng !== lngLat.lng ||
+        polyLine[polyLine.length - 1].lat !== lngLat.lat ||
+        polyLine[polyLine.length - 1].alt !== lngLat.alt) {
         polyLine.push(lngLat)
       }
     } else {
@@ -498,6 +500,8 @@ const handleDel = () => {
           selectedArea.value = response.data.data[0].children[0].code
           stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           stateStore.commit("updateSelectedAreaId", districtId.value)
+          // 关闭递归调用人员位置接口
+          clearTimeout(timer.value)
           getDetail(districtId.value, districtId.value).then(function (response) {
             // 初始化全局墙壁和矢量图层(露天广场)
             initWindow()

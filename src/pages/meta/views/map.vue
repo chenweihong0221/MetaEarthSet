@@ -159,11 +159,10 @@ const marsOnload = (map: any) => {
         width: 5,
         materialType: mars3d.MaterialType.LineTrail,
         materialOptions: {
-          color: Cesium.Color.WHITE, // 中心线颜色
+          color: Cesium.Color.GRAY, // 中心线颜色
           speed: 20
         }
-      },
-    attr: { remark: "示例17" }
+      }
   })
   window.drawGraphicLayer.addGraphic(graphic)
 
