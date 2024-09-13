@@ -99,10 +99,8 @@ onMounted(() => {
             // 加载图层
             getBuilding(response.data.data.detailsInfoAndChildren)
           })
-
           // 获取人员位置
           timeGetHuman()
-
           // 获取监控设备
           const cameraParam = {
             current: 1,
@@ -299,19 +297,7 @@ const handleArea = (area: any) => {
   })
 
   // 获取人员位置
-  getHumen().then(function (response) {
-    if (response.data.code === "0") {
-      const humen = response.data.data
-      getHuman(humen)
-    } else {
-      message.error(response.data.msg)
-    }
-  })
-  // 定时获取
-  timer.value = setTimeout(() => {
-    // store.commit("clearHumenMap")
-    console.log("getHuman")
-  }, 2000)
+  timeGetHuman()
 
   // 获取监控设备
   const cameraParam = {
@@ -536,6 +522,16 @@ function initWindow() {
     window.polygonCamera = new Map<string, any>()
   } else {
     window.polygonCamera.clear()
+  }
+  if (window.polygonMan === undefined) {
+    window.polygonMan = new Map<string, any>()
+  } else {
+    window.polygonMan.clear()
+  }
+  if (window.polygonPolyline === undefined) {
+    window.polygonPolyline = new Map<string, any>()
+  } else {
+    window.polygonPolyline.clear()
   }
 }
 
