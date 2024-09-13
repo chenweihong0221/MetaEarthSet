@@ -462,8 +462,15 @@ function getHuman(humen: any) {
       window.polygonMan.delete(data.userName)
     }
     // 新增轨道
-    if (window.polygonPolyline.get(data.userName)) {
-      window.polygonPolyline.get(data.userName).push(lngLat)
+    const polyLine = window.polygonPolyline.get(data.userName)
+    if (polyLine) {
+      console.log(polyLine, polyLine[polyLine.length - 1])
+      if (polyLine[polyLine.length - 1].lng !== lngLat.lng &&
+        polyLine[polyLine.length - 1].lat !== lngLat.lat &&
+        polyLine[polyLine.length - 1].alt !== lngLat.alt
+      ) {
+        polyLine.push(lngLat)
+      }
     } else {
       window.polygonPolyline.set(data.userName, [lngLat])
     }

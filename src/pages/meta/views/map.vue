@@ -152,21 +152,17 @@ const marsOnload = (map: any) => {
 
   const graphic = new mars3d.graphic.PolylineEntity({
     positions: [
-      [113.516004, 34.823779, 20.1],
-      [113.515382, 34.823811, 0]
+      [113.515382, 34.823811, 0],
+      [113.516004, 34.823779, 20.1]
     ],
     style: {
-      width: 20,
-      materialType: mars3d.MaterialType.LineThreeDash,
-      materialOptions: {
-        color: Cesium.Color.RED, // 中心线颜色
-        dashLength: 64, // 中心长度
-        widthRatio: 0.1, // 中心百分比
-        sidesColor: Cesium.Color.WHITE, // 外侧颜色
-        sidesDashLength: 32, // 外侧长度
-        sidesWidthRatio: 0.1 // 外侧百分比
-      }
-    },
+        width: 5,
+        materialType: mars3d.MaterialType.LineTrail,
+        materialOptions: {
+          color: Cesium.Color.WHITE, // 中心线颜色
+          speed: 20
+        }
+      },
     attr: { remark: "示例17" }
   })
   window.drawGraphicLayer.addGraphic(graphic)

@@ -32,15 +32,11 @@ export class Human implements GraphicInterface {
     this.polyline = new mars3d.graphic.PolylineEntity({
       positions: window.polygonPolyline.get(this.id),
       style: {
-        width: 20,
-        materialType: mars3d.MaterialType.LineThreeDash,
+        width: 5,
+        materialType: mars3d.MaterialType.LineTrail,
         materialOptions: {
-          color: Cesium.Color.RED, // 中心线颜色
-          dashLength: 64, // 中心长度
-          widthRatio: 0.1, // 中心百分比
-          sidesColor: Cesium.Color.WHITE, // 外侧颜色
-          sidesDashLength: 32, // 外侧长度
-          sidesWidthRatio: 0.1 // 外侧百分比
+          color: Cesium.Color.WHITE, // 中心线颜色
+          speed: 20
         }
       },
       attr: { remark: "示例" }
