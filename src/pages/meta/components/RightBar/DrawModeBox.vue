@@ -322,7 +322,8 @@ const handleAddCamera = () => {
       deviceCode,
       districtCode: "1021699225924174464",
       latitude: lngLatPoint.lat,
-      longitude: lngLatPoint.lng
+      longitude: lngLatPoint.lng,
+      height: lngLatPoint.alt
     }
     updateCamera(param).then(function (response) {
       if (response.data.code === "0") {

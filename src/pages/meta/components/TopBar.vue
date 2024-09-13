@@ -427,7 +427,7 @@ function getCameras(cameras: any) {
       lngLat = {
         lng: deviceExt.longitude,
         lat: deviceExt.latitude,
-        alt: deviceExt.altitude
+        alt: deviceExt.height
       }
     } else {
       lngLat = {
