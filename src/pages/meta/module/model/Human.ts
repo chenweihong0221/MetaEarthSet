@@ -49,8 +49,10 @@ export class Human implements GraphicInterface {
       attr: { remark: "示例" }
     })
     this.layer = layer
-    this.layer.addGraphic(this.model)
+    window.drawGraphicLayer.addGraphic(this.model)
     window.drawGraphicLayer.addGraphic(this.polyline)
+    window.polygonMan.set(this.id, this)
+    window.polygonPolyline.set(this.id, this.polyline)
   }
 
   setShow(show: boolean): void {

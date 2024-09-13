@@ -134,12 +134,18 @@ const timeGetHuman = () => {
   // 获取人员位置
   getHumen().then(function (response) {
     if (response.data.code === "0") {
-      const humen = response.data.data
-      getHuman(humen)
+      const human = response.data.data
+      getHuman(human)
       // 定时获取
       timer.value = setTimeout(() => {
+        for (let i = 0; i < human.length; i++) {
+          const data = human[i]
+          window.polygonMan.get(data.userName).model.destroy()
+          window.polygonMan.get(data.userName).polyline.destroy()
+          window.polygonMan.delete(data.userName)
+        }
         store.commit("clearHumenMap")
-        console.log("getHuman")
+        console.log("getHuman", window.polygonMan)
         timeGetHuman()
       }, 2000)
     } else {
@@ -319,29 +325,6 @@ const handleArea = (area: any) => {
       getCameras(cameras)
     }
   })
-}
-
-function getPoint() {
-  const graphic = new mars3d.graphic.PolylineEntity({
-    positions: [
-      [113.516004, 34.823779, 20.1],
-      [113.515382, 34.823811, 0]
-    ],
-    style: {
-      width: 20,
-      materialType: mars3d.MaterialType.LineThreeDash,
-      materialOptions: {
-        color: Cesium.Color.RED, // 中心线颜色
-        dashLength: 64, // 中心长度
-        widthRatio: 0.1, // 中心百分比
-        sidesColor: Cesium.Color.WHITE, // 外侧颜色
-        sidesDashLength: 32, // 外侧长度
-        sidesWidthRatio: 0.1 // 外侧百分比
-      }
-    },
-    attr: { remark: "示例17" }
-  })
-  window.drawGraphicLayer.addGraphic(graphic)
 }
 
 function getBuilding(parent) {
