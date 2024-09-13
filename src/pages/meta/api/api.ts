@@ -10,7 +10,7 @@ export const instance = axios.create({
   headers: {
     "Content-Type": "application/json",
     // Authorization: "Bearer ea8c0470-7f2f-473d-b3c0-be2add35a42c" // 测试环境
-    Authorization: "Bearer 5c28273e-0b85-435b-b90d-c2ebdac616b8" // dev环境
+    Authorization: "Bearer 3863583f-6480-4332-a97c-e0c6229991f7" // dev环境
   }
 })
 

@@ -82,6 +82,7 @@ onMounted(() => {
       childrenParentCode: "",
       name: ""
     }
+    initWindow()
     getPoint()
     // 初始化全局墙壁和矢量图层(露天广场)
     getModel(params)
@@ -93,8 +94,6 @@ onMounted(() => {
           selectedArea.value = response.data.data[0].children[0].code
           stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           stateStore.commit("updateSelectedAreaId", districtId.value)
-          // 初始化全局矢量图层
-          initWindow()
           // 获取楼栋模型
           getDetail(districtId.value, districtId.value).then(function (response) {
             // 加载图层
@@ -350,12 +349,17 @@ function getBuilding(parent) {
       // } else {
       //   positions = JSON.parse(child.path)
       // }
-      const positions = []
-      const lngLatPoint = JSON.parse(child.longitudeAndLatitudeJson)
-      for (let j = 0; j < lngLatPoint.length; j++) {
-        const lngLat = lngLatPoint[j]
-        positions.push(Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt))
+      let positions = []
+      if (child.longitudeAndLatitudeJson !== null) {
+        const lngLatPoint = JSON.parse(child.longitudeAndLatitudeJson)
+        for (let j = 0; j < lngLatPoint.length; j++) {
+          const lngLat = lngLatPoint[j]
+          positions.push(Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt))
+        }
+      } else {
+        positions = JSON.parse(child.path)
       }
+
       if (child.districtType === 3) {
         const building = new Building(store.state.graphicLayer, positions, child.name, 0, 5, null, true, child.districtId, child.code, false)
         getFloor(children[i], building)
@@ -422,11 +426,15 @@ function getSpace(parent: any, floor: Floor) {
   if (children) {
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
-      const positions = []
-      const lngLatPoint = JSON.parse(child.longitudeAndLatitudeJson)
-      for (let j = 0; j < lngLatPoint.length; j++) {
-        const lngLat = lngLatPoint[j]
-        positions.push(Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt))
+      let positions = []
+      if (child.longitudeAndLatitudeJson !== null) {
+        const lngLatPoint = JSON.parse(child.longitudeAndLatitudeJson)
+        for (let j = 0; j < lngLatPoint.length; j++) {
+          const lngLat = lngLatPoint[j]
+          positions.push(Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt))
+        }
+      } else {
+        positions = JSON.parse(child.path)
       }
       if (child.districtType === 5) {
         const newPosition: Cesium.Cartesian3[] = mars3d.PointUtil.addPositionsHeight(
