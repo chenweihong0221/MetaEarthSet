@@ -12,14 +12,11 @@ export class Human implements GraphicInterface {
   positions: Cesium.Cartesian3
   show: boolean = true
   polyline: mars3d.graphic.PolylineEntity
-  polylinePositions: mars3d.LngLatPoint[] | Cesium.Cartesian3[] | any[] | Cesium.PositionProperty | any
-
-  constructor(id: string, position: Cesium.Cartesian3, layer: mars3d.layer.GraphicLayer,
-    polylinePositions?: any) {
+  
+  constructor(id: string, position: Cesium.Cartesian3, layer: mars3d.layer.GraphicLayer) {
     this.id = id
     this.name = id
     this.positions = position
-    this.polylinePositions = polylinePositions
     this.model = new mars3d.graphic.ModelEntity({
       position,
       style: {
@@ -28,12 +25,12 @@ export class Human implements GraphicInterface {
         minimumPixelSize: 50
       }
     })
-    polylinePositions = [
-      [113.516004, 34.823779, 20.1],
-      [113.515382, 34.823811, 0]
-    ]
+    // polylinePositions = [
+    //   [113.516004, 34.823779, 20.1],
+    //   [113.515382, 34.823811, 0]
+    // ]
     this.polyline = new mars3d.graphic.PolylineEntity({
-      positions: polylinePositions,
+      positions: window.polygonPolyline.get(this.id),
       style: {
         width: 20,
         materialType: mars3d.MaterialType.LineThreeDash,
@@ -52,7 +49,6 @@ export class Human implements GraphicInterface {
     window.drawGraphicLayer.addGraphic(this.model)
     window.drawGraphicLayer.addGraphic(this.polyline)
     window.polygonMan.set(this.id, this)
-    window.polygonPolyline.set(this.id, this.polyline)
   }
 
   setShow(show: boolean): void {

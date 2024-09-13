@@ -135,15 +135,9 @@ const timeGetHuman = () => {
       const human = response.data.data
       getHuman(human)
       // 定时获取
+      console.log("getHuman", window.polygonMan)
       timer.value = setTimeout(() => {
-        for (let i = 0; i < human.length; i++) {
-          const data = human[i]
-          window.polygonMan.get(data.userName).model.destroy()
-          window.polygonMan.get(data.userName).polyline.destroy()
-          window.polygonMan.delete(data.userName)
-        }
         store.commit("clearHumenMap")
-        console.log("getHuman", window.polygonMan)
         timeGetHuman()
       }, 2000)
     } else {
@@ -458,6 +452,19 @@ function getHuman(humen: any) {
       lat: data.latitude,
       alt: 0
     }
+    // 删除之前人物的位置和对象
+    if (window.polygonMan.get(data.userName)) {
+      window.polygonMan.get(data.userName).model.destroy()
+      window.polygonMan.get(data.userName).polyline.destroy()
+      window.polygonMan.delete(data.userName)
+    }
+    // 新增轨道
+    if (window.polygonPolyline.get(data.userName)) {
+      window.polygonPolyline.get(data.userName).push(lngLat)
+    } else {
+      window.polygonPolyline.set(data.userName, [lngLat])
+    }
+    // 新建人物
     const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
     const human = new Human(data.userName, position, store.state.graphicLayer)
     store.state.humanMap.set(human.id, human)
