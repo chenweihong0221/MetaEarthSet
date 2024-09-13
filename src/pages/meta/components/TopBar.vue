@@ -271,9 +271,10 @@ const handleArea = (area: any) => {
   stateStore.commit("updateSelectedAreaId", area.districtId)
   store.commit("clearAllMap")
   getAllModel()
+  stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
-const getAllModel = () => { 
+const getAllModel = () => {
   // 初始化全局墙壁和矢量图层(露天广场)
   initWindow()
   getDetail(districtId.value, districtId.value).then(function (response) {
@@ -442,27 +443,30 @@ function getHuman(humen: any) {
       lat: data.latitude,
       alt: 0
     }
-    // 删除之前人物的位置和对象
-    if (window.polygonMan.get(data.userName)) {
-      window.polygonMan.get(data.userName).model.destroy()
-      window.polygonMan.get(data.userName).polyline.destroy()
-      window.polygonMan.delete(data.userName)
-    }
+    const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
     // 新增路线
     const polyLine = window.polygonPolyline.get(data.userName)
+    // 判断是否是第一次获取人物
     if (polyLine) {
+      // 删除之前人物的位置和对象
+      if (window.polygonMan.get(data.userName)) {
+        window.polygonMan.get(data.userName).model.position = position
+        window.polygonMan.get(data.userName).polyline.position = position
+        // window.polygonMan.delete(data.userName)
+        window.polygonMan.get(data.userName)
+      }
       if (polyLine[polyLine.length - 1].lng !== lngLat.lng ||
         polyLine[polyLine.length - 1].lat !== lngLat.lat ||
         polyLine[polyLine.length - 1].alt !== lngLat.alt) {
         polyLine.push(lngLat)
       }
     } else {
+      // 新建人物
+      const human = new Human(data.userName, position, store.state.graphicLayer)
+      store.state.humanMap.set(human.id, human)
+      stateStore.commit("updateLeftBarNeedUpdate", true)
       window.polygonPolyline.set(data.userName, [lngLat])
     }
-    // 新建人物
-    const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
-    const human = new Human(data.userName, position, store.state.graphicLayer)
-    store.state.humanMap.set(human.id, human)
   }
 
 }
@@ -485,6 +489,7 @@ const handleDel = () => {
           // 关闭递归调用人员位置接口
           clearTimeout(timer.value)
           getAllModel()
+          stateStore.commit("updateLeftBarNeedUpdate", true)
         })
         .catch(function (error) {
           // 处理错误情况
