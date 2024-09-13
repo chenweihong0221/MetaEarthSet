@@ -156,7 +156,6 @@ const handleSave = () => {
     }
   )
   AreaAdd.value.name = selectedArea.value
-  console.log("AreaAdd", AreaAdd.value)
   addModel(AreaAdd.value)
   getThree()
     .then(function (response) {
@@ -275,7 +274,7 @@ const handleClick = () => {
 }
 
 const handleArea = (area: any) => {
-  if (area.id === districtId.value) {
+  if (area.districtId === districtId.value) {
     return
   }
   districtId.value = area.districtId
@@ -440,7 +439,6 @@ function getCameras(cameras: any) {
     const flvUrl = "ws://47.93.190.98:80/rtp/34020000001310000002_34020000001310000001.live.flv"
     const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
     const camera = new Camera(child.id, child.deviceCode, flvUrl, position, store.state.graphicLayer)
-    console.log("获取camera", camera, position)
   }
 }
 
@@ -456,7 +454,6 @@ function getHuman(humen: any) {
     const human = new Human(data.userName, position, store.state.graphicLayer)
     store.state.humanMap.set(human.id, human)
     stateStore.commit("updateLeftBarNeedUpdate", true)
-    console.log("获取人员", human, position)
   }
 
 }
