@@ -197,10 +197,22 @@ const updateStore = () => {
   if (id === "") {
     return
   }
-  const params = {
-    districtId: id,
-    name: name.value,
-    content: content.value
+  let params
+  if (selectedType === 5) {
+    const graphicDraw = window.polygonToParent.get(id)
+    params = {
+      districtId: id,
+      name: name.value,
+      content: {
+        name: content.value,
+        type: graphicDraw.type
+      }
+    }
+  } else {
+    params = {
+      districtId: id,
+      name: name.value
+    }
   }
   updateModel(params).then((res) => {
     if (res.data.code === "0") {
