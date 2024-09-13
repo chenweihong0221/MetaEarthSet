@@ -93,6 +93,7 @@ onMounted(() => {
           stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           stateStore.commit("updateSelectedAreaId", districtId.value)
           getAllModel()
+          stateStore.commit("updateLeftBarNeedUpdate", true)
         } else {
           message.error(response.data.msg)
         }
@@ -348,7 +349,6 @@ function getBuilding(parent) {
         const graphicDraw = new GraphicDraw(child.name, contentType.content, lngLatPoint, contentType.type, child.districtId, false)
         store.commit("addGraphicDraw", graphicDraw)
       }
-      stateStore.commit("updateLeftBarNeedUpdate", true)
       getBuilding(children)
     }
   }
@@ -376,7 +376,6 @@ function getFloor(parent: any, building: Building) {
     }
   }
   store.state.buildingMap.set(building.id, building)
-  stateStore.commit("updateLeftBarNeedUpdate", true)
 }
 
 function getSpace(parent: any, floor: Floor) {
@@ -464,7 +463,6 @@ function getHuman(humen: any) {
     const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
     const human = new Human(data.userName, position, store.state.graphicLayer)
     store.state.humanMap.set(human.id, human)
-    stateStore.commit("updateLeftBarNeedUpdate", true)
   }
 
 }

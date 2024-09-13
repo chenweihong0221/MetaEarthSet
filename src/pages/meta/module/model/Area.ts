@@ -49,7 +49,6 @@ export class Area {
   }
 
   static getFromJson(json: string): Area {
-    console.log("area found json", json)
     const areaLocalStorage = JSON.parse(json)
     if (!areaLocalStorage) {
       return null
