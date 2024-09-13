@@ -82,8 +82,6 @@ onMounted(() => {
       childrenParentCode: "",
       name: ""
     }
-    initWindow()
-    getPoint()
     // 初始化全局墙壁和矢量图层(露天广场)
     getModel(params)
       .then(function (response) {
@@ -94,6 +92,8 @@ onMounted(() => {
           selectedArea.value = response.data.data[0].children[0].code
           stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           stateStore.commit("updateSelectedAreaId", districtId.value)
+          // 初始化矢量图层
+          initWindow()
           // 获取楼栋模型
           getDetail(districtId.value, districtId.value).then(function (response) {
             // 加载图层
@@ -317,9 +317,8 @@ const handleArea = (area: any) => {
 function getPoint() {
   const graphic = new mars3d.graphic.PolylineEntity({
     positions: [
-      [117.126296, 31.901182, 32.3],
-      [117.19873, 31.896307, 29],
-      [117.245564, 31.894645, 24.1]
+      [113.516004, 34.823779, 20.1],
+      [113.515382, 34.823811, 0]
     ],
     style: {
       width: 20,
@@ -350,8 +349,9 @@ function getBuilding(parent) {
       //   positions = JSON.parse(child.path)
       // }
       let positions = []
+      let lngLatPoint
       if (child.longitudeAndLatitudeJson !== null) {
-        const lngLatPoint = JSON.parse(child.longitudeAndLatitudeJson)
+        lngLatPoint = JSON.parse(child.longitudeAndLatitudeJson)
         for (let j = 0; j < lngLatPoint.length; j++) {
           const lngLat = lngLatPoint[j]
           positions.push(Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt))

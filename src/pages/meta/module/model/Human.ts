@@ -11,11 +11,15 @@ export class Human implements GraphicInterface {
   layer: mars3d.layer.GraphicLayer
   positions: Cesium.Cartesian3
   show: boolean = true
+  polyline: mars3d.graphic.PolylineEntity
+  polylinePositions: mars3d.LngLatPoint[] | Cesium.Cartesian3[] | any[] | Cesium.PositionProperty | any;
 
-  constructor(id: string, position: Cesium.Cartesian3, layer: mars3d.layer.GraphicLayer) {
+  constructor(id: string, position: Cesium.Cartesian3, layer: mars3d.layer.GraphicLayer,
+    polylinePositions?: any) {
     this.id = id
     this.name = id
     this.positions = position
+    this.polylinePositions = polylinePositions
     this.model = new mars3d.graphic.ModelEntity({
       position,
       style: {
@@ -24,8 +28,28 @@ export class Human implements GraphicInterface {
         minimumPixelSize: 50
       }
     })
+    this.polyline = new mars3d.graphic.PolylineEntity({
+      positions: [
+        [113.516004, 34.823779, 20.1],
+        [113.515382, 34.823811, 0]
+      ],
+      style: {
+        width: 20,
+        materialType: mars3d.MaterialType.LineThreeDash,
+        materialOptions: {
+          color: Cesium.Color.RED, // 中心线颜色
+          dashLength: 64, // 中心长度
+          widthRatio: 0.1, // 中心百分比
+          sidesColor: Cesium.Color.WHITE, // 外侧颜色
+          sidesDashLength: 32, // 外侧长度
+          sidesWidthRatio: 0.1 // 外侧百分比
+        }
+      },
+      attr: { remark: "示例" }
+    })
     this.layer = layer
     this.layer.addGraphic(this.model)
+    window.drawGraphicLayer.addGraphic(this.polyline)
   }
 
   setShow(show: boolean): void {
