@@ -101,19 +101,7 @@ onMounted(() => {
           })
 
           // 获取人员位置
-          getHumen().then(function (response) {
-            if (response.data.code === "0") {
-              const humen = response.data.data
-              getHuman(humen)
-            } else {
-              message.error(response.data.msg)
-            }
-          })
-          // 定时获取
-          timer.value = setTimeout(() => {
-            // store.commit("clearHumenMap")
-            console.log("getHuman")
-          }, 2000)
+          timeGetHuman()
 
           // 获取监控设备
           const cameraParam = {
@@ -141,6 +129,25 @@ onMounted(() => {
       })
   }
 })
+
+const timeGetHuman = () => {
+  // 获取人员位置
+  getHumen().then(function (response) {
+    if (response.data.code === "0") {
+      const humen = response.data.data
+      getHuman(humen)
+      // 定时获取
+      timer.value = setTimeout(() => {
+        store.commit("clearHumenMap")
+        console.log("getHuman")
+        timeGetHuman()
+      }, 2000)
+    } else {
+      message.error(response.data.msg)
+      clearTimeout(timer.value)
+    }
+  })
+}
 
 const handleSave = () => {
   // saveToLocalStorage(selectedArea.value)

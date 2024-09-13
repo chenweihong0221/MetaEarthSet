@@ -12,7 +12,7 @@ export class Human implements GraphicInterface {
   positions: Cesium.Cartesian3
   show: boolean = true
   polyline: mars3d.graphic.PolylineEntity
-  polylinePositions: mars3d.LngLatPoint[] | Cesium.Cartesian3[] | any[] | Cesium.PositionProperty | any;
+  polylinePositions: mars3d.LngLatPoint[] | Cesium.Cartesian3[] | any[] | Cesium.PositionProperty | any
 
   constructor(id: string, position: Cesium.Cartesian3, layer: mars3d.layer.GraphicLayer,
     polylinePositions?: any) {
@@ -28,11 +28,12 @@ export class Human implements GraphicInterface {
         minimumPixelSize: 50
       }
     })
+    polylinePositions = [
+      [113.516004, 34.823779, 20.1],
+      [113.515382, 34.823811, 0]
+    ]
     this.polyline = new mars3d.graphic.PolylineEntity({
-      positions: [
-        [113.516004, 34.823779, 20.1],
-        [113.515382, 34.823811, 0]
-      ],
+      positions: polylinePositions,
       style: {
         width: 20,
         materialType: mars3d.MaterialType.LineThreeDash,
