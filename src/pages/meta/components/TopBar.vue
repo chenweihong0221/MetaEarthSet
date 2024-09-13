@@ -445,6 +445,9 @@ function getCameras(cameras: any) {
 }
 
 function getHuman(humen: any) {
+  if (!humen || humen.length === 0) {
+    return
+  }
   for (let i = 0; i < humen.length; i++) {
     const data = humen[i]
     const lngLat = {
