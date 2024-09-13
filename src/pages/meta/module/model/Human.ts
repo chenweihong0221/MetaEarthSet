@@ -38,8 +38,7 @@ export class Human implements GraphicInterface {
           color: Cesium.Color.WHITE, // 中心线颜色
           speed: 20
         }
-      },
-      attr: { remark: "示例" }
+      }
     })
     this.layer = layer
     window.drawGraphicLayer.addGraphic(this.model)
