@@ -82,6 +82,7 @@ onMounted(() => {
       childrenParentCode: "",
       name: ""
     }
+    getPoint()
     // 初始化全局墙壁和矢量图层(露天广场)
     getModel(params)
       .then(function (response) {
@@ -92,11 +93,8 @@ onMounted(() => {
           selectedArea.value = response.data.data[0].children[0].code
           stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           stateStore.commit("updateSelectedAreaId", districtId.value)
-          window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
-          window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
-          window.polygonToParent = new Map<string, any>()
-          window.divGraphic = new Map<string, mars3d.graphic.DivGraphic>()
-          window.polygonCamera = new Map<string, any>()
+          // 初始化全局矢量图层
+          initWindow()
           // 获取楼栋模型
           getDetail(districtId.value, districtId.value).then(function (response) {
             // 加载图层
@@ -252,6 +250,8 @@ const handleOk = () => {
           AreaList.value.push(newArea)
           stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           stateStore.commit("updateSelectedAreaId", districtId.value)
+          // 初始化全局矢量图层
+          initWindow()
           stateStore.commit("updateLeftBarNeedUpdate", true)
         })
         .catch(function (error) {
@@ -313,6 +313,30 @@ const handleArea = (area: any) => {
       getCameras(cameras)
     }
   })
+}
+
+function getPoint() {
+  const graphic = new mars3d.graphic.PolylineEntity({
+    positions: [
+      [117.126296, 31.901182, 32.3],
+      [117.19873, 31.896307, 29],
+      [117.245564, 31.894645, 24.1]
+    ],
+    style: {
+      width: 20,
+      materialType: mars3d.MaterialType.LineThreeDash,
+      materialOptions: {
+        color: Cesium.Color.RED, // 中心线颜色
+        dashLength: 64, // 中心长度
+        widthRatio: 0.1, // 中心百分比
+        sidesColor: Cesium.Color.WHITE, // 外侧颜色
+        sidesDashLength: 32, // 外侧长度
+        sidesWidthRatio: 0.1 // 外侧百分比
+      }
+    },
+    attr: { remark: "示例17" }
+  })
+  window.drawGraphicLayer.addGraphic(graphic)
 }
 
 function getBuilding(parent) {
@@ -475,21 +499,7 @@ const handleDel = () => {
           stateStore.commit("updateSelectedAreaId", districtId.value)
           getDetail(districtId.value, districtId.value).then(function (response) {
             // 初始化全局墙壁和矢量图层(露天广场)
-            if (window.polygonWall === undefined) {
-              window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
-            } else {
-              window.polygonWall.clear()
-            }
-            if (window.polygonEntity === undefined) {
-              window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
-            } else {
-              window.polygonEntity.clear()
-            }
-            if (window.polygonToParent === undefined) {
-              window.polygonToParent = new Map<string, any>()
-            } else {
-              window.polygonToParent.clear()
-            }
+            initWindow()
             // 加载图层
             getBuilding(response.data.data.detailsInfoAndChildren)
           })
@@ -503,6 +513,33 @@ const handleDel = () => {
   })
 }
 
+function initWindow() {
+  if (window.polygonWall === undefined) {
+    window.polygonWall = new Map<string, mars3d.graphic.ThickWall>()
+  } else {
+    window.polygonWall.clear()
+  }
+  if (window.polygonEntity === undefined) {
+    window.polygonEntity = new Map<string, mars3d.graphic.PolygonEntity>()
+  } else {
+    window.polygonEntity.clear()
+  }
+  if (window.polygonToParent === undefined) {
+    window.polygonToParent = new Map<string, any>()
+  } else {
+    window.polygonToParent.clear()
+  }
+  if (window.divGraphic === undefined) {
+    window.divGraphic = new Map<string, mars3d.graphic.DivGraphic>()
+  } else {
+    window.divGraphic.clear()
+  }
+  if (window.polygonCamera === undefined) {
+    window.polygonCamera = new Map<string, any>()
+  } else {
+    window.polygonCamera.clear()
+  }
+}
 
 </script>
 
