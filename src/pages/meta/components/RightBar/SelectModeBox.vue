@@ -208,7 +208,7 @@ const updateStore = () => {
     params = {
       districtId: id,
       name: name.value,
-      content: JSON.stringify(data),
+      content: JSON.stringify(data)
     }
   } else {
     params = {

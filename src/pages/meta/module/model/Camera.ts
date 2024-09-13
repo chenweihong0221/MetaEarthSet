@@ -35,6 +35,7 @@ export class Camera implements GraphicInterface {
       style: {
         html: `     <div class="mars3d-camera-content">
                       <img class="mars3d-camera-img" src="/public/img/icon/camera.svg" alt="camera"/>
+                      ${id}
                     </div>
                     <div class="mars3d-camera-line" ></div>
                     <div class="mars3d-camera-point"></div>

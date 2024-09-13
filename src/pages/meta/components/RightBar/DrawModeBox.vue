@@ -353,7 +353,7 @@ const handleAddHuman = () => {
 }
 
 const getCamera = () => {
-  cameras.value = Array.from(window.polygonCamera.values()) 
+  cameras.value = Array.from(window.polygonCamera.values())
 }
 </script>
 

@@ -1,6 +1,7 @@
 .mars3d-camera-content {
   /* 防止下面的line一直随img动画 */
   height: 30px;
+  color: white
 }
 .mars3d-camera-img {
   width: 30px;
