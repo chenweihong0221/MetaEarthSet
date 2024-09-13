@@ -1,17 +1,8 @@
 import type { RouteRecordRaw } from "vue-router"
 import { createRouter, createWebHashHistory } from "vue-router"
 
-// const routes: RouteRecordRaw[] = [
-//   { name: "home", path: "/", component: () => import("./views/home.vue") },
-//   { name: "map", path: "/map", component: () => import("./views/map.vue") },
-//   { name: "widget", path: "/widget", component: () => import("./views/widget.vue") }
-// ]
-
-// 修改默认为map.vue路径
 const routes: RouteRecordRaw[] = [
-  { name: "home", path: "/", component: () => import("./views/map.vue") },
-  { name: "map", path: "/map", component: () => import("./views/map.vue") },
-  { name: "widget", path: "/widget", component: () => import("./views/widget.vue") }
+  { name: "home", path: "/", component: () => import("./views/map.vue") }
 ]
 
 export const router = createRouter({
