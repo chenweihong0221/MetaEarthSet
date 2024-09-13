@@ -200,13 +200,15 @@ const updateStore = () => {
   let params
   if (selectedType === 5) {
     const graphicDraw = window.polygonToParent.get(id)
+    // 内容转为json格式
+    const data = {
+        name: content.value,
+        type: graphicDraw.type
+    }
     params = {
       districtId: id,
       name: name.value,
-      content: {
-        name: content.value,
-        type: graphicDraw.type
-      }
+      content: JSON.stringify(data),
     }
   } else {
     params = {
