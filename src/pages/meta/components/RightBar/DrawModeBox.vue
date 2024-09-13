@@ -473,7 +473,7 @@ const getCamera = () => {
             <div class="other-row">
               <div>设备ID：</div>
               <a-select class="c_mars-select" v-model:value="deviceId" @click="getCamera">
-                <a-select-option v-for="camera in cameras" :key="camera">
+                <a-select-option v-for="camera in cameras" :key="camera.id">
                   {{ camera.id }}
                 </a-select-option>
               </a-select>
