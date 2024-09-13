@@ -19,7 +19,6 @@ const showKeys = ref<string[]>([])
 
 
 watchEffect(() => {
-  console.log("left bar tree update!")
   graphicIdTypeMap.clear()
   const value = stateStore.state.leftBarNeedUpdate
   if (!value) {

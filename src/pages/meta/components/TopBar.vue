@@ -449,7 +449,7 @@ function getHuman(humen: any) {
       window.polygonMan.get(data.userName).polyline.destroy()
       window.polygonMan.delete(data.userName)
     }
-    // 新增轨道
+    // 新增路线
     const polyLine = window.polygonPolyline.get(data.userName)
     if (polyLine) {
       if (polyLine[polyLine.length - 1].lng !== lngLat.lng ||
