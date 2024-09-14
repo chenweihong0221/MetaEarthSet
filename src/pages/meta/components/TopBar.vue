@@ -469,6 +469,8 @@ function getHuman(humen: any) {
         polyLine[polyLine.length - 1].alt !== lngLat.alt) {
         polyLine.push(lngLat)
       }
+      const human = window.polygonMan.get(data.userName)
+      human.polyline.positions = polyLine
     } else {
       // 新建人物
       const human = new Human(data.userName, position, store.state.graphicLayer)
