@@ -167,6 +167,7 @@ const marsOnload = (map: any) => {
     }
     const graphic: GraphicInterface = window.polygonToParent.get(event.graphic.options.id)
     if (selectShow.value === graphic.id) {
+      selectShow.value = ""
       graphic.removeHighLight()
     } else {
       selectShow.value = graphic.id
