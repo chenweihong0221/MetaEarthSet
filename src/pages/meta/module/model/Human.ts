@@ -20,7 +20,7 @@ export class Human implements GraphicInterface {
     this.model = new mars3d.graphic.ModelEntity({
       position,
       style: {
-        url: "//data.mars3d.cn/gltf/mars/man/walk.gltf",
+        url: "//data.mars3d.cn/gltf/mars/man/gongren.glb",
         scale: 1,
         minimumPixelSize: 50
       }
