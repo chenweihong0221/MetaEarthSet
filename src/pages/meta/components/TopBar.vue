@@ -123,6 +123,7 @@ const timeGetHuman = () => {
       message.error(response.data.msg)
       // 关闭递归调用人员位置接口
       clearTimeout(timer.value)
+      timer.value = null
     }
   })
 }
@@ -220,6 +221,7 @@ const handleOk = () => {
     if (res.data.code === "0") {
       // 关闭递归调用人员位置接口
       clearTimeout(timer.value)
+      timer.value = null
       newArea.districtId = res.data.data.districtId
       newArea.code = res.data.data.code
       message.success("新增区域成功")
@@ -266,6 +268,7 @@ const handleArea = (area: any) => {
   }
   // 关闭递归调用人员位置接口
   clearTimeout(timer.value)
+  timer.value = null
   districtId.value = area.districtId
   stateStore.commit("updateSelectedAreaCode", area.code)
   stateStore.commit("updateSelectedAreaId", area.districtId)
@@ -488,6 +491,7 @@ const handleDel = () => {
           // 关闭递归调用人员位置接口
           store.state.graphicLayer.clear()
           clearTimeout(timer.value)
+          timer.value = null
           getAllModel()
         })
         .catch(function (error) {
