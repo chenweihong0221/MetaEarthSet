@@ -202,8 +202,8 @@ const updateStore = () => {
     const graphicDraw = window.polygonToParent.get(id)
     // 内容转为json格式
     const data = {
-        name: content.value,
-        type: graphicDraw.type
+      name: content.value,
+      type: graphicDraw.type
     }
     params = {
       districtId: id,
@@ -372,18 +372,10 @@ const beginStore = () => {
         <a-collapse-panel header="变换" key="1">
           <div class="trans-box">
             <div class="trans-row">
-              <div>
-                经度
-                <input v-model="lng" />
-              </div>
-              <div>
-                维度
-                <input v-model="lat" />
-              </div>
-              <div>
-                海拔
-                <input v-model="alt" />
-              </div>
+              位置：
+              <div>x <input v-model="lng" disabled /></div>
+              <div>y <input v-model="lat" disabled /></div>
+              <div>z <input v-model="alt" disabled /></div>
             </div>
             <div class="trans-row">
               旋转：
@@ -393,7 +385,9 @@ const beginStore = () => {
             </div>
             <div class="trans-row">
               缩放：
-              <div><input v-model="scale" disabled />%</div>
+              <div>x <input v-model="scale" disabled /></div>
+              <div>y <input v-model="scale" disabled /></div>
+              <div>z <input v-model="scale" disabled /></div>
             </div>
           </div>
         </a-collapse-panel>
@@ -432,8 +426,8 @@ const beginStore = () => {
               <mars-button class="my-button-interaction" @click="updateStore">修改</mars-button>
             </div>
             <div class="msg-row">
-              <mars-button class="my-button-edit" @click="beginStore" v-show="!startEdit">开始编辑</mars-button>
-              <mars-button class="my-button-edit" @click="beginStore" v-show="startEdit">停止编辑</mars-button>
+              <mars-button class="my-button-interaction" @click="beginStore" v-show="!startEdit">开始编辑</mars-button>
+              <mars-button class="my-button-interaction" @click="beginStore" v-show="startEdit">停止编辑</mars-button>
             </div>
           </div>
         </a-collapse-panel>
@@ -637,15 +631,6 @@ input {
 }
 
 .my-button-interaction {
-  margin: auto 1em;
-  width: 90px;
-  height: 32px;
-  background-color: #444444 !important;
-  border-color: #1DA57A !important;
-  color: white;
-}
-
-.my-button-edit {
   margin: auto 1em;
   width: 100px;
   height: 32px;
