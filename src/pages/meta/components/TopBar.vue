@@ -102,7 +102,8 @@ onMounted(() => {
       })
       .catch(function (error) {
         // 处理错误情况
-        console.log(error)
+        // console.log(error)
+        console.error("catched error=", error)
       })
       .finally(function () {
         // 总是会执行
@@ -453,7 +454,7 @@ function getHuman(humen: any) {
     const lngLat = {
       lng: data.longitude,
       lat: data.latitude,
-      alt: (data.floorNumber - 1) * 5
+      alt: ((data.floorNumber - 1) * 5 + 0.6)
     }
     // 新增路线
     const polyLine = window.polygonPolyline.get(data.userName)
