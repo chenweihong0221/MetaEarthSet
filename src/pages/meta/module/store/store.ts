@@ -138,16 +138,6 @@ export const mapStore = createStore({
       state.buildingMap.clear()
       state.floorBuildingMap.clear()
     },
-    clearAllMap(state) {
-      state.buildingMap.clear()
-      state.floorBuildingMap.clear()
-      state.fenceMap.clear()
-      state.spaceFloorMap.clear()
-      state.graphicDrawMap.clear()
-      state.cameraMap.clear()
-      state.humanMap.clear()
-      state.openAirMap.clear()
-    },
     clearFenceMap(state) {
       state.fenceMap.clear()
     },

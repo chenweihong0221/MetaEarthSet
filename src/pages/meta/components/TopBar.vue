@@ -228,6 +228,7 @@ const handleOk = () => {
         childrenParentCode: "",
         name: ""
       }
+      store.commit("clearAllMap")
       getModel(params)
         .then(function () {
           // 处理成功情况
@@ -268,7 +269,7 @@ const handleArea = (area: any) => {
   districtId.value = area.districtId
   stateStore.commit("updateSelectedAreaCode", area.code)
   stateStore.commit("updateSelectedAreaId", area.districtId)
-  store.commit("clearAllMap")
+  store.commit("clearMap")
   getAllModel()
 }
 
@@ -442,14 +443,16 @@ function getHuman(humen: any) {
       lat: data.latitude,
       alt: 0
     }
+    const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
     // 删除之前人物的位置和对象
     if (window.polygonMan.get(data.userName)) {
-      window.polygonMan.get(data.userName).model.destroy()
-      window.polygonMan.get(data.userName).polyline.destroy()
-      window.polygonMan.delete(data.userName)
+      window.polygonMan.get(data.userName).model.position = position
+      window.polygonMan.get(data.userName).polyline.positions = window.polygonPolyline.get(data.userName)
+      // window.polygonMan.delete(data.userName)
     }
     // 新增路线
     const polyLine = window.polygonPolyline.get(data.userName)
+    console.log("获取路线", polyLine, lngLat)
     if (polyLine) {
       if (polyLine[polyLine.length - 1].lng !== lngLat.lng ||
         polyLine[polyLine.length - 1].lat !== lngLat.lat ||
@@ -457,15 +460,13 @@ function getHuman(humen: any) {
         polyLine.push(lngLat)
       }
     } else {
+      // 新建人物
+      const human = new Human(data.userName, position, store.state.graphicLayer)
+      store.state.humanMap.set(human.id, human)
+      stateStore.commit("updateLeftBarNeedUpdate", true)
       window.polygonPolyline.set(data.userName, [lngLat])
     }
-    // 新建人物
-    const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
-    const human = new Human(data.userName, position, store.state.graphicLayer)
-    store.state.humanMap.set(human.id, human)
-    stateStore.commit("updateLeftBarNeedUpdate", true)
   }
-
 }
 
 const handleDel = () => {
@@ -483,7 +484,9 @@ const handleDel = () => {
           selectedArea.value = response.data.data[0].children[0].code
           stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           stateStore.commit("updateSelectedAreaId", districtId.value)
+          store.commit("clearMap")
           // 关闭递归调用人员位置接口
+          store.state.graphicLayer.clear()
           clearTimeout(timer.value)
           getAllModel()
         })
