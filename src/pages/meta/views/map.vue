@@ -151,23 +151,6 @@ const marsOnload = (map: any) => {
   // })
   // map.graphicLayer.addGraphic(label)
 
-  const graphic = new mars3d.graphic.PolylineEntity({
-    positions: [
-      [113.515382, 34.823811, 0],
-      [113.516004, 34.823779, 20.1]
-    ],
-    style: {
-      width: 5,
-      materialType: mars3d.MaterialType.LineFlowColor,
-      materialOptions: {
-        color: Cesium.Color.fromBytes(255, 118, 118), // 中心线颜色
-        alpha: 0.5,
-        speed: 0
-      }
-    }
-  })
-  window.drawGraphicLayer.addGraphic(graphic)
-
   map.addLayer(tiles3dLayer)
   // 设置编辑功能，先注释掉不用
   map.addLayer(graphicLayer)

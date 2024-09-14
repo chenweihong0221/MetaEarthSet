@@ -453,7 +453,7 @@ function getHuman(humen: any) {
     const lngLat = {
       lng: data.longitude,
       lat: data.latitude,
-      alt: data.floorNumber
+      alt: (data.floorNumber - 1) * 5
     }
     // 新增路线
     const polyLine = window.polygonPolyline.get(data.userName)
@@ -621,6 +621,9 @@ function initWindow() {
 
 
 <style lang="less" scoped>
+.ant-modal-content {
+  background-color: red !important;
+}
 
 .c_mars-select {
   width: 100%;
@@ -696,6 +699,7 @@ function initWindow() {
   color: #fff;
   /* 示例：修改文字颜色 */
 }
+
 
 
 .my-button,
