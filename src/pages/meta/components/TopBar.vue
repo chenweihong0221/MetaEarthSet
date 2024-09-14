@@ -453,30 +453,28 @@ function getHuman(humen: any) {
       lat: data.latitude,
       alt: data.floorNumber
     }
-    const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
-    // 删除之前人物的位置和对象
-    if (window.polygonMan.get(data.userName)) {
-      window.polygonMan.get(data.userName).model.position = position
-      window.polygonMan.get(data.userName).polyline.positions = window.polygonPolyline.get(data.userName)
-      // window.polygonMan.delete(data.userName)
-    }
     // 新增路线
     const polyLine = window.polygonPolyline.get(data.userName)
+    const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
     console.log("获取路线", polyLine, lngLat)
+    const human = window.polygonMan.get(data.userName)
     if (polyLine) {
       if (polyLine[polyLine.length - 1].lng !== lngLat.lng ||
         polyLine[polyLine.length - 1].lat !== lngLat.lat ||
         polyLine[polyLine.length - 1].alt !== lngLat.alt) {
         polyLine.push(lngLat)
       }
-      const human = window.polygonMan.get(data.userName)
+    } 
+    // 修改之前人物的位置和对象
+    if (human) {
+      human.model.position = position
       human.polyline.positions = polyLine
     } else {
       // 新建人物
+      window.polygonPolyline.set(data.userName, [lngLat])
       const human = new Human(data.userName, position, store.state.graphicLayer)
       store.state.humanMap.set(human.id, human)
       stateStore.commit("updateLeftBarNeedUpdate", true)
-      window.polygonPolyline.set(data.userName, [lngLat])
     }
   }
 
