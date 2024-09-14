@@ -16,6 +16,8 @@ import { OpenAir } from "../module/model/OpenAir"
 import { GraphicDraw } from "@mars/pages/meta/module/model/GraphicDraw"
 import { Camera } from "@mars/pages/meta/module/model/Camera"
 import { Human } from "../module/model/Human"
+import { BackgroundColor } from "@icon-park/svg"
+import { color } from "echarts"
 
 interface FormState {
   url: string
@@ -464,7 +466,7 @@ function getHuman(humen: any) {
         polyLine[polyLine.length - 1].alt !== lngLat.alt) {
         polyLine.push(lngLat)
       }
-    } 
+    }
     // 修改之前人物的位置和对象
     if (human) {
       human.model.position = position
@@ -619,6 +621,7 @@ function initWindow() {
 
 
 <style lang="less" scoped>
+
 .c_mars-select {
   width: 100%;
   height: 32px;

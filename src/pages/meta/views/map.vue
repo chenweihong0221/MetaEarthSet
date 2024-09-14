@@ -28,6 +28,7 @@ const Cesium = mars3d.Cesium
 const startDraw = ref(false)
 // 选中的graphic, 使用provide和inject传递给rightBar
 const selectedGraphicId = ref("")
+const selectShow = ref("")
 provide("selectedGraphicId", selectedGraphicId)
 const router = useRouter()
 
@@ -182,7 +183,10 @@ const marsOnload = (map: any) => {
       return
     }
     const graphic: GraphicInterface = window.polygonToParent.get(event.graphic.options.id)
-    if (graphic) {
+    if (selectShow.value === graphic.id) {
+      graphic.removeHighLight()
+    } else {
+      selectShow.value = graphic.id
       graphic.highLight()
     }
     selectedGraphicId.value = event.graphic.id
