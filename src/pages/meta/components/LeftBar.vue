@@ -16,7 +16,7 @@ let selectedGraphicType = 0
 const graphicIdTypeMap = new Map<string, number>()
 const showGraphicIdSet = new Set<string>()
 const showKeys = ref<string[]>([])
-
+const selectShow = ref("")
 
 watchEffect(() => {
   graphicIdTypeMap.clear()
@@ -128,10 +128,16 @@ const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
     const graphic = store.getters.getGraphicByIdAndType(selectedGraphicId, selectedGraphicType)
     // graphic.removeHighLight()
   }
-  const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type) 
+  const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
   selectedGraphicId = selectedKeys[0].toString()
   selectedGraphicType = info.node.dataRef.type
-  graphic.highLight()
+  if (selectShow.value === graphic.id) {
+    selectShow.value = ""
+    graphic.removeHighLight()
+  } else {
+    selectShow.value = selectedGraphicId.id
+    graphic.highLight()
+  }
   stateStore.commit("updateSelectedGraphicId", selectedKeys[0])
   stateStore.commit("updateSelectedGraphicType", info.node.type)
 }
