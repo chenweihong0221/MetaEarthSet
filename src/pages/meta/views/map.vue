@@ -156,13 +156,14 @@ const marsOnload = (map: any) => {
       [113.516004, 34.823779, 20.1]
     ],
     style: {
-        width: 5,
-        materialType: mars3d.MaterialType.LineTrail,
-        materialOptions: {
-          color: Cesium.Color.GRAY, // 中心线颜色
-          speed: 20
-        }
+      width: 5,
+      materialType: mars3d.MaterialType.LineFlowColor,
+      materialOptions: {
+        color: Cesium.Color.fromBytes(255, 118, 118), // 中心线颜色
+        alpha: 0.5,
+        speed: 0
       }
+    }
   })
   window.drawGraphicLayer.addGraphic(graphic)
 

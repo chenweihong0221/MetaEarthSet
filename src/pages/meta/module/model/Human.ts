@@ -33,10 +33,11 @@ export class Human implements GraphicInterface {
       positions: window.polygonPolyline.get(this.id),
       style: {
         width: 5,
-        materialType: mars3d.MaterialType.LineTrail,
+        materialType: mars3d.MaterialType.LineFlowColor,
         materialOptions: {
-          color: Cesium.Color.WHITE, // 中心线颜色
-          speed: 20
+          color: Cesium.Color.fromBytes(255, 118, 118), // 中心线颜色
+          alpha: 0.5,
+          speed: 0
         }
       }
     })

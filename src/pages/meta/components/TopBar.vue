@@ -441,7 +441,7 @@ function getHuman(humen: any) {
     const lngLat = {
       lng: data.longitude,
       lat: data.latitude,
-      alt: 0
+      alt: data.floorNumber
     }
     const position = Cesium.Cartesian3.fromDegrees(lngLat.lng, lngLat.lat, lngLat.alt)
     // 删除之前人物的位置和对象

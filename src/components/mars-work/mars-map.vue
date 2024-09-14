@@ -92,9 +92,9 @@ const handleChangeLayer = () => {
   console.log(layerFlag, map.basemap)
   layerFlag.value = !layerFlag.value
   if (layerFlag.value) {
-    map.basemap = 2024 // 蓝色地图
+    map.basemap = 2024 // 高德影像图
   } else {
-    map.basemap = 2017 // 高德影像图
+    map.basemap = 2017 // 蓝色地图
   }
 }
 
