@@ -54,6 +54,7 @@ const selectedValue = ref("1") // 假设默认选中“选项1”
 const selectedArea = ref()
 const inputAreaName = ref("")
 const showModal = ref(false)
+const makeDelete = ref(false)
 const getData = ref(true)
 const districtId = ref("")
 const timer = ref(null)
@@ -253,6 +254,15 @@ const handleOk = () => {
 const handleCancel = () => {
   inputAreaName.value = ""
   showModal.value = false
+}
+
+const handlelDelete = () => {
+  makeDelete.value = true
+}
+
+
+const handleCancelDel = () => {
+  makeDelete.value = false
 }
 
 const handleClick = () => {
@@ -546,7 +556,7 @@ function initWindow() {
   <div class="border" style="position: absolute; top: 0;  width: 100%; height: 4em; background: #555555">
     <a-space class="space" style="position: static; margin-top: 10px; margin-left: 20px">
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
-                @change="handleSelectAreaChange" v-model:value="selectedArea">
+        @change="handleSelectAreaChange" v-model:value="selectedArea">
         <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" @click="handleArea(area)">
           {{ area.name }}
         </a-select-option>
@@ -554,14 +564,14 @@ function initWindow() {
           添加区域
         </a-select-option>
       </a-select>
-      <mars-button class="my-button" @click="handleDel">
+      <mars-button class="my-button" @click="handlelDelete">
         <template #icon><mars-icon icon="delete" class="icon-vertical-a" width="16" /></template>
         删除
       </mars-button>
       <!-- <SmileOutlined />
       <SnippetsOutlined /> -->
       <a-select v-model:value="selectedValue" style="width: 130px; " class="c_mars-select"
-                popupClassName="mars-select-dropdown" @change="handleChange">
+        popupClassName="mars-select-dropdown" @change="handleChange">
         <a-select-option key="2">
           <SelectOutlined />
           选项模式
@@ -579,6 +589,7 @@ function initWindow() {
         <template #icon><mars-icon icon="home-two" class="icon-vertical-a" width="20" /></template>
       </a-button>
     </a-space>
+    <!-- 添加区域弹框 -->
     <a-modal v-model:open="showModal">
       <template #title>
         <div>添加区域</div>
@@ -591,6 +602,16 @@ function initWindow() {
         <div>区域名称：</div>
         <div><input type="text" v-model="inputAreaName"></div>
       </div>
+    </a-modal>
+    <!-- 删除区域弹窗 -->
+    <a-modal v-model:open="makeDelete">
+      <template #title>
+        <div>确定删除吗?</div>
+      </template>
+      <template #footer>
+        <a-button key="cancel" @click="handleCancelDel">取消</a-button>
+        <a-button key="ok" type="primary" @click="handleDel">确定</a-button>
+      </template>
     </a-modal>
   </div>
 </template>
@@ -623,14 +644,12 @@ function initWindow() {
       color: var(--mars-control-text) !important;
       line-height: 32px !important;
     }
-  }
 
-  :deep(.ant-select-arrow) {
-    color: var(--mars-control-placeholder);
+
   }
 }
 
-/* 使用 /deep/ 深度选择器（需要vue-loader 15+ 和相应的CSS作用域配置） */
+// 使用 /deep/ 深度选择器（需要vue-loader 15+ 和相应的CSS作用域配置） 
 .my-custom-select::v-deep .ant-select-arrow {
   color: #ffffff;
 }
@@ -673,6 +692,7 @@ function initWindow() {
   color: #fff;
   /* 示例：修改文字颜色 */
 }
+
 
 .my-button,
 .c_mars-select {
