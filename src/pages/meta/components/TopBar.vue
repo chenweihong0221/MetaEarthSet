@@ -102,7 +102,8 @@ onMounted(() => {
       })
       .catch(function (error) {
         // 处理错误情况
-        console.log(error)
+        // console.log(error)
+        console.error("catched error=", error)
       })
       .finally(function () {
         // 总是会执行
