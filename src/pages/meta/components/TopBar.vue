@@ -215,7 +215,7 @@ const handleOk = () => {
       parentCode: ""
     }
   )
-  store.commit("clearAllMap")
+  store.commit("clearMap")
   AreaAdd.value.name = newArea.name
   addModel(AreaAdd.value).then(res => {
     if (res.data.code === "0") {
@@ -269,7 +269,7 @@ const handleArea = (area: any) => {
   districtId.value = area.districtId
   stateStore.commit("updateSelectedAreaCode", area.code)
   stateStore.commit("updateSelectedAreaId", area.districtId)
-  store.commit("clearAllMap")
+  store.commit("clearMap")
   getAllModel()
 }
 
@@ -489,7 +489,7 @@ const handleDel = () => {
           // 关闭递归调用人员位置接口
           clearTimeout(timer.value)
           store.state.graphicLayer.clear()
-          store.commit("clearAllMap")
+          store.commit("clearMap")
           getAllModel()
         })
         .catch(function (error) {
