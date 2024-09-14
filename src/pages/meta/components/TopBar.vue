@@ -116,14 +116,13 @@ const timeGetHuman = () => {
       getHuman(human)
       // 定时获取
       timer.value = setTimeout(() => {
-        store.commit("clearHumenMap")
+        // store.commit("clearHumenMap")
         timeGetHuman()
       }, 2000)
     } else {
       message.error(response.data.msg)
       // 关闭递归调用人员位置接口
       clearTimeout(timer.value)
-      timer.value = null
     }
   })
 }
@@ -216,12 +215,12 @@ const handleOk = () => {
       parentCode: ""
     }
   )
+  store.commit("clearAllMap")
   AreaAdd.value.name = newArea.name
   addModel(AreaAdd.value).then(res => {
     if (res.data.code === "0") {
       // 关闭递归调用人员位置接口
       clearTimeout(timer.value)
-      timer.value = null
       newArea.districtId = res.data.data.districtId
       newArea.code = res.data.data.code
       message.success("新增区域成功")
@@ -230,7 +229,6 @@ const handleOk = () => {
         childrenParentCode: "",
         name: ""
       }
-      store.commit("clearAllMap")
       getModel(params)
         .then(function () {
           // 处理成功情况
@@ -268,15 +266,14 @@ const handleArea = (area: any) => {
   }
   // 关闭递归调用人员位置接口
   clearTimeout(timer.value)
-  timer.value = null
   districtId.value = area.districtId
   stateStore.commit("updateSelectedAreaCode", area.code)
   stateStore.commit("updateSelectedAreaId", area.districtId)
-  store.commit("clearMap")
+  store.commit("clearAllMap")
   getAllModel()
 }
 
-const getAllModel = () => { 
+const getAllModel = () => {
   // 初始化全局墙壁和矢量图层(露天广场)
   initWindow()
   getDetail(districtId.value, districtId.value).then(function (response) {
@@ -470,6 +467,7 @@ function getHuman(humen: any) {
       window.polygonPolyline.set(data.userName, [lngLat])
     }
   }
+
 }
 
 const handleDel = () => {
@@ -479,6 +477,7 @@ const handleDel = () => {
         childrenParentCode: "",
         name: ""
       }
+      stateStore.commit("updateLeftBarNeedUpdate", true)
       getModel(params)
         .then(function (response) {
           // 处理成功情况
@@ -487,11 +486,10 @@ const handleDel = () => {
           selectedArea.value = response.data.data[0].children[0].code
           stateStore.commit("updateSelectedAreaCode", selectedArea.value)
           stateStore.commit("updateSelectedAreaId", districtId.value)
-          store.commit("clearMap")
           // 关闭递归调用人员位置接口
-          store.state.graphicLayer.clear()
           clearTimeout(timer.value)
-          timer.value = null
+          store.state.graphicLayer.clear()
+          store.commit("clearAllMap")
           getAllModel()
         })
         .catch(function (error) {
@@ -548,7 +546,7 @@ function initWindow() {
   <div class="border" style="position: absolute; top: 0;  width: 100%; height: 4em; background: #555555">
     <a-space class="space" style="position: static; margin-top: 10px; margin-left: 20px">
       <a-select style="width: 130px; " class="c_mars-select" popupClassName="mars-select-dropdown"
-        @change="handleSelectAreaChange" v-model:value="selectedArea">
+                @change="handleSelectAreaChange" v-model:value="selectedArea">
         <a-select-option v-for="area in AreaList" :key="area.code" :value="area.code" @click="handleArea(area)">
           {{ area.name }}
         </a-select-option>
@@ -563,7 +561,7 @@ function initWindow() {
       <!-- <SmileOutlined />
       <SnippetsOutlined /> -->
       <a-select v-model:value="selectedValue" style="width: 130px; " class="c_mars-select"
-        popupClassName="mars-select-dropdown" @change="handleChange">
+                popupClassName="mars-select-dropdown" @change="handleChange">
         <a-select-option key="2">
           <SelectOutlined />
           选项模式
