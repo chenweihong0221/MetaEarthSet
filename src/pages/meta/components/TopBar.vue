@@ -483,6 +483,7 @@ function getHuman(humen: any) {
 const handleDel = () => {
   deleteModel(districtId.value).then(response => {
     if (response.data.code === "0") {
+      makeDelete.value = false
       const params = {
         childrenParentCode: "",
         name: ""

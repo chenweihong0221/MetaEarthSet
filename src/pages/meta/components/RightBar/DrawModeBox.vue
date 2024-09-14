@@ -578,7 +578,7 @@ const getCamera = () => {
 }
 
 .c_mars-select {
-  width: 95%;
+  width: 14em;
   height: 32px;
   background-color: var(--mars-control-bg);
   border-radius: 2px;
