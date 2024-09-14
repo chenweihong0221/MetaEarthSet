@@ -166,15 +166,17 @@ const marsOnload = (map: any) => {
       return
     }
     const graphic: GraphicInterface = window.polygonToParent.get(event.graphic.options.id)
-    if (selectShow.value === graphic.id) {
-      selectShow.value = ""
-      graphic.removeHighLight()
-    } else {
-      selectShow.value = graphic.id
-      graphic.highLight()
+    if (graphic) {
+      if (selectShow.value === graphic.id) {
+        selectShow.value = ""
+        graphic.removeHighLight()
+      } else {
+        selectShow.value = graphic.id
+        graphic.highLight()
+      }
+      selectedGraphicId.value = event.graphic.id
+      console.log("selectedGraphicId", selectedGraphicId.value)
     }
-    selectedGraphicId.value = event.graphic.id
-    console.log("selectedGraphicId", selectedGraphicId.value)
   })
   // Area.getFromLocalStorage(stateStore.state.selectedAreaCode)
 }
