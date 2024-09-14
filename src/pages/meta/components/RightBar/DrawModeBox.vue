@@ -693,10 +693,6 @@ input {
   margin-right: auto;
 }
 
-.other-input {
-  margin-left: 10px;
-}
-
 .other-row .my-button,
 .draw-row .my-button {
   margin: auto 5em;
