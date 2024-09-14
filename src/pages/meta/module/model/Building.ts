@@ -97,7 +97,6 @@ export class Building implements GraphicInterface {
             this.floors.set(newFloor.id, newFloor)
             i++
           }
-
           mapStore.commit("addBuilding", this)
           stateStore.commit("updateLeftBarNeedUpdate", true)
           message.success("新建楼栋成功")

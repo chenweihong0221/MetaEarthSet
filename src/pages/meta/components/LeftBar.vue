@@ -16,7 +16,7 @@ let selectedGraphicType = 0
 const graphicIdTypeMap = new Map<string, number>()
 const showGraphicIdSet = new Set<string>()
 const showKeys = ref<string[]>([])
-const selectShow = ref("")
+const selectShow = ref<any>()
 
 watchEffect(() => {
   graphicIdTypeMap.clear()
@@ -118,28 +118,22 @@ watch(leftBarTreeData, () => {
 
 
 const handleSelected: TreeProps["onSelect"] = (selectedKeys, info) => {
-
   if (selectedKeys.length === 0) {
+    console.log(selectShow.value, selectShow.value)
+    const graphic = store.getters.getGraphicByIdAndType(selectShow.value, info.node.dataRef.type)
+    graphic.removeHighLight()
+    selectShow.value = ""
     stateStore.commit("updateSelectedGraphicId", "")
     selectedGraphicId = ""
     return
   }
-  if (selectedGraphicId !== "") {
-    const graphic = store.getters.getGraphicByIdAndType(selectedGraphicId, selectedGraphicType)
-    // graphic.removeHighLight()
-  }
-  const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
-  selectedGraphicId = selectedKeys[0].toString()
-  selectedGraphicType = info.node.dataRef.type
-  if (selectShow.value === graphic.id) {
-    selectShow.value = ""
-    graphic.removeHighLight()
-  } else {
-    selectShow.value = selectedGraphicId.id
+    const graphic: GraphicInterface = store.getters.getGraphicByIdAndType(selectedKeys[0], info.node.dataRef.type)
+    selectedGraphicId = selectedKeys[0].toString()
+    selectedGraphicType = info.node.dataRef.type
     graphic.highLight()
-  }
-  stateStore.commit("updateSelectedGraphicId", selectedKeys[0])
-  stateStore.commit("updateSelectedGraphicType", info.node.type)
+    stateStore.commit("updateSelectedGraphicId", selectedKeys[0])
+    stateStore.commit("updateSelectedGraphicType", info.node.type)
+    selectShow.value = selectedKeys[0]
 }
 
 const handleRightClick: TreeProps["onRightClick"] = (info) => {
