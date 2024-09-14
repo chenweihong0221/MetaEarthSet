@@ -45,7 +45,6 @@ const props = withDefaults(
 
 // 用于存放地球组件实例
 let map: mars3d.Map // 地图对象
-
 // 使用用户传入的 mapKey 拼接生成 withKeyId 作为当前显示容器的id
 const withKeyId = computed(() => `mars3d-container-${props.mapKey}`)
 const layerFlag = ref<boolean>(false)
@@ -90,11 +89,12 @@ const openLink3 = () => {
 
 // 解决点击按钮触发底图功能
 const handleChangeLayer = () => {
+  console.log(layerFlag, map.basemap)
   layerFlag.value = !layerFlag.value
   if (layerFlag.value) {
-    map.basemap = 2017 // 蓝色地图
+    map.basemap = 2024 // 蓝色地图
   } else {
-    map.basemap = 2024 // 高德影像图
+    map.basemap = 2017 // 高德影像图
   }
 }
 
@@ -108,7 +108,7 @@ const initMars3d = (option: any) => {
   // }
   if (layerFlag.value) {
     console.log("mars-map.vue value: " + layerFlag.value)
-    map.basemap = 2017
+    map.basemap = 2024
   } else {
     console.log("没有设置 changerLayerFlag 参数，不进行默认底图切换")
   }
@@ -157,6 +157,7 @@ const initMars3d = (option: any) => {
   })
 
   // map构造完成后的一些处理
+  map.basemap = 2017
   onMapLoad()
   map.hasTerrain = false
   emit("onload", map)
