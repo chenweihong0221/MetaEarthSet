@@ -1,12 +1,12 @@
 import * as mars3d from "mars3d"
-import { mapStore, stateStore } from "@mars/pages/meta/module/store/store"
-import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
+import { mapStore, stateStore } from "@mars/pages/module/store/store"
+import { GraphicInterface } from "@mars/pages/module/model/GraphicInterface"
 import { Cesium } from "mars3d"
-import { ModelData } from "@mars/pages/meta/api/adopter"
-import { castTo2DArr, LngLatPointToJSON } from "@mars/pages/meta/module/tool/position"
+import { ModelData } from "@mars/pages/api/adopter"
+import { castTo2DArr, LngLatPointToJSON } from "@mars/pages/module/tool/position"
 
 
-import { addModel } from "@mars/pages/meta/api/api"
+import { addModel } from "@mars/pages/api/api"
 import { message } from "ant-design-vue"
 import { useStore } from "vuex"
 import * as uuid from "uuid"

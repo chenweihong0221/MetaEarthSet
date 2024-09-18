@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-import SelectModeBox from "@mars/pages/meta/components/RightBar/SelectModeBox.vue"
+import SelectModeBox from "@mars/pages/components/RightBar/SelectModeBox.vue"
 
-import DrawModeBox from "@mars/pages/meta/components/RightBar/DrawModeBox.vue"
-import { stateKey } from "@mars/pages/meta/module/store/store"
+import DrawModeBox from "@mars/pages/components/RightBar/DrawModeBox.vue"
+import { stateKey } from "@mars/pages/module/store/store"
 import { useStore } from "vuex"
 import { Cesium } from "mars3d"
 

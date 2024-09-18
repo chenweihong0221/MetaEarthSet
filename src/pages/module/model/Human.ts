@@ -1,9 +1,9 @@
 import * as mars3d from "mars3d"
 import { Cesium } from "mars3d"
-import { mapStore } from "@mars/pages/meta/module/store/store"
-import { GraphicInterface } from "@mars/pages/meta/module/model/GraphicInterface"
-import { ModelData } from "@mars/pages/meta/api/adopter"
-import { castTo2DArr, convertToJSON, LngLatPointToJSON } from "@mars/pages/meta/module/tool/position"
+import { mapStore } from "@mars/pages/module/store/store"
+import { GraphicInterface } from "@mars/pages/module/model/GraphicInterface"
+import { ModelData } from "@mars/pages/api/adopter"
+import { castTo2DArr, convertToJSON, LngLatPointToJSON } from "@mars/pages/module/tool/position"
 
 export class Human implements GraphicInterface {
   id: string

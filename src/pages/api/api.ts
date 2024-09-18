@@ -1,5 +1,5 @@
 // axios配置
-import { ModelData } from "@mars/pages/meta/api/adopter"
+import { ModelData } from "@mars/pages/api/adopter"
 import { ref } from "vue"
 import axios from "axios"
 

@@ -1,4 +1,4 @@
-import { ModelData } from "@mars/pages/meta/api/adopter"
+import { ModelData } from "@mars/pages/api/adopter"
 
 export interface GraphicInterface{
   id: string
