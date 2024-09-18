@@ -94,5 +94,31 @@
   background-color: rgba(64, 150, 255, 0.8) !important;
 }
 
+:where(.css-dev-only-do-not-override-19iuou).ant-modal .ant-modal-content {
+  background-color: #666666 !important;
+}
 
+:where(.css-dev-only-do-not-override-19iuou).ant-modal .ant-modal-body {
+  background-color: #666666 !important;
+}
+
+:where(.css-dev-only-do-not-override-19iuou).ant-modal .ant-modal-title {
+  background-color: #666666 !important;
+  color: #ffffff;
+}
+
+:where(.css-dev-only-do-not-override-19iuou).ant-modal .ant-modal-body {
+  background-color: #666666 !important;
+  color: #ffffff;
+}
+
+:where(.css-dev-only-do-not-override-19iuou).ant-modal .ant-btn {
+  background-color: #ffffff !important;
+  color: #000000;
+}
+
+:where(.css-dev-only-do-not-override-19iuou).ant-modal .ant-btn-primary {
+  background-color: #ffffff !important;
+  color: #000000;
+}
 
