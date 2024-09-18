@@ -593,37 +593,42 @@ function initWindow() {
         <template #icon><mars-icon icon="home-two" class="icon-vertical-a" width="20" /></template>
       </a-button>
     </a-space>
-    <!-- 添加区域弹框 -->
-    <a-modal v-model:open="showModal">
-      <template #title>
-        <div>添加区域</div>
-      </template>
-      <template #footer>
-        <a-button key="cancel" @click="handleCancel">取消</a-button>
-        <a-button key="ok" type="primary" @click="handleOk">确定</a-button>
-      </template>
-      <div>
-        <div>区域名称：</div>
-        <div><input type="text" v-model="inputAreaName"></div>
-      </div>
-    </a-modal>
-    <!-- 删除区域弹窗 -->
-    <a-modal v-model:open="makeDelete">
-      <template #title>
-        <div>确定删除吗?</div>
-      </template>
-      <template #footer>
-        <a-button key="cancel" @click="handleCancelDel">取消</a-button>
-        <a-button key="ok" type="primary" @click="handleDel">确定</a-button>
-      </template>
-    </a-modal>
   </div>
+  <a-modal v-model:open="showModal" contentStyle="width: 400px; color: red; background: red">
+    <template #title >
+      <div>添加区域</div>
+    </template>
+    <template #footer>
+      <a-button key="cancel" @click="handleCancel">取消</a-button>
+      <a-button key="ok" type="primary" @click="handleOk">确定</a-button>
+    </template>
+    <div>
+      <div>区域名称：</div>
+      <div><input type="text" v-model="inputAreaName"></div>
+    </div>
+  </a-modal>
+  <!-- 删除区域弹窗 -->
+  <a-modal v-model:open="makeDelete">
+    <template #title>
+      <div>确定删除吗?</div>
+    </template>
+    <template #footer>
+      <a-button key="cancel" @click="handleCancelDel">取消</a-button>
+      <a-button key="ok" type="primary" @click="handleDel">确定</a-button>
+    </template>
+  </a-modal>
 </template>
 
 
 <style lang="less" scoped>
-.ant-modal-content {
+/deep/ .ant-modal-body {
   background-color: red !important;
+}
+
+:deep(.modal .ant-modal-content) {
+  width: 1000px;
+  background-color: red !important;
+  color: RED;
 }
 
 .c_mars-select {

@@ -445,7 +445,7 @@ const getCamera = () => {
           <div class="draw-box">
             <div class="draw-row">
               <div style="width: 60px">样式：</div>
-              <a-select v-model:value="selectedGraphicDrawStyle" style="margin-left: 15px; color: white; width: 14em;
+              <a-select v-model:value="selectedGraphicDrawStyle" style="margin-left: 15px; color: white; width: 12em;
   margin-right: auto;" class="c_mars-select" popupClassName="mars-select-dropdown" :options="graphicDrawOptions" />
             </div>
             <div class="draw-row">
@@ -578,7 +578,7 @@ const getCamera = () => {
 }
 
 .c_mars-select {
-  width: 14em;
+  width: 12em;
   height: 32px;
   background-color: var(--mars-control-bg);
   border-radius: 2px;
@@ -699,7 +699,7 @@ input {
 }
 
 .draw-row .c_mars-select {
-  width: 14em;
+  width: 12em;
   padding: 0;
   margin: 0;
 }
