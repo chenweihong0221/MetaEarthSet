@@ -551,7 +551,9 @@ function initWindow() {
   } else {
     window.polygonPolyline.clear()
   }
+
 }
+
 
 </script>
 
@@ -595,7 +597,7 @@ function initWindow() {
     </a-space>
   </div>
   <a-modal v-model:open="showModal" contentStyle="width: 400px; color: red; background: red">
-    <template #title >
+    <template #title>
       <div>添加区域</div>
     </template>
     <template #footer>
@@ -607,28 +609,25 @@ function initWindow() {
       <div><input type="text" v-model="inputAreaName"></div>
     </div>
   </a-modal>
-  <!-- 删除区域弹窗 -->
-  <a-modal v-model:open="makeDelete">
-    <template #title>
-      <div>确定删除吗?</div>
-    </template>
-    <template #footer>
-      <a-button key="cancel" @click="handleCancelDel">取消</a-button>
-      <a-button key="ok" type="primary" @click="handleDel">确定</a-button>
-    </template>
-  </a-modal>
+
+    <!-- 删除区域弹窗 -->
+    <a-modal v-model:open="makeDelete">
+      <template #title>
+        <div>确定删除吗?</div>
+      </template>
+      <template #footer>
+        <a-button key="cancel" @click="handleCancelDel">取消</a-button>
+        <a-button key="ok" type="primary" @click="handleDel">确定</a-button>
+      </template>
+    </a-modal>
 </template>
 
 
-<style lang="less" scoped>
-/deep/ .ant-modal-body {
-  background-color: red !important;
-}
 
-:deep(.modal .ant-modal-content) {
-  width: 1000px;
-  background-color: red !important;
-  color: RED;
+<style lang="less" scoped>
+
+.ant-modal .ant-modal-content{
+  background-color: red;
 }
 
 .c_mars-select {
