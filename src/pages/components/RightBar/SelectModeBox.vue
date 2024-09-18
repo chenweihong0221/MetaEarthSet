@@ -586,11 +586,11 @@ input {
 }
 
 /* 使用 /deep/ 深度选择器（需要vue-loader 15+ 和相应的CSS作用域配置） */
-.my-custom-select::v-deep .ant-select-arrow {
+.my-custom-select::deep .ant-select-arrow {
   color: #ffffff;
 }
 
-.my-custom-select::v-deep .ant-select-selector {
+.my-custom-select::deep .ant-select-selector {
   /* 自定义选择器样式 */
   /* 示例：修改边框颜色 */
   border-color: #191a19;
@@ -598,7 +598,7 @@ input {
   color: #ffffff;
 }
 
-.my-custom-select::v-deep .ant-select-selector-selected {
+.my-custom-select::deep .ant-select-selector-selected {
   /* 自定义选择器样式 */
   /* 示例：修改边框颜色 */
   border-color: #191a19;
@@ -607,21 +607,21 @@ input {
 }
 
 /* 自定义下拉框项样式 */
-.my-custom-select::v-deep .ant-select-dropdown {
+.my-custom-select::deep .ant-select-dropdown {
   background-color: #0a0606;
   color: #333;
   /* 示例：修改文字颜色 */
 }
 
 /* 自定义下拉框项样式 */
-.my-custom-select::v-deep .ant-select-dropdown-menu-item {
+.my-custom-select::deep .ant-select-dropdown-menu-item {
   background-color: #2a2a2a;
   color: #333;
   /* 示例：修改文字颜色 */
 }
 
 /* 自定义选中项的样式 */
-.my-custom-select::v-deep .ant-select-dropdown-menu-item-selected {
+.my-custom-select::deep .ant-select-dropdown-menu-item-selected {
   background-color: #060606;
   /* 示例：修改背景颜色 */
   color: #fff;
