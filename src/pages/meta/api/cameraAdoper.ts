@@ -40,7 +40,7 @@ export class ModelData {
 
     districtCode: string | null
 
+    // eslint-disable-next-line
     constructor(
     ) { }
-}
 }

@@ -71,8 +71,8 @@ export default ({ mode }: ConfigEnv) => {
       // 自定义底层的 Rollup 打包配置
       rollupOptions: {
         input: {
-          index: path.resolve(__dirname, "index.html"),
-          demo: path.resolve(__dirname, "demo.html")
+          index: path.resolve(__dirname, "index.html")
+          // demo: path.resolve(__dirname, "demo.html")
         },
         output: {
           chunkFileNames: "assets/js/[name]-[hash].js",

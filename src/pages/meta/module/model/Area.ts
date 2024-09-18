@@ -26,6 +26,7 @@ export class AreaData {
 }
 
 export class Area {
+  id: string
   name: string
   districtId: string
   data: AreaData
