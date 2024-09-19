@@ -83,16 +83,19 @@ const firstApi = ref(true)
 
 onMounted(() => {
 
-    // 从缓存中获取token
-    const sso_token_url = Cookies.get("SSO_TOKEN")
-    console.log("sso_token_url=", sso_token_url)
-    
+  // 从缓存中获取token
+  let token = ""
+  const sso_token_url = Cookies.get("SSO_TOKEN")
+  console.log("sso_token_url=", sso_token_url)
+  if (sso_token_url === undefined) {
+    console.log("sso_token_url underfined")
+  } else {
     const sso_token_obj: any = JSON.parse(sso_token_url)
-    const token = sso_token_obj.accessToken
-    console.log("token=", token)
-
-    modifyToken(token)
-
+    token = sso_token_obj.accessToken
+  }
+  console.log("token=", token)
+  modifyToken(token)
+    
   if (firstApi.value) {
     const params = {
       childrenParentCode: "",
