@@ -3,10 +3,10 @@ import { ModelData } from "@mars/pages/api/adopter"
 import { ref } from "vue"
 import axios from "axios"
 
-export const instance = axios.create({
-  // baseURL: "https://api.test01.platform.ahjtest.top",// 测试环境
+export let instance = axios.create({
+  // baseURL: "https://api.test01.platform.ahjtest.top", // 测试环境
   baseURL: "https://api.dev3.platform.ahjdev.top", // dev 环境
-  timeout: 1000,
+  timeout: 30000,
   headers: {
     "Content-Type": "application/json",
     // Authorization: "Bearer ea8c0470-7f2f-473d-b3c0-be2add35a42c" // 测试环境
@@ -93,4 +93,20 @@ export function getCameraDetail(id: string) {
 
 export function getChannel(param) {
   return instance.get("/xay/v1/iot/device/playStartUrl?" + "deviceId=" + param.deviceId + "&channelId=" + param.channelId)
+}
+
+export function modifyToken(p_token) {
+
+  instance = axios.create({
+    // baseURL: "https://api.test01.platform.ahjtest.top", // 测试环境
+    baseURL: "https://api.dev3.platform.ahjdev.top", // dev 环境
+    timeout: 30000,
+    headers: {
+      "Content-Type": "application/json",
+      // Authorization: "Bearer ea8c0470-7f2f-473d-b3c0-be2add35a42c" // 测试环境
+      // Authorization: "Bearer 5c28273e-0b85-435b-b90d-c2ebdac616b8" // dev环境
+      // Authorization: `Bearer ${p_token}`
+      Authorization: "Bearer " + p_token
+    }
+  })
 }

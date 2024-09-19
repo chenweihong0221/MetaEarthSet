@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // import "ant-design-vue/dist/antd.css"
-import { addModel, deleteModel, getModel, getThree, getDetail, getCamera, getHumen } from "@mars/pages/api/api"
+import { addModel, deleteModel, getModel, getThree, getDetail, getCamera, getHumen, modifyToken } from "@mars/pages/api/api"
 import { Cesium } from "mars3d"
 import * as mars3d from "mars3d"
 import { Area, getAllAreaIdAndName } from "@mars/pages/module/model/Area"
@@ -18,6 +18,8 @@ import { Camera } from "@mars/pages/module/model/Camera"
 import { Human } from "../module/model/Human"
 import { BackgroundColor } from "@icon-park/svg"
 import { color } from "echarts"
+
+import Cookies from "js-cookie"
 
 interface FormState {
   url: string
@@ -80,6 +82,17 @@ const AreaList = ref([
 const firstApi = ref(true)
 
 onMounted(() => {
+
+    // 从缓存中获取token
+    const sso_token_url = Cookies.get("SSO_TOKEN")
+    console.log("sso_token_url=", sso_token_url)
+    
+    const sso_token_obj: any = JSON.parse(sso_token_url)
+    const token = sso_token_obj.accessToken
+    console.log("token=", token)
+
+    modifyToken(token)
+
   if (firstApi.value) {
     const params = {
       childrenParentCode: "",
